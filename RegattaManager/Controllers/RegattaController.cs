@@ -22,7 +22,7 @@ namespace RegattaManager.Controllers
         // GET: Regatta
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Regatta.Include(r => r.Club);
+            var applicationDbContext = _context.Regattas.Include(r => r.Club);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -34,7 +34,7 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var regatta = await _context.Regatta
+            var regatta = await _context.Regattas
                 .Include(r => r.Club)
                 .SingleOrDefaultAsync(m => m.RegattaId == id);
             if (regatta == null)
@@ -48,7 +48,7 @@ namespace RegattaManager.Controllers
         // GET: Regatta/Create
         public IActionResult Create()
         {
-            ViewData["ClubId"] = new SelectList(_context.Club, "ClubId", "ClubId");
+            ViewData["ClubId"] = new SelectList(_context.Clubs, "ClubId", "Name");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace RegattaManager.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClubId"] = new SelectList(_context.Club, "ClubId", "ClubId", regatta.ClubId);
+            ViewData["ClubId"] = new SelectList(_context.Clubs, "ClubId", "Name", regatta.ClubId);
             return View(regatta);
         }
 
@@ -77,12 +77,12 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var regatta = await _context.Regatta.SingleOrDefaultAsync(m => m.RegattaId == id);
+            var regatta = await _context.Regattas.SingleOrDefaultAsync(m => m.RegattaId == id);
             if (regatta == null)
             {
                 return NotFound();
             }
-            ViewData["ClubId"] = new SelectList(_context.Club, "ClubId", "ClubId", regatta.ClubId);
+            ViewData["ClubId"] = new SelectList(_context.Clubs, "ClubId", "ClubId", regatta.ClubId);
             return View(regatta);
         }
 
@@ -118,7 +118,7 @@ namespace RegattaManager.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClubId"] = new SelectList(_context.Club, "ClubId", "ClubId", regatta.ClubId);
+            ViewData["ClubId"] = new SelectList(_context.Clubs, "ClubId", "ClubId", regatta.ClubId);
             return View(regatta);
         }
 
@@ -130,7 +130,7 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var regatta = await _context.Regatta
+            var regatta = await _context.Regattas
                 .Include(r => r.Club)
                 .SingleOrDefaultAsync(m => m.RegattaId == id);
             if (regatta == null)
@@ -146,15 +146,15 @@ namespace RegattaManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var regatta = await _context.Regatta.SingleOrDefaultAsync(m => m.RegattaId == id);
-            _context.Regatta.Remove(regatta);
+            var regatta = await _context.Regattas.SingleOrDefaultAsync(m => m.RegattaId == id);
+            _context.Regattas.Remove(regatta);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool RegattaExists(int id)
         {
-            return _context.Regatta.Any(e => e.RegattaId == id);
+            return _context.Regattas.Any(e => e.RegattaId == id);
         }
     }
 }

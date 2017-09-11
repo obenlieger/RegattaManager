@@ -22,7 +22,7 @@ namespace RegattaManager.Controllers
         // GET: Raceclass
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Raceclass.ToListAsync());
+            return View(await _context.Raceclasses.ToListAsync());
         }
 
         // GET: Raceclass/Details/5
@@ -33,7 +33,7 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var raceclass = await _context.Raceclass
+            var raceclass = await _context.Raceclasses
                 .SingleOrDefaultAsync(m => m.RaceclassId == id);
             if (raceclass == null)
             {
@@ -73,7 +73,7 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var raceclass = await _context.Raceclass.SingleOrDefaultAsync(m => m.RaceclassId == id);
+            var raceclass = await _context.Raceclasses.SingleOrDefaultAsync(m => m.RaceclassId == id);
             if (raceclass == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var raceclass = await _context.Raceclass
+            var raceclass = await _context.Raceclasses
                 .SingleOrDefaultAsync(m => m.RaceclassId == id);
             if (raceclass == null)
             {
@@ -139,15 +139,15 @@ namespace RegattaManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var raceclass = await _context.Raceclass.SingleOrDefaultAsync(m => m.RaceclassId == id);
-            _context.Raceclass.Remove(raceclass);
+            var raceclass = await _context.Raceclasses.SingleOrDefaultAsync(m => m.RaceclassId == id);
+            _context.Raceclasses.Remove(raceclass);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool RaceclassExists(int id)
         {
-            return _context.Raceclass.Any(e => e.RaceclassId == id);
+            return _context.Raceclasses.Any(e => e.RaceclassId == id);
         }
     }
 }

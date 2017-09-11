@@ -11,9 +11,10 @@ using System;
 namespace RegattaManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170905204325_Aenderungen")]
+    partial class Aenderungen
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -333,21 +334,6 @@ namespace RegattaManager.Migrations
                     b.ToTable("Regattas");
                 });
 
-            modelBuilder.Entity("RegattaManager.Models.RegattaChosen", b =>
-                {
-                    b.Property<int>("RegattaChosenId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("RegattaId");
-
-                    b.HasKey("RegattaChosenId");
-
-                    b.HasIndex("RegattaId")
-                        .IsUnique();
-
-                    b.ToTable("RegattaChosen");
-                });
-
             modelBuilder.Entity("RegattaManager.Models.Startboat", b =>
                 {
                     b.Property<int>("StartboatId")
@@ -361,8 +347,6 @@ namespace RegattaManager.Migrations
 
                     b.Property<int>("RaceId");
 
-                    b.Property<int>("RegattaId");
-
                     b.Property<int>("StartboatstatusId");
 
                     b.Property<int>("Startslot");
@@ -372,8 +356,6 @@ namespace RegattaManager.Migrations
                     b.HasIndex("ClubId");
 
                     b.HasIndex("RaceId");
-
-                    b.HasIndex("RegattaId");
 
                     b.HasIndex("StartboatstatusId");
 
@@ -500,14 +482,6 @@ namespace RegattaManager.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("RegattaManager.Models.RegattaChosen", b =>
-                {
-                    b.HasOne("RegattaManager.Models.Regatta", "Regatta")
-                        .WithOne("RegattaChosen")
-                        .HasForeignKey("RegattaManager.Models.RegattaChosen", "RegattaId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("RegattaManager.Models.Startboat", b =>
                 {
                     b.HasOne("RegattaManager.Models.Club", "Club")
@@ -518,11 +492,6 @@ namespace RegattaManager.Migrations
                     b.HasOne("RegattaManager.Models.Race", "Race")
                         .WithMany("Startboats")
                         .HasForeignKey("RaceId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("RegattaManager.Models.Regatta", "Regatta")
-                        .WithMany("Startboats")
-                        .HasForeignKey("RegattaId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("RegattaManager.Models.Startboatstatus", "Startboatstatus")

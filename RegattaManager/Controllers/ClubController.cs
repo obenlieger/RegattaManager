@@ -22,7 +22,7 @@ namespace RegattaManager.Controllers
         // GET: Club
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Club.ToListAsync());
+            return View(await _context.Clubs.ToListAsync());
         }
 
         // GET: Club/Details/5
@@ -33,7 +33,7 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var club = await _context.Club
+            var club = await _context.Clubs
                 .SingleOrDefaultAsync(m => m.ClubId == id);
             if (club == null)
             {
@@ -73,7 +73,7 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var club = await _context.Club.SingleOrDefaultAsync(m => m.ClubId == id);
+            var club = await _context.Clubs.SingleOrDefaultAsync(m => m.ClubId == id);
             if (club == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var club = await _context.Club
+            var club = await _context.Clubs
                 .SingleOrDefaultAsync(m => m.ClubId == id);
             if (club == null)
             {
@@ -139,15 +139,15 @@ namespace RegattaManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var club = await _context.Club.SingleOrDefaultAsync(m => m.ClubId == id);
-            _context.Club.Remove(club);
+            var club = await _context.Clubs.SingleOrDefaultAsync(m => m.ClubId == id);
+            _context.Clubs.Remove(club);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ClubExists(int id)
         {
-            return _context.Club.Any(e => e.ClubId == id);
+            return _context.Clubs.Any(e => e.ClubId == id);
         }
     }
 }

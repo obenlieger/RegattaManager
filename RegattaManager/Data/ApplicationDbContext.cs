@@ -40,18 +40,35 @@ namespace RegattaManager.Data
                 .HasOne(r => r.Race)
                 .WithMany(rr => rr.Startboats)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Startboat>()
+                .HasOne(r => r.Regatta)
+                .WithMany(rs => rs.Startboats)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
-        public DbSet<RegattaManager.Models.Boatclass> Boatclass { get; set; }
+        public DbSet<RegattaManager.Models.Boatclass> Boatclasses { get; set; }
 
-        public DbSet<RegattaManager.Models.Raceclass> Raceclass { get; set; }
+        public DbSet<RegattaManager.Models.Raceclass> Raceclasses { get; set; }
 
-        public DbSet<RegattaManager.Models.Oldclass> Oldclass { get; set; }
+        public DbSet<RegattaManager.Models.Oldclass> Oldclasses { get; set; }
 
-        public DbSet<RegattaManager.Models.Racestatus> Racestatus { get; set; }
+        public DbSet<RegattaManager.Models.Racestatus> Racestati { get; set; }
 
-        public DbSet<RegattaManager.Models.Club> Club { get; set; }
+        public DbSet<RegattaManager.Models.Club> Clubs { get; set; }
 
-        public DbSet<RegattaManager.Models.Regatta> Regatta { get; set; }
+        public DbSet<RegattaManager.Models.Regatta> Regattas { get; set; }
+
+        public DbSet<RegattaManager.Models.Race> Races { get; set; }
+
+        public DbSet<RegattaManager.Models.Member> Members { get; set; }
+
+        public DbSet<RegattaManager.Models.Startboat> Startboats { get; set; }
+
+        public DbSet<RegattaManager.Models.Startboatstatus> Startboatstati { get; set; }
+
+        public DbSet<RegattaManager.Models.StartboatMember> StartboatMembers { get; set; }
+
+        public DbSet<RegattaManager.Models.RegattaChosen> RegattaChosen { get; set; }
     }
 }

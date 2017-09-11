@@ -22,7 +22,7 @@ namespace RegattaManager.Controllers
         // GET: Racestatus
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Racestatus.ToListAsync());
+            return View(await _context.Racestati.ToListAsync());
         }
 
         // GET: Racestatus/Details/5
@@ -33,7 +33,7 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var racestatus = await _context.Racestatus
+            var racestatus = await _context.Racestati
                 .SingleOrDefaultAsync(m => m.RacestatusId == id);
             if (racestatus == null)
             {
@@ -73,7 +73,7 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var racestatus = await _context.Racestatus.SingleOrDefaultAsync(m => m.RacestatusId == id);
+            var racestatus = await _context.Racestati.SingleOrDefaultAsync(m => m.RacestatusId == id);
             if (racestatus == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var racestatus = await _context.Racestatus
+            var racestatus = await _context.Racestati
                 .SingleOrDefaultAsync(m => m.RacestatusId == id);
             if (racestatus == null)
             {
@@ -139,15 +139,15 @@ namespace RegattaManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var racestatus = await _context.Racestatus.SingleOrDefaultAsync(m => m.RacestatusId == id);
-            _context.Racestatus.Remove(racestatus);
+            var racestatus = await _context.Racestati.SingleOrDefaultAsync(m => m.RacestatusId == id);
+            _context.Racestati.Remove(racestatus);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool RacestatusExists(int id)
         {
-            return _context.Racestatus.Any(e => e.RacestatusId == id);
+            return _context.Racestati.Any(e => e.RacestatusId == id);
         }
     }
 }

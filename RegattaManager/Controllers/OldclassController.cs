@@ -22,7 +22,7 @@ namespace RegattaManager.Controllers
         // GET: Oldclass
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Oldclass.ToListAsync());
+            return View(await _context.Oldclasses.ToListAsync());
         }
 
         // GET: Oldclass/Details/5
@@ -33,7 +33,7 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var oldclass = await _context.Oldclass
+            var oldclass = await _context.Oldclasses
                 .SingleOrDefaultAsync(m => m.OldclassId == id);
             if (oldclass == null)
             {
@@ -73,7 +73,7 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var oldclass = await _context.Oldclass.SingleOrDefaultAsync(m => m.OldclassId == id);
+            var oldclass = await _context.Oldclasses.SingleOrDefaultAsync(m => m.OldclassId == id);
             if (oldclass == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var oldclass = await _context.Oldclass
+            var oldclass = await _context.Oldclasses
                 .SingleOrDefaultAsync(m => m.OldclassId == id);
             if (oldclass == null)
             {
@@ -139,15 +139,15 @@ namespace RegattaManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var oldclass = await _context.Oldclass.SingleOrDefaultAsync(m => m.OldclassId == id);
-            _context.Oldclass.Remove(oldclass);
+            var oldclass = await _context.Oldclasses.SingleOrDefaultAsync(m => m.OldclassId == id);
+            _context.Oldclasses.Remove(oldclass);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool OldclassExists(int id)
         {
-            return _context.Oldclass.Any(e => e.OldclassId == id);
+            return _context.Oldclasses.Any(e => e.OldclassId == id);
         }
     }
 }

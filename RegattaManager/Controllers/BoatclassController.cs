@@ -22,7 +22,7 @@ namespace RegattaManager.Controllers
         // GET: Boatclass
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Boatclass.ToListAsync());
+            return View(await _context.Boatclasses.ToListAsync());
         }
 
         // GET: Boatclass/Details/5
@@ -33,7 +33,7 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var boatclass = await _context.Boatclass
+            var boatclass = await _context.Boatclasses
                 .SingleOrDefaultAsync(m => m.BoatclassId == id);
             if (boatclass == null)
             {
@@ -73,7 +73,7 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var boatclass = await _context.Boatclass.SingleOrDefaultAsync(m => m.BoatclassId == id);
+            var boatclass = await _context.Boatclasses.SingleOrDefaultAsync(m => m.BoatclassId == id);
             if (boatclass == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var boatclass = await _context.Boatclass
+            var boatclass = await _context.Boatclasses
                 .SingleOrDefaultAsync(m => m.BoatclassId == id);
             if (boatclass == null)
             {
@@ -139,15 +139,15 @@ namespace RegattaManager.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var boatclass = await _context.Boatclass.SingleOrDefaultAsync(m => m.BoatclassId == id);
-            _context.Boatclass.Remove(boatclass);
+            var boatclass = await _context.Boatclasses.SingleOrDefaultAsync(m => m.BoatclassId == id);
+            _context.Boatclasses.Remove(boatclass);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool BoatclassExists(int id)
         {
-            return _context.Boatclass.Any(e => e.BoatclassId == id);
+            return _context.Boatclasses.Any(e => e.BoatclassId == id);
         }
     }
 }

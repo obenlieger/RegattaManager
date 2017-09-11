@@ -16,6 +16,8 @@ namespace RegattaManager.Models
         public virtual DateTime ToDate { get; set; }
         public virtual int ClubId { get; set; }
         public virtual Club Club { get; set; }
+        public virtual RegattaChosen RegattaChosen { get; set; }
+        public virtual List<Startboat> Startboats { get; set; }
         public virtual List<Race> Races { get; set; }        
     }
 }
