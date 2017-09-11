@@ -35,3 +35,37 @@
     <a asp-action="Edit" asp-route-id="@Model.ClubId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+<h3>Mitglied hinzufügen</h3>
+<form asp-action="AddMember" asp-controller="Club" asp-route-id="@Model.ClubId">
+    <table>
+        <tr>
+            <th>Vorname</th>
+            <th>Nachname</th>
+            <th>Geschlecht</th>
+            <th>Geburtsjahr</th>
+        </tr>
+        <tr>
+            <td><input class="form-control" type="text" name="FirstName" id="FirstName"/></td>
+            <td><input class="form-control" type="text" name="LastName" id="LastName"/></td>
+            <td>
+                <select class="form-control" name="Gender" id="Gender" size="2">
+                    <option value="M" selected>männliche</option>
+                    <option value="W">weibliche</option>
+                </select>
+            </td>
+            <td><input class="form-control" type="number" name="Birthyear" id="Birthyear" /></td>
+        </tr>
+    </table>
+    <br />
+    <input type="submit" value="Mitglied hinzufügen" />
+</form>
+
+<h3>Mitglieder</h3>
+<ul>
+    @foreach(var member in Model.Members)
+    {
+        <li>@member.LastName, @member.FirstName - @member.Gender - @member.Birthyear</li>
+
+    }
+</ul>

@@ -4,11 +4,11 @@
     ViewBag.Title = "Rennübersicht";
 }
 
-@if (ViewData["All"].ToString() == "1")
+@if (ViewData["All"] == "1")
 {
     <h2>Alle geplanten Rennen</h2>
 }
-else if (ViewData["ZE"].ToString() == "1")
+else if (ViewData["ZE"] == "1")
 {
     <h2>Zwischen- und Endläufe</h2>
 }
@@ -121,39 +121,39 @@ else
             <td bgcolor="#EEEEEE"><i>Starter</i></td>
             <td bgcolor="#EEEEEE"><i>Verein</i></td>
         </tr>
-        @foreach (var sb in ViewBag.startboats)
-        {
-            if (sb.RaceId == item.RaceId)
+            @foreach (var sb in ViewBag.startboats)
             {
-                @:&nbsp;
-                <tr>                    
-                    <td>@sb.Startbahn</td>                   
-                    <td>
-            foreach (var sbm in ViewBag.startboatmembers)
+                if (sb.RaceId == item.RaceId)
                 {
-                    if (sbm.StartboatId == sb.StartboatId)
-                    {
-                        foreach (var m in ViewBag.members)
-                        {
-                            if (m.MemberId == sbm.MemberId)
+                    @:&nbsp;
+                    <tr>                    
+                        <td>sb.Startbahn</td>                   
+                        <td>
+                        foreach (var sbm in ViewBag.startboatmembers)
                             {
-                                @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                @if (m.ClubId != sb.ClubId)
+                                if (sbm.StartboatId == sb.StartboatId)
                                 {
-                                    @string.Format(" ({0})", m.Club.Name);
+                                    foreach (var m in ViewBag.members)
+                                    {
+                                        if (m.MemberId == sbm.MemberId)
+                                        {
+                                            string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                            if (m.ClubId != sb.ClubId)
+                                            {
+                                                string.Format(" ({0})", m.Club.Name);
+                                            }
+                                            <br />
+                                    }
+                                    }
                                 }
-                                <br />
-                        }
-                        }
-                    }
-                }
+                            }
                 
-            </td>
+                </td>
             
-            <td>@sb.Club.Name</td>
+                <td>@sb.Club.Name</td>
             
-        </tr>
-        }
+            </tr>
+            }
         }
     }
 

@@ -34,6 +34,7 @@ namespace RegattaManager.Controllers
             }
 
             var club = await _context.Clubs
+                .Include(e => e.Members)
                 .SingleOrDefaultAsync(m => m.ClubId == id);
             if (club == null)
             {
@@ -148,6 +149,13 @@ namespace RegattaManager.Controllers
         private bool ClubExists(int id)
         {
             return _context.Clubs.Any(e => e.ClubId == id);
+        }
+
+        public IActionResult AddMember(int id, string lastname, string firstname, string gender, int birthyear)
+        {
+            _context.Clubs.Include(e => e.Members).FirstOrDefault(e => e.ClubId == id).Members.Add(new Member { LastName = lastname, FirstName = firstname, Gender = gender, Birthyear = birthyear });
+            _context.SaveChanges();
+            return RedirectToAction("Details", "Club", new { id = id });
         }
     }
 }
