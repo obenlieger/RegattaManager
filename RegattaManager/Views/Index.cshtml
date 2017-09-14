@@ -1,0 +1,207 @@
+﻿@model IEnumerable<RegattaManager.Models.Race>
+@{
+    ViewData["Title"] = "Rennergebnisse";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewData["All"] == "1")
+{
+    <h2>Alle Ergebnisse</h2>
+}
+else
+{
+    <h2>Aktuellste 10 Ergebnisse</h2>
+}
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Meine Ergebnisse (Nachname): <input class="form-control" type="text" name="SearchLastName" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Suchen" class="btn btn-default" /> |
+            <a asp-action="Index">Zurück</a>
+        </p>
+    </div>
+</form>
+<form asp-action="Index" method="get">
+    <p>
+        <div class="form-actions no-color">
+            <input type="hidden" name="All" value="1">
+            <input type="submit" value="Alle Ergebnisse anzeigen" class="btn btn-default" />
+        </div>
+    </p>
+</form>
+<table class="table">
+    <tr>
+        <th colspan="2">
+            Rennbezeichnung
+        </th>
+        <th colspan="2">
+            Startzeit
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td bgcolor="#CCCCCC"></td>
+            <td bgcolor="#CCCCCC"></td>
+            <td bgcolor="#CCCCCC"></td>
+            <td bgcolor="#CCCCCC"></td>
+            <td bgcolor="#CCCCCC"></td>
+        </tr>
+        <tr>
+            <td bgcolor="#DDDDDD" colspan="2">
+                @if (item.Gender == "M")
+                {
+                    @string.Format("männliche");
+                }
+                else if (item.Gender == "W")
+                {
+                    @string.Format("weibliche");
+                }
+                else
+                {
+                    @string.Format("mixed");
+                }
+                @item.Oldclass.Name
+                &nbsp;-&nbsp;
+                @item.Boatclass.Name
+                &nbsp;-&nbsp;
+                @item.Raceclass.Name
+            </td>
+            <td bgcolor="#DDDDDD" colspan="2">
+                @Html.DisplayFor(modelItem => item.Starttime)
+            </td>
+            <td bgcolor="#DDDDDD">
+                @if (item.FinishType == 2)
+                {
+                    <span class="label label-success">Endlauf</span>
+                }
+                else if (item.FinishType == 1)
+                {
+                    <span class="label label-primary">Zwischenlauf</span>
+                }
+                else if (item.FinishType == 0)
+                {
+                    <span class="label label-default">Vorlauf</span>
+                }
+                else if (item.FinishType == 4)
+                {
+                    <span class="label label-info">Hoffnungslauf</span>
+                }
+                @if (item.Comment != "")
+                {
+                    @:&nbsp;
+                    @:<span class="label label-warning">@item.Comment</span>
+                    @if (@item.Comment == "Bier Cup")
+                    {
+                        @:&nbsp;<img src="/images/beer-512.png" height="15" />
+            }
+                    @if (@item.Comment == "Prosecco Cup")
+                    {
+                        @:&nbsp;<img src="/images/prosecco.png" height="15" />
+            }
+                }
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#EEEEEE"><i>Platzierung</i></td>
+            <td bgcolor="#EEEEEE"><i>Startbahn</i></td>
+            <td bgcolor="#EEEEEE"><i>Starter</i></td>
+            <td bgcolor="#EEEEEE"><i>Verein</i></td>
+            <td bgcolor="#EEEEEE"><i>Status</i></td>
+        </tr>
+        @foreach (var sb in ViewBag.startboats)
+        {
+            if (sb.RaceId == item.RaceId)
+            {
+                var backcol = "FFFFFF";
+                if (sb.Placement == 0 || sb.Placement == -1)
+                {
+                    backcol = "FFCC99";
+                }
+                if (sb.Placement == 1)
+                {
+                    backcol = "B3FFB3";
+                }
+                if (sb.Placement == 2)
+                {
+                    backcol = "CCFFCC";
+                }
+                if (sb.Placement == 3)
+                {
+                    backcol = "E6FFE6";
+                }
+                if (sb.Placement != 0 && sb.Placement != -1)
+                {
+                    @:
+                    <tr>
+                        <td bgcolor=@backcol>@sb.Placement</td>
+                        <td bgcolor=@backcol>@sb.Startbahn</td>
+                        <td bgcolor=@backcol>
+                @foreach (var sbm in ViewBag.startboatmembers)
+                    {
+                        if (sbm.StartboatId == sb.StartboatId)
+                        {
+                            foreach (var m in ViewBag.members)
+                            {
+                                if (m.MemberId == sbm.MemberId)
+                                {
+                                    @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                    <br />
+                            }
+                            }
+                        }
+                    }
+                </td>
+                <td bgcolor=@backcol>@sb.Club.Name</td>
+                <td bgcolor=@backcol>@sb.Startboatstatus.Name</td>
+            </tr>
+             }
+            }
+        }
+        @foreach (var sb in ViewBag.disqsbs)
+        {
+            if (sb.RaceId == item.RaceId)
+            {
+                var backcol = "FFFFFF";
+                if (sb.Placement == 0 || sb.Placement == -1)
+                {
+                    backcol = "FFCC99";
+                }
+                if (sb.Placement <= 0)
+                {
+                    @:
+                    <tr>
+                        <td bgcolor=@backcol>0</td>
+                        <td bgcolor=@backcol>@sb.Startbahn</td>
+                        <td bgcolor=@backcol>
+                @foreach (var sbm in ViewBag.startboatmembers)
+                    {
+                        if (sbm.StartboatId == sb.StartboatId)
+                        {
+                            foreach (var m in ViewBag.members)
+                            {
+                                if (m.MemberId == sbm.MemberId)
+                                {
+                                    @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                    @if (m.ClubId != sb.ClubId)
+                                    {
+                                        @string.Format(" ({0})", m.Club.Name);
+                                    }
+                                    <br />
+                            }
+                            }
+                        }
+                    }
+                </td>
+                <td bgcolor=@backcol>@sb.Club.Name</td>
+                <td bgcolor=@backcol>@sb.Startboatstatus.Name</td>
+            </tr>
+             }
+            }
+        }
+    }
+
+</table>

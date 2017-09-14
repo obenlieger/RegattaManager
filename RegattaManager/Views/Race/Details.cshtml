@@ -1,0 +1,119 @@
+﻿@model RegattaManager.Models.Race
+
+@{
+    ViewBag.Title = "Startboot hinzufügen";
+}
+@{var x = Model.Boatclass.Seats;}
+
+
+<a asp-action="Details" asp-controller="Race" asp-route-id="@string.Format("{0}",Model.RaceId - 1)">Vorheriges Rennen</a>
+&nbsp; - &nbsp;
+<a asp-action="Details" asp-controller="Race" asp-route-id="@string.Format("{0}",Model.RaceId + 1)">Nächstes Rennen</a>
+<h2>Startboot erstellen</h2>
+<h4>@Model.Boatclass.Name - @Model.Raceclass.Name - @Model.Oldclass.Name - @Model.Gender - @Model.Starttime</h4>
+<hr />
+<form asp-action="AddStartboat" asp-controller="Race" asp-route-id="@Model.RaceId">
+    <table class="table">
+        <tr>
+            <th>
+                Startbahn
+            </th>
+            @for (var i = 1; i <= x; i++)
+            {
+                <th>
+                    Sitz @i
+                </th>
+            }
+            <th>
+                Verein
+            </th>
+            <th>
+                Startbootstatus
+            </th>
+        </tr>
+        <tr>
+            <td>
+                @if (ViewBag.laststartbahn != null)
+                {
+                    <input class="form-control" type="number" name="startbahn" id="startbahn" value="@string.Format("{0}",ViewBag.laststartbahn+1)" />
+                }
+                else
+                {
+                    <input class="form-control" type="number" name="startbahn" id="startbahn" value="1" />
+                }
+            </td>
+            @for (var i = 1; i <= x; i++)
+            {
+                <td>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <select name="@string.Format("seat{0}",i)" id="@string.Format("seat{0}",i)" asp-items="@ViewBag.MemberId"></select>
+                        </div>
+                    </div>
+                </td>
+            }
+            <td>
+                <div class="form-group">
+                    <div class="col-md-10">
+                        @Html.DropDownList("ClubId", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <div class="col-md-10">
+                        @Html.DropDownList("StartboatstatusId", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" name="seatnumber" value="@x" />
+    <input type="submit" value="Startboot speichern" />
+</form>
+<h2>Startboote</h2>
+<table class="table">
+    <tr>
+        <th>
+            Startbahn
+        </th>
+        <th>
+            Starter
+        </th>
+        <th>
+            Verein
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var startboat in ViewBag.startboats)
+    {
+        if (startboat.RaceId == Model.RaceId)
+        {
+            <tr>
+                <td>@startboat.Startbahn</td>
+                <td>
+                    @foreach (var sbm in ViewBag.startboatmembers)
+                    {
+                        if (sbm.StartboatId == startboat.StartboatId)
+                        {
+                            foreach (var member in ViewBag.members)
+                            {
+                                if (member.MemberId == sbm.MemberId)
+                                {
+                                    @string.Format("{0}", member.FullName);
+                                    @if (member.ClubId != startboat.ClubId)
+                                    {
+                                        @string.Format(" ({0})", member.Club.Name);
+                                    }
+                                    @:<br />
+                    }
+                            }
+                        }
+                    }
+                </td>
+                <td>@startboat.Club.Name</td>
+                <td><a asp-action="DeleteStartboat" asp-controller="Race" asp-route-id="@startboat.StartboatId">Löschen</a></td>
+            </tr>
+        }
+    }
+</table>

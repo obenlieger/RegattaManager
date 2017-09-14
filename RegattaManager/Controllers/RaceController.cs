@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RegattaManager.Data;
+using RegattaManager.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -145,6 +146,93 @@ namespace RegattaManager.Controllers
             {
                 return View();
             }
+        }
+
+        public IActionResult Edit(int id)
+        {
+            ViewBag.BoatclassId = new SelectList(_context.Boatclasses.OrderBy(e => e.Name), "BoatclassId", "Name");
+            ViewBag.RaceclassId = new SelectList(_context.Raceclasses, "RaceclassId", "Name");
+            ViewBag.OldclassId = new SelectList(_context.Oldclasses.OrderBy(e => e.FromAge), "OldclassId", "Name");
+            ViewBag.RacestatusId = new SelectList(_context.Racestati, "RacestatusId", "Name");
+            ViewBag.ClubId = new SelectList(_context.Clubs, "ClubId", "Name");
+            ViewBag.MemberId = new SelectList(_context.Members, "MemberId", "LastName, FirstName");
+
+            var model = _context.Races.Include(e => e.Raceclass).Include(e => e.Boatclass).Include(e => e.Oldclass).FirstOrDefault(e => e.RaceId == id);
+
+            return View(model);
+        }
+
+        public IActionResult Update(Race race)
+        {
+            if (race != null)
+            {
+                _context.Entry(race).State = EntityState.Modified;
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Details", "Race", new { id = race.RaceId });
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var original = _context.Races.FirstOrDefault(e => e.RaceId == id);
+            if (original != null)
+            {
+                _context.Races.Remove(original);
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult AddStartboat(int id, int seat1, int seat2, int seat3, int seat4, int seat5, int seat6, int seat7, int seat8, int startbahn, int ClubId, int seatnumber, int StartboatstatusId)
+        {
+            _context.Races.Include(e => e.Startboats).FirstOrDefault(e => e.RaceId == id).Startboats.Add(new Startboat { Startslot = startbahn, ClubId = ClubId, StartboatstatusId = StartboatstatusId });
+            _context.SaveChanges();
+
+            if (seatnumber == 1)
+            {
+                _context.Startboats.Include(e => e.StartboatMembers).Last().StartboatMembers.Add(new StartboatMember { MemberId = seat1, SeatNumber = 1, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
+                _context.SaveChanges();
+            }
+            else if (seatnumber == 2)
+            {
+                _context.Startboats.Include(e => e.StartboatMembers).Last().StartboatMembers.Add(new StartboatMember { MemberId = seat1, SeatNumber = 1, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
+                _context.Startboats.Include(e => e.StartboatMembers).Last().StartboatMembers.Add(new StartboatMember { MemberId = seat2, SeatNumber = 2, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
+                _context.SaveChanges();
+            }
+            else if (seatnumber == 4)
+            {
+                _context.Startboats.Include(e => e.StartboatMembers).Last().StartboatMembers.Add(new StartboatMember { MemberId = seat1, SeatNumber = 1, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
+                _context.Startboats.Include(e => e.StartboatMembers).Last().StartboatMembers.Add(new StartboatMember { MemberId = seat2, SeatNumber = 2, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
+                _context.Startboats.Include(e => e.StartboatMembers).Last().StartboatMembers.Add(new StartboatMember { MemberId = seat3, SeatNumber = 3, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
+                _context.Startboats.Include(e => e.StartboatMembers).Last().StartboatMembers.Add(new StartboatMember { MemberId = seat4, SeatNumber = 4, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
+                _context.SaveChanges();
+            }
+            else if (seatnumber == 8)
+            {
+                _context.Startboats.Include(e => e.StartboatMembers).Last().StartboatMembers.Add(new StartboatMember { MemberId = seat1, SeatNumber = 1, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
+                _context.Startboats.Include(e => e.StartboatMembers).Last().StartboatMembers.Add(new StartboatMember { MemberId = seat2, SeatNumber = 2, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
+                _context.Startboats.Include(e => e.StartboatMembers).Last().StartboatMembers.Add(new StartboatMember { MemberId = seat3, SeatNumber = 3, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
+                _context.Startboats.Include(e => e.StartboatMembers).Last().StartboatMembers.Add(new StartboatMember { MemberId = seat4, SeatNumber = 4, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
+                _context.Startboats.Include(e => e.StartboatMembers).Last().StartboatMembers.Add(new StartboatMember { MemberId = seat5, SeatNumber = 5, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
+                _context.Startboats.Include(e => e.StartboatMembers).Last().StartboatMembers.Add(new StartboatMember { MemberId = seat6, SeatNumber = 6, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
+                _context.Startboats.Include(e => e.StartboatMembers).Last().StartboatMembers.Add(new StartboatMember { MemberId = seat7, SeatNumber = 7, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
+                _context.Startboats.Include(e => e.StartboatMembers).Last().StartboatMembers.Add(new StartboatMember { MemberId = seat8, SeatNumber = 8, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Details", "Race", new { id = id });
+        }
+
+        public IActionResult DeleteStartboat(int id)
+        {
+            var original = _context.Startboats.FirstOrDefault(e => e.StartboatId == id);
+            if (original != null)
+            {
+                _context.Startboats.Remove(original);
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Details", "Race", new { id = original.RaceId });
         }
     }
 }
