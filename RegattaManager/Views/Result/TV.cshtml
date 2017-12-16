@@ -1,0 +1,410 @@
+﻿@{
+    Layout = "";
+    ViewBag.Title = "Rennergebnisse und geplante Rennen";
+    var x = 0;
+    var y = 0;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="refresh" content="60">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - RegattaPlaner</title>
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+    <style>
+        th {
+            font-size: 85%;
+        }
+
+        td {
+            font-size: 85%;
+        }
+    </style>
+</head>
+<body>
+
+    <table width="100%">
+        <tr VALIGN=TOP>
+            <th>
+                &nbsp;
+            </th>
+            <th colspan="3">
+                <h5>Rennergebnisse</h5>
+            </th>
+            <th>
+                &nbsp;&nbsp;
+            </th>
+            <th colspan="3">
+                <h5>Zwischen- und Endläufe</h5>
+            </th>
+            <th>
+                &nbsp;&nbsp;
+            </th>
+        </tr>
+        <tr VALIGN=TOP>
+            <td></td>
+            <td>
+                <table class="table">
+                    <tr>
+                        <th colspan="3">
+                            Rennbezeichnung
+                        </th>
+                        <th>
+                            Startzeit
+                        </th>
+                    </tr>
+
+                    @foreach (var rrs in ViewBag.raceresults)
+                    {
+                        @:
+                        <tr>
+                            <td bgcolor="#CCCCCC"></td>
+                            <td bgcolor="#CCCCCC"></td>
+                            <td bgcolor="#CCCCCC"></td>
+                            <td bgcolor="#CCCCCC"></td>
+                            <td bgcolor="#CCCCCC"></td>
+                        </tr>
+                        <tr>
+                            <td bgcolor="#DDDDDD" colspan="3">
+                                @if (rrs.Gender == 'M')
+                                {
+                                    @string.Format("männliche");
+                                }
+                                else if (rrs.Gender == 'W')
+                                {
+                                    @string.Format("weibliche");
+                                }
+                                else
+                                {
+                                    @string.Format("mixed");
+                                }
+                                @rrs.Oldclass.Name
+                                &nbsp;-&nbsp;
+                                @rrs.Boatclass.Name
+                                &nbsp;-&nbsp;
+                                @rrs.Raceclass.Name
+                            </td>
+                            <td bgcolor="#DDDDDD">
+                                @rrs.Starttime
+                            </td>
+                            <td bgcolor="#DDDDDD">
+                                @if (rrs.Final == 2)
+                                {
+                                    <span class="label label-success">Endlauf</span>
+                                }
+                                else if (rrs.Final == 1)
+                                {
+                                    <span class="label label-primary">Zwischenlauf</span>
+                                }
+                                else if (rrs.Final == 0)
+                                {
+                                    <span class="label label-default">Vorlauf</span>
+                                }
+                                else if (rrs.Final == 4)
+                                {
+                                    <span class="label label-info">Hoffnungslauf</span>
+                                }
+                                @if (rrs.Comment != "")
+                                {
+                                    @:&nbsp;
+                                    @:<span class="label label-warning">@rrs.Comment</span>
+                                    @if (@rrs.Comment == "Bier Cup")
+                                    {
+                                        @:&nbsp;<img src="/images/beer-512.png" height="15" />
+                                    }
+                                    @if (@rrs.Comment == "Prosecco Cup")
+                                    {
+                                        @:&nbsp;<img src="/images/prosecco.png" height="15" />
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td bgcolor="#EEEEEE"><i>Platzierung</i></td>
+                            <td bgcolor="#EEEEEE"><i>Startbahn</i></td>
+                            <td bgcolor="#EEEEEE"><i>Starter</i></td>
+                            <td bgcolor="#EEEEEE"><i>Verein</i></td>
+                            <td bgcolor="#EEEEEE"><i>Status</i></td>
+                        </tr>
+                        @foreach (var sb in ViewBag.startboats)
+                        {
+                            if (sb.RaceId == rrs.RaceId)
+                            {
+                                var backcol = "FFFFFF";
+                                if (sb.Placement == 0 || sb.Placement == -1)
+                                {
+                                    backcol = "FFCC99";
+                                }
+                                if (sb.Placement == 1)
+                                {
+                                    backcol = "B3FFB3";
+                                }
+                                if (sb.Placement == 2)
+                                {
+                                    backcol = "CCFFCC";
+                                }
+                                if (sb.Placement == 3)
+                                {
+                                    backcol = "E6FFE6";
+                                }
+                                if (sb.Placement != 0 && sb.Placement != -1)
+                                {
+                                    @:
+                                    <tr>
+                                        <td bgcolor=@backcol>@sb.Placement</td>
+                                        <td bgcolor=@backcol>@sb.Startbahn</td>
+                                        <td bgcolor=@backcol>
+                                        @foreach (var sbm in ViewBag.startboatmembers)
+                                        {
+                                            if (sbm.StartboatId == sb.StartboatId)
+                                            {
+                                                foreach (var m in ViewBag.members)
+                                                {
+                                                    if (m.MemberId == sbm.MemberId)
+                                                    {
+                                                        @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                                        @if (m.ClubId != sb.ClubId)
+                                                        {
+                                                            @string.Format(" ({0})", m.Club.Name);
+                                                        }
+                                                        @:<br />
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        </td>
+                                        <td bgcolor=@backcol>@sb.Club.Name</td>
+                                        <td bgcolor=@backcol>@sb.Startboatstatus.Name</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                        @foreach (var sb in ViewBag.disqsbs)
+                        {
+                            if (sb.RaceId == rrs.RaceId)
+                            {
+                                var backcol = "FFFFFF";
+                                if (sb.Placement == 0 || sb.Placement == -1)
+                                {
+                                    backcol = "FFCC99";
+                                }
+                                if (sb.Placement <= 0)
+                                {
+                                    @:
+                                    <tr>
+                                        <td bgcolor=@backcol>0</td>
+                                        <td bgcolor=@backcol>@sb.Startbahn</td>
+                                        <td bgcolor=@backcol>
+                                        @foreach (var sbm in ViewBag.startboatmembers)
+                                            {
+                                                if (sbm.StartboatId == sb.StartboatId)
+                                                {
+                                                    foreach (var m in ViewBag.members)
+                                                    {
+                                                        if (m.MemberId == sbm.MemberId)
+                                                        {
+                                                            @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                                            @if (m.ClubId != sb.ClubId)
+                                                            {
+                                                                @string.Format(" ({0})", m.Club.Name);
+                                                            }
+                                                            <br />
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        </td>
+                                        <td bgcolor=@backcol>@sb.Club.Name</td>
+                                        <td bgcolor=@backcol>@sb.Startboatstatus.Name</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                        if(x == 2)
+                        {
+                        @:</table>
+                            @:</td>
+                            @:<td>&nbsp;</td>
+                            @:<td>
+                               @:<table class="table">
+                                @:<tr>
+                                    @:<th colspan="3">
+                                        @:Rennbezeichnung
+                                    @:</th>
+                                    @:<th>
+                                        @:Startzeit
+                                    @:</th>
+                                @:</tr>
+                        }
+                        x++;
+                    }
+                    </table>
+            </td>
+            <td></td>
+            <td>
+                <table class="table">
+                    <tr>
+                        <th colspan="2">
+                            Rennbezeichnung
+                        </th>
+                        <th colspan="2">
+                            Startzeit
+                        </th>
+                    </tr>
+
+                    @foreach (var rpd in ViewBag.raceplanned)
+                    {
+                        <tr>
+                            <td bgcolor="#CCCCCC" colspan="2"></td>
+                            <td bgcolor="#CCCCCC" colspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td bgcolor="#DDDDDD" colspan="2">
+                                @if (rpd.Gender == 'M')
+                                {
+                                    @string.Format("männliche");
+                                }
+                                else if (rpd.Gender == 'W')
+                                {
+                                    @string.Format("weibliche");
+                                }
+                                else
+                                {
+                                    @string.Format("mixed");
+                                }
+                                @rpd.Oldclass.Name
+                                &nbsp;-&nbsp;
+                                @rpd.Boatclass.Name
+                                &nbsp;-&nbsp;
+                                @rpd.Raceclass.Name
+                            </td>
+                            <td bgcolor="#DDDDDD">
+                                @rpd.Starttime
+                            </td>
+                            <td bgcolor="#DDDDDD">
+                                @if (rpd.Final == 2)
+                                {
+                                    <span class="label label-success">Endlauf</span>
+                                }
+                                else if (rpd.Final == 1)
+                                {
+                                    <span class="label label-primary">Zwischenlauf</span>
+                                }
+                                else if (rpd.Final == 0)
+                                {
+                                    <span class="label label-default">Vorlauf</span>
+                                }
+                                else if (rpd.Final == 4)
+                                {
+                                    <span class="label label-info">Hoffnungslauf</span>
+                                }
+                                @if (rpd.Comment != "")
+                                {
+                                    @:&nbsp;
+                                    @:<span class="label label-warning">@rpd.Comment</span>
+                                    @if (@rpd.Comment == "Bier Cup")
+                                    {
+                                        @:&nbsp;<img src="/images/beer-512.png" height="15" />
+                                    }
+                                    @if (@rpd.Comment == "Prosecco Cup")
+                                    {
+                                        @:&nbsp;<img src="/images/prosecco.png" height="15" />
+                                    }
+                                }
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td bgcolor="#EEEEEE"><i>Startbahn</i></td>
+                            <td bgcolor="#EEEEEE"><i>Starter</i></td>
+                            <td bgcolor="#EEEEEE" colspan="2"><i>Verein</i></td>
+                        </tr>
+                        @foreach (var sb in ViewBag.startboats)
+                        {
+                            if (sb.RaceId == rpd.RaceId)
+                            {
+                                @:
+                                <tr>
+                                    <td>@sb.Startbahn</td>
+                                    <td>
+                                @foreach (var sbm in ViewBag.startboatmembers)
+                                {
+                                    @if (sbm.StartboatId == sb.StartboatId)
+                                    {
+                                        @foreach (var m in ViewBag.members)
+                                        {
+                                            @if (m.MemberId == sbm.MemberId)
+                                            {
+                                                @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                                @if (m.ClubId != sb.ClubId)
+                                                {
+                                                    @string.Format(" ({0})", m.Club.Name);
+                                                }
+                                                <br />
+                                            }
+                                        }
+                                    }
+                                }
+                            </td>
+                            <td colspan="2">@sb.Club.Name</td>
+                        </tr>
+                            }
+                        }
+                        @if (y == 2)
+                        {
+                        @:</table>
+                        @:
+                    @:</td>
+                    @:
+                    @:<td>&nbsp;</td>
+                    @:
+                    @:<td>
+                        @:<table class="table">
+                            @:<tr>
+                                @:<th colspan="2">
+                                    @:Rennbezeichnung
+                                @:</th>
+                                @:<th colspan="2">
+                                    @:Startzeit
+                                @:</th>
+                            @:</tr>
+                        }
+                        y++;
+                    }
+                </table>
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+</body>
+</html>
