@@ -152,6 +152,39 @@ namespace RegattaManager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Choose (int? id)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+
+            Regatta regatta = _context.Regattas.FirstOrDefault(e => e.RegattaId == id);
+            
+            if(ModelState.IsValid)
+            {
+                regatta.Choosen = true;
+                try
+                {
+                    _context.Update(regatta);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!RegattaExists(regatta.RegattaId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
         private bool RegattaExists(int id)
         {
             return _context.Regattas.Any(e => e.RegattaId == id);

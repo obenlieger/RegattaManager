@@ -68,7 +68,5 @@ namespace RegattaManager.Data
         public DbSet<RegattaManager.Models.Startboatstatus> Startboatstati { get; set; }
 
         public DbSet<RegattaManager.Models.StartboatMember> StartboatMembers { get; set; }
-
-        public DbSet<RegattaManager.Models.RegattaChosen> RegattaChosen { get; set; }
     }
 }

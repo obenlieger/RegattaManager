@@ -21,28 +21,42 @@ namespace RegattaManager.Controllers
 
         public IActionResult Index()
         {
-            var rid = _context.RegattaChosen.FirstOrDefault().RegattaId;
+            var rid = 0;
 
-            if(rid != 0)
+            if(_context.Regattas.Where(e => e.Choosen == true).Any())
             { 
+                rid = _context.Regattas.Where(e => e.Choosen == true).FirstOrDefault().RegattaId;
+            }
+
+            ViewBag.regattachosen = rid;
+
+            if (rid != 0)
+            {
                 var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).Where(e => e.RegattaId == rid).OrderBy(e => e.Starttime);
                 ViewBag.startboats = _context.Startboats.Include(e => e.Club).OrderBy(e => e.Startslot);
                 ViewBag.startboatmembers = _context.StartboatMembers;
-                ViewBag.members = _context.Members;
+                ViewBag.members = _context.Members;                
 
                 return View(model.ToList());
             }
             else
             {
                 return View();
-            }            
+            }          
         }
 
         public IActionResult Details(int id)
         {
-            var rid = _context.RegattaChosen.FirstOrDefault().RegattaId;
+            var rid = 0;
 
-            if(rid != 0)
+            if (_context.Regattas.Where(e => e.Choosen == true).Any())
+            {
+                rid = _context.Regattas.Where(e => e.Choosen == true).FirstOrDefault().RegattaId;
+            }
+
+            ViewBag.regattachosen = rid;
+
+            if (rid != 0)
             { 
                 var model = _context.Races.Include(e => e.Regatta).Include(e => e.Boatclass).Include(e => e.Raceclass).Include(e => e.Oldclass).Where(e => e.RegattaId == rid).FirstOrDefault(e => e.RaceId == id);
 
