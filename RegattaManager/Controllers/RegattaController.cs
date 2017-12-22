@@ -82,16 +82,14 @@ namespace RegattaManager.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClubId"] = new SelectList(_context.Clubs, "ClubId", "ClubId", regatta.ClubId);
+            ViewData["ClubId"] = new SelectList(_context.Clubs, "ClubId", "Name", regatta.ClubId);
             return View(regatta);
         }
 
         // POST: Regatta/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RegattaId,Name,FromDate,ToDate,ClubId")] Regatta regatta)
+        public async Task<IActionResult> Edit(int id, [Bind("RegattaId,Name,FromDate,ToDate,ClubId,Choosen")] Regatta regatta)
         {
             if (id != regatta.RegattaId)
             {
@@ -152,36 +150,17 @@ namespace RegattaManager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Choose (int? id)
+        public async Task<IActionResult> Choose(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            Regatta regatta = _context.Regattas.FirstOrDefault(e => e.RegattaId == id);
-            
-            if(ModelState.IsValid)
-            {
-                regatta.Choosen = true;
-                try
-                {
-                    _context.Update(regatta);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RegattaExists(regatta.RegattaId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
+            var regatta = await _context.Regattas.SingleOrDefaultAsync(m => m.RegattaId == id);
+            regatta.Choosen = true;
+            _context.Update(regatta);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
