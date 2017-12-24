@@ -22,5 +22,6 @@ namespace RegattaManager.Models
         public virtual Club Club { get; set; }        
         public virtual List<Startboat> Startboats { get; set; }
         public virtual List<Race> Races { get; set; }        
+        public virtual List<RegattaRaceclass> RegattaRaceclasses { get; set; }
     }
 }

@@ -1,14 +1,14 @@
 ﻿@model IEnumerable<RegattaManager.Models.Club>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Vereine";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>Vereine</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Neuen Verein erstellen</a>
 </p>
 <table class="table">
     <thead>
@@ -38,9 +38,9 @@
                 @Html.DisplayFor(modelItem => item.VNr)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ClubId">Edit</a> |
+                <a asp-action="Edit" asp-route-id="@item.ClubId">Bearbeiten</a> |
                 <a asp-action="Details" asp-route-id="@item.ClubId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ClubId">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.ClubId">Löschen</a>
             </td>
         </tr>
 }

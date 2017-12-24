@@ -45,6 +45,20 @@ namespace RegattaManager.Data
                 .HasOne(r => r.Regatta)
                 .WithMany(rs => rs.Startboats)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<RegattaRaceclass>()
+                .HasKey(t => new { t.RegattaId, t.RaceclassId });
+
+            builder.Entity<RegattaRaceclass>()
+                .HasOne(rc => rc.Regatta)
+                .WithMany(r => r.RegattaRaceclasses)
+                .HasForeignKey(rc => rc.RegattaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<RegattaRaceclass>()
+                .HasOne(rc => rc.Raceclass)
+                .WithMany(c => c.RegattaRaceclasses)
+                .HasForeignKey(rc => rc.RaceclassId);
         }
 
         public DbSet<RegattaManager.Models.Boatclass> Boatclasses { get; set; }
