@@ -164,6 +164,13 @@ namespace RegattaManager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult AddRaceclass(int id, int rcid)
+        {
+            _context.Regattas.Include(e => e.RegattaRaceclasses).FirstOrDefault(m => m.RegattaId == id).RegattaRaceclasses.Add(new RegattaRaceclass { RegattaId = id, RaceclassId = rcid });
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+
         private bool RegattaExists(int id)
         {
             return _context.Regattas.Any(e => e.RegattaId == id);
