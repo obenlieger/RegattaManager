@@ -37,6 +37,13 @@
         </dd>
     </dl>
 </div>
+<hr />
+<form asp-action="AddRaceclass" asp-controller="Regatta" asp-route-id="@Model.RegattaId">
+    @foreach(var item in ViewBag.raceclasslist)
+    {
+        <select name="@item.Name" id="@item.RaceclassId" asp-items="@item.RaceclassId"></select>
+    }
+</form>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.RegattaId">Edit</a> |
     <a asp-action="Index">Back to List</a>

@@ -15,6 +15,6 @@ namespace RegattaManager.Models
         [Display(Name = "Streckenlänge")]
         public virtual int Length { get; set; }
         public virtual List<Race> Races { get; set; }
-        public virtual List<RegattaRaceclass> RegattaRaceclasses { get; set; }
+        public virtual List<Competition> Competitions { get; set; }
     }
 }

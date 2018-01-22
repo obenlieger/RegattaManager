@@ -15,5 +15,6 @@ namespace RegattaManager.Models
         [Display(Name = "Anzahl Sitze")]
         public virtual int Seats { get; set; }
         public virtual List<Race> Races { get; set; }
+        public virtual List<Competition> Competitions { get; set; }
     }
 }

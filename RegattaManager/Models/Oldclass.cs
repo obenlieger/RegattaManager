@@ -17,5 +17,6 @@ namespace RegattaManager.Models
         [Display(Name = "Bis Alter")]
         public virtual int ToAge { get; set; }
         public virtual List<Race> Races { get; set; }
+        public virtual List<RegattaOldclass> RegattaOldclasses { get; set; }
     }
 }
