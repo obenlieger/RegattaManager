@@ -36,14 +36,13 @@ namespace RegattaManager.Controllers
 
             var regatta = await _context.Regattas
                 .Include(r => r.Club)
+                .Include(w => w.Waters)
                 .SingleOrDefaultAsync(m => m.RegattaId == id);
             if (regatta == null)
             {
                 return NotFound();
             }
-            
-            
-
+                        
             return View(regatta);
         }
 
@@ -51,6 +50,7 @@ namespace RegattaManager.Controllers
         public IActionResult Create()
         {
             ViewData["ClubId"] = new SelectList(_context.Clubs, "ClubId", "Name");
+            ViewData["WaterId"] = new SelectList(_context.Waters, "WaterId", "Name");
             return View();
         }
 
@@ -59,7 +59,7 @@ namespace RegattaManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RegattaId,Name,FromDate,ToDate,ClubId")] Regatta regatta)
+        public async Task<IActionResult> Create([Bind("RegattaId,Name,FromDate,ToDate,ClubId,WaterId")] Regatta regatta)
         {
             if (ModelState.IsValid)
             {
@@ -68,6 +68,7 @@ namespace RegattaManager.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClubId"] = new SelectList(_context.Clubs, "ClubId", "Name", regatta.ClubId);
+            ViewData["WaterId"] = new SelectList(_context.Waters, "WaterId", "Name", regatta.WaterId);
             return View(regatta);
         }
 
@@ -85,13 +86,14 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
             ViewData["ClubId"] = new SelectList(_context.Clubs, "ClubId", "Name", regatta.ClubId);
+            ViewData["WaterId"] = new SelectList(_context.Waters, "WaterId", "Name", regatta.WaterId);
             return View(regatta);
         }
 
         // POST: Regatta/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RegattaId,Name,FromDate,ToDate,ClubId,Choosen")] Regatta regatta)
+        public async Task<IActionResult> Edit(int id, [Bind("RegattaId,Name,FromDate,ToDate,ClubId,WaterId,Choosen")] Regatta regatta)
         {
             if (id != regatta.RegattaId)
             {
@@ -119,6 +121,7 @@ namespace RegattaManager.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClubId"] = new SelectList(_context.Clubs, "ClubId", "ClubId", regatta.ClubId);
+            ViewData["WaterId"] = new SelectList(_context.Waters, "WaterId", "WaterId", regatta.WaterId);
             return View(regatta);
         }
 
@@ -164,6 +167,47 @@ namespace RegattaManager.Controllers
             _context.Update(regatta);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult Oldclasses(int? id)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+
+            var regatta = _context.Regattas.Include(e => e.RegattaOldclasses).FirstOrDefault(r => r.RegattaId == id);
+            var selectedRegattaOldclasses = _context.RegattaOldclasses.Where(m => m.RegattaId == id).Select(e => e.OldclassId).ToList();
+            ViewData["OldclassId"] = new MultiSelectList(_context.Oldclasses,"OldclassId","Name",selectedRegattaOldclasses);            
+
+            return View(regatta);
+        }
+
+        [HttpPost]
+        public IActionResult Oldclasses(int RegattaId, IEnumerable<int> OldclassId)
+        {
+            foreach(int oid in OldclassId)
+            {
+                _context.Regattas.Include(e => e.RegattaOldclasses).FirstOrDefault(m => m.RegattaId == RegattaId).RegattaOldclasses.Add(new RegattaOldclass { RegattaId = RegattaId, OldclassId = oid });
+            }            
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult CampingFees(int? id)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+
+            var regatta = _context.Regattas.Include(e => e.RegattaCampingFees).FirstOrDefault(r => r.RegattaId == id);
+            var selectedCampingFees = _context.RegattaCampingFees.Where(m => m.RegattaId == id).Select(e => e.CampingFeeId).ToList();
+            ViewData["CampingFeeId"] = new MultiSelectList(_context.CampingFees, "CampingFeeId", "Name", selectedCampingFees);
+
+            return View(regatta);
         }
 
     /*    public IActionResult AddRaceclass(int id, int rcid)

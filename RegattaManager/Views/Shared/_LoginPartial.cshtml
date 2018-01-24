@@ -21,13 +21,14 @@
                     <li><a asp-area="" asp-controller="Oldclass" asp-action="Index">Altersklassen</a></li>
                     <li><a asp-area="" asp-controller="Racestatus" asp-action="Index">Rennstati</a></li>
                     <li><a asp-area="" asp-controller="Startboatstatus" asp-action="Index">Startbootstati</a></li>
+                    <li><a asp-area="" asp-controller="Water" asp-action="Index">Gew&auml;sser</a></li>
                 </ul>
             </li>
             <li>
-                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hallo @UserManager.GetUserName(User)!</a>
             </li>
             <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link">Ausloggen</button>
             </li>
         </ul>
     </form>
@@ -35,7 +36,7 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
-        <li><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
+        <li><a asp-area="" asp-controller="Account" asp-action="Register">Registrieren</a></li>
+        <li><a asp-area="" asp-controller="Account" asp-action="Login">Einloggen</a></li>
     </ul>
 }
