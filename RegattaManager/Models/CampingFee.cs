@@ -11,6 +11,7 @@ namespace RegattaManager.Models
         [Key]
         public virtual int CampingFeeId { get; set; }
         public virtual string Name { get; set; }
+        [Display(Name="Gebühr")]
         public virtual float Amount { get; set; }
         public virtual List<RegattaCampingFee> RegattaCampingFees { get; set; }
     }

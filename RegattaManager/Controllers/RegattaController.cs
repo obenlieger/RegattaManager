@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RegattaManager.Data;
 using RegattaManager.Models;
+using RegattaManager.ViewModels;
 
 namespace RegattaManager.Controllers
 {
@@ -80,14 +81,16 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var regatta = await _context.Regattas.SingleOrDefaultAsync(m => m.RegattaId == id);
+            RegattaVM rvm = populateRegattaVM(id);
+
+            //var regatta = await _context.Regattas.SingleOrDefaultAsync(m => m.RegattaId == id);
             if (regatta == null)
             {
                 return NotFound();
             }
             ViewData["ClubId"] = new SelectList(_context.Clubs, "ClubId", "Name", regatta.ClubId);
             ViewData["WaterId"] = new SelectList(_context.Waters, "WaterId", "Name", regatta.WaterId);
-            return View(regatta);
+            return View(rvm);
         }
 
         // POST: Regatta/Edit/5
@@ -210,16 +213,67 @@ namespace RegattaManager.Controllers
             return View(regatta);
         }
 
-    /*    public IActionResult AddRaceclass(int id, int rcid)
+        [HttpPost]
+        public IActionResult CampingFees(int RegattaId, IEnumerable<int> CampingFeeId)
         {
-            _context.Regattas.Include(e => e.RegattaRaceclasses).FirstOrDefault(m => m.RegattaId == id).RegattaRaceclasses.Add(new RegattaRaceclass { RegattaId = id, RaceclassId = rcid });
+            foreach(int cfid in CampingFeeId)
+            {
+                _context.Regattas.Include(e => e.RegattaCampingFees).FirstOrDefault(m => m.RegattaId == RegattaId).RegattaCampingFees.Add(new RegattaCampingFee { RegattaId = RegattaId, CampingFeeId = cfid });
+            }
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
-        */
+
         private bool RegattaExists(int id)
         {
             return _context.Regattas.Any(e => e.RegattaId == id);
+        }
+
+        private RegattaVM populateRegattaVM(int? id)
+        {
+            if (id == null)
+            {
+                return null;
+            }
+            RegattaVM rvm = new RegattaVM();
+            var regatta = _context.Regattas.Include(e => e.Waters).Include(e => e.Club).FirstOrDefault(e => e.RegattaId == id);
+            var roc = _context.RegattaOldclasses.Where(e => e.RegattaId == id);
+            var rcf = _context.RegattaCampingFees.Where(e => e.RegattaId == id);
+            var comp = _context.Competitions.Where(e => e.RegattaId == id);
+
+            rvm.RegattaId = id;
+            rvm.RegattaName = regatta.Name;
+            rvm.RegattaVon = regatta.FromDate;
+            rvm.RegattaBis = regatta.ToDate;
+            rvm.Waterdepth = regatta.Waterdepth;
+            rvm.Startslots = regatta.Startslots;
+            rvm.ReportText = regatta.ReportText;
+            rvm.ReportSchedule = regatta.ReportSchedule;
+            rvm.ReportOpening = regatta.ReportOpening;
+            rvm.ReportAddress = regatta.ReportAddress;
+            rvm.ReportTel = regatta.ReportTel;
+            rvm.ReportFax = regatta.ReportFax;
+            rvm.Judge = regatta.Judge;
+            rvm.Awards = regatta.Awards;
+            rvm.Security = regatta.Security;
+            rvm.ScheduleText = regatta.ScheduleText;
+            rvm.SubscriberFee = regatta.SubscriberFee;
+            rvm.Accomodation = regatta.Accomodation;
+            rvm.Comment = regatta.Comment;
+            rvm.Catering = regatta.Catering;
+            rvm.WaterId = regatta.WaterId;
+            rvm.ClubId = regatta.ClubId;
+
+            rvm.RegattaOldclasses = roc;
+            rvm.RegattaCampingFees = rcf;
+            rvm.Competitions = comp;
+
+            rvm.Oldclasses = _context.Oldclasses.ToList();
+            rvm.CampingFees = _context.CampingFees.ToList();
+            rvm.StartingFees = _context.StartingFees.ToList();
+            rvm.Raceclasses = _context.Raceclasses.ToList();
+
+            return rvm;
         }
     }
 }

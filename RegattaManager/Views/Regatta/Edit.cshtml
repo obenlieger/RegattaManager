@@ -1,4 +1,4 @@
-﻿@model RegattaManager.Models.Regatta
+﻿@model RegattaManager.ViewModels.RegattaVM
 
 @{
     ViewData["Title"] = "Edit";
@@ -14,26 +14,30 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="RegattaId" />
-            <input type="hidden" asp-for="Choosen" />
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="RegattaName" class="control-label"></label>
+                <input asp-for="RegattaName" class="form-control" />
+                <span asp-validation-for="RegattaName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FromDate" class="control-label"></label>
-                <input asp-for="FromDate" class="form-control" />
-                <span asp-validation-for="FromDate" class="text-danger"></span>
+                <label asp-for="RegattaVon" class="control-label"></label>
+                <input asp-for="RegattaVon" class="form-control" />
+                <span asp-validation-for="RegattaVon" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ToDate" class="control-label"></label>
-                <input asp-for="ToDate" class="form-control" />
-                <span asp-validation-for="ToDate" class="text-danger"></span>
+                <label asp-for="RegattaBis" class="control-label"></label>
+                <input asp-for="RegattaBis" class="form-control" />
+                <span asp-validation-for="RegattaBis" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ClubId" class="control-label"></label>
                 <select asp-for="ClubId" class="form-control" asp-items="ViewBag.ClubId"></select>
                 <span asp-validation-for="ClubId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WaterId" class="control-label"></label>
+                <select asp-for="WaterId" class="form-control" asp-items="ViewBag.WaterId"></select>
+                <span asp-validation-for="WaterId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
