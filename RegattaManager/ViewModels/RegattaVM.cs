@@ -20,6 +20,7 @@ namespace RegattaManager.ViewModels
         public string ReportAddress { get; set; }
         public string ReportTel { get; set; }
         public string ReportFax { get; set; }
+        public string ReportMail { get; set; }
         public string Judge { get; set; }
         public string Awards { get; set; }
         public string Security { get; set; }

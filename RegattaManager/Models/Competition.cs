@@ -16,5 +16,12 @@ namespace RegattaManager.Models
         public virtual Boatclass Boatclasses { get; set; }
         public virtual int RaceclassId { get; set; }
         public virtual Raceclass Raceclasses { get; set; }
+        public virtual bool Selected { get; set; }
+        public virtual string Name {
+            get
+            {
+                return string.Format("{0} {1}", Boatclasses.Name, Raceclasses.Name);
+            }
+        }
     }
 }

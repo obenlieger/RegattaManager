@@ -74,22 +74,41 @@ namespace RegattaManager.Controllers
         }
 
         // GET: Regatta/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
+            var comp = _context.Competitions.Where(e => e.RegattaId == id);
+            
+            if (comp.ToList().Count == 0 || comp == null)
+            {                
+                var bclist = _context.Boatclasses.ToList();
+                var rclist = _context.Raceclasses.ToList();
+                foreach(var bc in bclist)
+                {
+                    foreach(var rc in rclist)
+                    {
+                        _context.Competitions.Add(new Competition { BoatclassId = bc.BoatclassId, RaceclassId = rc.RaceclassId, RegattaId = id.Value });
+                    }
+                }
+                _context.SaveChanges();
+            }
+
             RegattaVM rvm = populateRegattaVM(id);
 
             //var regatta = await _context.Regattas.SingleOrDefaultAsync(m => m.RegattaId == id);
-            if (regatta == null)
+            if (rvm == null)
             {
                 return NotFound();
             }
-            ViewData["ClubId"] = new SelectList(_context.Clubs, "ClubId", "Name", regatta.ClubId);
-            ViewData["WaterId"] = new SelectList(_context.Waters, "WaterId", "Name", regatta.WaterId);
+            ViewData["ClubId"] = new SelectList(_context.Clubs, "ClubId", "Name", rvm.ClubId);
+            ViewData["WaterId"] = new SelectList(_context.Waters, "WaterId", "Name", rvm.WaterId);            
+            ViewData["OldclassId"] = new MultiSelectList(_context.Oldclasses, "OldclassId", "Name", rvm.RegattaOldclasses.Select(e => e.OldclassId).ToList());
+            ViewData["CompetitionId"] = new MultiSelectList(_context.Competitions, "CompetitionId", "Name", rvm.Competitions.Where(e => e.Selected == true).Select(e => e.CompetitionId));
+            //ViewData["StartingFeeId"] = new MultiSelectList(_context.StartingFees,"StartingFeeId","Name",rvm)
             return View(rvm);
         }
 
@@ -231,17 +250,13 @@ namespace RegattaManager.Controllers
 
         private RegattaVM populateRegattaVM(int? id)
         {
-            if (id == null)
-            {
-                return null;
-            }
             RegattaVM rvm = new RegattaVM();
             var regatta = _context.Regattas.Include(e => e.Waters).Include(e => e.Club).FirstOrDefault(e => e.RegattaId == id);
             var roc = _context.RegattaOldclasses.Where(e => e.RegattaId == id);
             var rcf = _context.RegattaCampingFees.Where(e => e.RegattaId == id);
             var comp = _context.Competitions.Where(e => e.RegattaId == id);
 
-            rvm.RegattaId = id;
+            rvm.RegattaId = regatta.RegattaId;
             rvm.RegattaName = regatta.Name;
             rvm.RegattaVon = regatta.FromDate;
             rvm.RegattaBis = regatta.ToDate;
@@ -253,6 +268,7 @@ namespace RegattaManager.Controllers
             rvm.ReportAddress = regatta.ReportAddress;
             rvm.ReportTel = regatta.ReportTel;
             rvm.ReportFax = regatta.ReportFax;
+            rvm.ReportMail = regatta.ReportMail;
             rvm.Judge = regatta.Judge;
             rvm.Awards = regatta.Awards;
             rvm.Security = regatta.Security;

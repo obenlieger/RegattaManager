@@ -59,7 +59,7 @@ namespace RegattaManager.Models
         public virtual int WaterId { get; set; }        
         public virtual Water Waters { get; set; }
         public virtual List<RegattaCampingFee> RegattaCampingFees { get; set; }
-        public virtual List<StartingFee> StartingFees { get; set; }
+        public virtual List<RegattaStartingFee> RegattaStartingFees { get; set; }
         public virtual List<RegattaOldclass> RegattaOldclasses { get; set; }
         public virtual List<Competition> Competitions { get; set; }
     }
