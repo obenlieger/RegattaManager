@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RegattaManager.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RegattaManager.Controllers
 {
+    [Authorize]
     public class StartController : Controller
     {
         private readonly ApplicationDbContext _context;

@@ -5,50 +5,53 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using RegattaManager.Data;
 using RegattaManager.Models;
 
 namespace RegattaManager.Controllers
 {
     [Authorize]
-    public class CampingFeeController : Controller
+    public class StartingFeeController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CampingFeeController(ApplicationDbContext context)
+        public StartingFeeController(ApplicationDbContext context)
         {
             _context = context;
         }
-
-        // GET: CampingFee
+        // GET: StartingFee
         public ActionResult Index()
         {
-            var model = _context.CampingFees.ToList();
+            var model = _context.StartingFees.Include(e => e.Boatclasses).Include(e => e.Oldclasses).ToList();
             return View(model);
         }
 
-        // GET: CampingFee/Details/5
+        // GET: StartingFee/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: CampingFee/Create
+        // GET: StartingFee/Create
         public ActionResult Create()
         {
+            ViewData["BoatclassId"] = new SelectList(_context.Boatclasses, "BoatclassId", "Name");
+            ViewData["OldclassId"] = new SelectList(_context.Oldclasses, "OldclassId", "Name");
             return View();
         }
 
-        // POST: CampingFee/Create
+        // POST: StartingFee/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CampingFee campingFee)
+        public ActionResult Create(StartingFee startingFee)
         {
             try
             {
                 if(ModelState.IsValid)
                 {
-                    _context.Add(campingFee);
+                    _context.Add(startingFee);
                     _context.SaveChanges();
                 }
 
@@ -60,13 +63,13 @@ namespace RegattaManager.Controllers
             }
         }
 
-        // GET: CampingFee/Edit/5
+        // GET: StartingFee/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: CampingFee/Edit/5
+        // POST: StartingFee/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -83,21 +86,23 @@ namespace RegattaManager.Controllers
             }
         }
 
-        // GET: CampingFee/Delete/5
+        // GET: StartingFee/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var model = _context.StartingFees.FirstOrDefault(e => e.StartingFeeId == id);
+            return View(model);
         }
 
-        // POST: CampingFee/Delete/5
+        // POST: StartingFee/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int? id)
         {
             try
             {
-                // TODO: Add delete logic here
-
+                var model = _context.StartingFees.FirstOrDefault(e => e.StartingFeeId == id);
+                _context.StartingFees.Remove(model);
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             catch

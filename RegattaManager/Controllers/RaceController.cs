@@ -7,9 +7,11 @@ using RegattaManager.Data;
 using RegattaManager.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RegattaManager.Controllers
 {
+    [Authorize]
     public class RaceController : Controller
     {
         private readonly ApplicationDbContext _context;

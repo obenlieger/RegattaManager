@@ -88,23 +88,18 @@ namespace RegattaManager.Data
                 .WithMany(ro => ro.RegattaOldclasses)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<Competition>()
-                .HasKey(t => new { t.BoatclassId, t.RaceclassId, t.RegattaId });
+            builder.Entity<RegattaCompetition>()
+                .HasKey(t => new { t.CompetitionId, t.RegattaId });
 
-            builder.Entity<Competition>()
+            builder.Entity<RegattaCompetition>()
                 .HasOne(r => r.Regattas)
-                .WithMany(c => c.Competitions)
+                .WithMany(c => c.RegattaCompetitions)
                 .HasForeignKey(rr => rr.RegattaId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<Competition>()
-                .HasOne(b => b.Boatclasses)
-                .WithMany(c => c.Competitions)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<Competition>()
-                .HasOne(rc => rc.Raceclasses)
-                .WithMany(c => c.Competitions)
+            builder.Entity<RegattaCompetition>()
+                .HasOne(b => b.Competitions)
+                .WithMany(c => c.RegattaCompetitions)
                 .OnDelete(DeleteBehavior.Restrict);
         }
 
@@ -143,5 +138,7 @@ namespace RegattaManager.Data
         public DbSet<RegattaManager.Models.Competition> Competitions { get; set; }
 
         public DbSet<RegattaManager.Models.RegattaStartingFee> RegattaStartingFees { get; set; }
+
+        public DbSet<RegattaManager.Models.RegattaCompetition> RegattaCompetitions { get; set; }
     }
 }

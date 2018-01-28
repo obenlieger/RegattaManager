@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using RegattaManager.ViewModels;
 
 namespace RegattaManager.Controllers
 {
+    [Authorize]
     public class RegattaController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -81,34 +83,18 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
-            var comp = _context.Competitions.Where(e => e.RegattaId == id);
-            
-            if (comp.ToList().Count == 0 || comp == null)
-            {                
-                var bclist = _context.Boatclasses.ToList();
-                var rclist = _context.Raceclasses.ToList();
-                foreach(var bc in bclist)
-                {
-                    foreach(var rc in rclist)
-                    {
-                        _context.Competitions.Add(new Competition { BoatclassId = bc.BoatclassId, RaceclassId = rc.RaceclassId, RegattaId = id.Value });
-                    }
-                }
-                _context.SaveChanges();
-            }
-
             RegattaVM rvm = populateRegattaVM(id);
 
-            //var regatta = await _context.Regattas.SingleOrDefaultAsync(m => m.RegattaId == id);
             if (rvm == null)
             {
                 return NotFound();
             }
             ViewData["ClubId"] = new SelectList(_context.Clubs, "ClubId", "Name", rvm.ClubId);
             ViewData["WaterId"] = new SelectList(_context.Waters, "WaterId", "Name", rvm.WaterId);            
-            ViewData["OldclassId"] = new MultiSelectList(_context.Oldclasses, "OldclassId", "Name", rvm.RegattaOldclasses.Select(e => e.OldclassId).ToList());
-            ViewData["CompetitionId"] = new MultiSelectList(_context.Competitions, "CompetitionId", "Name", rvm.Competitions.Where(e => e.Selected == true).Select(e => e.CompetitionId));
-            //ViewData["StartingFeeId"] = new MultiSelectList(_context.StartingFees,"StartingFeeId","Name",rvm)
+            ViewData["OldclassId"] = new MultiSelectList(rvm.Oldclasses, "OldclassId", "Name", rvm.RegattaOldclasses.Select(e => e.OldclassId).ToList());
+            ViewData["CompetitionId"] = new MultiSelectList(rvm.Competitions, "CompetitionId", "Name", rvm.RegattaCompetitions.Select(e => e.CompetitionId).ToList());
+            ViewData["StartingFeeId"] = new MultiSelectList(rvm.StartingFees, "StartingFeeId", "Name", rvm.RegattaStartingFees.Select(e => e.StartingFeeId).ToList());
+            ViewData["CampingFeeId"] = new MultiSelectList(rvm.CampingFees, "CampingFeeId", "Name", rvm.RegattaCampingFees.Select(e => e.CampingFeeId).ToList());
             return View(rvm);
         }
 
@@ -191,7 +177,7 @@ namespace RegattaManager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet]
+/*        [HttpGet]
         public IActionResult Oldclasses(int? id)
         {
             if(id == null)
@@ -242,7 +228,7 @@ namespace RegattaManager.Controllers
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
-
+*/
         private bool RegattaExists(int id)
         {
             return _context.Regattas.Any(e => e.RegattaId == id);
@@ -254,7 +240,8 @@ namespace RegattaManager.Controllers
             var regatta = _context.Regattas.Include(e => e.Waters).Include(e => e.Club).FirstOrDefault(e => e.RegattaId == id);
             var roc = _context.RegattaOldclasses.Where(e => e.RegattaId == id);
             var rcf = _context.RegattaCampingFees.Where(e => e.RegattaId == id);
-            var comp = _context.Competitions.Where(e => e.RegattaId == id);
+            var comp = _context.RegattaCompetitions.Where(e => e.RegattaId == id);
+            var rsf = _context.RegattaStartingFees.Where(e => e.RegattaId == id);
 
             rvm.RegattaId = regatta.RegattaId;
             rvm.RegattaName = regatta.Name;
@@ -268,7 +255,7 @@ namespace RegattaManager.Controllers
             rvm.ReportAddress = regatta.ReportAddress;
             rvm.ReportTel = regatta.ReportTel;
             rvm.ReportFax = regatta.ReportFax;
-            rvm.ReportMail = regatta.ReportMail;
+            rvm.ReportMail = regatta.ReportMail;            
             rvm.Judge = regatta.Judge;
             rvm.Awards = regatta.Awards;
             rvm.Security = regatta.Security;
@@ -282,12 +269,14 @@ namespace RegattaManager.Controllers
 
             rvm.RegattaOldclasses = roc;
             rvm.RegattaCampingFees = rcf;
-            rvm.Competitions = comp;
+            rvm.RegattaCompetitions = comp;
+            rvm.RegattaStartingFees = rsf;
 
             rvm.Oldclasses = _context.Oldclasses.ToList();
             rvm.CampingFees = _context.CampingFees.ToList();
-            rvm.StartingFees = _context.StartingFees.ToList();
+            rvm.StartingFees = _context.StartingFees.Include(e => e.Boatclasses).Include(e => e.Oldclasses).ToList();
             rvm.Raceclasses = _context.Raceclasses.ToList();
+            rvm.Competitions = _context.Competitions.Include(e => e.Boatclasses).Include(e => e.Raceclasses).ToList();
 
             return rvm;
         }

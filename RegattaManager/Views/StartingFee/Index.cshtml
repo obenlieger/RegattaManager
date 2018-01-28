@@ -1,0 +1,48 @@
+﻿@model IEnumerable<RegattaManager.Models.StartingFee>
+
+@{
+    ViewData["Title"] = "Startgeb&uuml;hren";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Startgeb&uuml;hren</h2>
+
+<p>
+    <a asp-action="Create">Erstellen</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Amount)
+                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Boatclasses)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Oldclasses)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Boatclasses.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Oldclasses.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.StartingFeeId">Bearbeiten</a> |
+                <a asp-action="Details" asp-route-id="@item.StartingFeeId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.StartingFeeId">L&ouml;schen</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

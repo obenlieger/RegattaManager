@@ -5,50 +5,54 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using RegattaManager.Data;
 using RegattaManager.Models;
 
 namespace RegattaManager.Controllers
 {
     [Authorize]
-    public class CampingFeeController : Controller
+    public class CompetitionController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CampingFeeController(ApplicationDbContext context)
+        public CompetitionController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: CampingFee
+        // GET: Competition
         public ActionResult Index()
         {
-            var model = _context.CampingFees.ToList();
+            var model = _context.Competitions.Include(e => e.Raceclasses).Include(e => e.Boatclasses).ToList().OrderBy(e => e.Boatclasses.Name);
             return View(model);
         }
 
-        // GET: CampingFee/Details/5
+        // GET: Competition/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: CampingFee/Create
+        // GET: Competition/Create
         public ActionResult Create()
         {
+            ViewData["BoatclassId"] = new SelectList(_context.Boatclasses, "BoatclassId", "Name");
+            ViewData["RaceclassId"] = new SelectList(_context.Raceclasses, "RaceclassId", "Name");
             return View();
         }
 
-        // POST: CampingFee/Create
+        // POST: Competition/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CampingFee campingFee)
+        public ActionResult Create(Competition competition)
         {
             try
             {
                 if(ModelState.IsValid)
                 {
-                    _context.Add(campingFee);
+                    _context.Add(competition);
                     _context.SaveChanges();
                 }
 
@@ -60,13 +64,31 @@ namespace RegattaManager.Controllers
             }
         }
 
-        // GET: CampingFee/Edit/5
+        [HttpGet]        
+        public ActionResult CreateAll()
+        {
+            var bclist = _context.Boatclasses.ToList();
+            var rclist = _context.Raceclasses.ToList();
+
+            foreach(var bc in bclist)
+            {
+                foreach(var rc in rclist)
+                {
+                    _context.Competitions.Add(new Competition { BoatclassId = bc.BoatclassId, RaceclassId = rc.RaceclassId });
+                }
+            }
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Competition/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: CampingFee/Edit/5
+        // POST: Competition/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -83,13 +105,13 @@ namespace RegattaManager.Controllers
             }
         }
 
-        // GET: CampingFee/Delete/5
+        // GET: Competition/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: CampingFee/Delete/5
+        // POST: Competition/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

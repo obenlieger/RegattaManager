@@ -9,19 +9,19 @@ namespace RegattaManager.Models
     public class Competition
     {
         [Key]
-        public virtual int CompetitionId { get; set; }
-        public virtual int RegattaId { get; set; }
-        public virtual Regatta Regattas { get; set; }
+        public virtual int CompetitionId { get; set; }        
         public virtual int BoatclassId { get; set; }
+        [Display(Name="Bootsklassen")]
         public virtual Boatclass Boatclasses { get; set; }
         public virtual int RaceclassId { get; set; }
-        public virtual Raceclass Raceclasses { get; set; }
-        public virtual bool Selected { get; set; }
+        [Display(Name="Rennklassen")]
+        public virtual Raceclass Raceclasses { get; set; }        
         public virtual string Name {
             get
             {
                 return string.Format("{0} {1}", Boatclasses.Name, Raceclasses.Name);
             }
         }
+        public virtual List<RegattaCompetition> RegattaCompetitions { get; set; }
     }
 }
