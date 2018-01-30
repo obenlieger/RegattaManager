@@ -54,6 +54,10 @@ namespace RegattaManager.Controllers
         {
             ViewData["ClubId"] = new SelectList(_context.Clubs, "ClubId", "Name");
             ViewData["WaterId"] = new SelectList(_context.Waters, "WaterId", "Name");
+            ViewData["OldclassIds"] = new MultiSelectList(rvm.Oldclasses, "OldclassId", "Name");
+            ViewData["CompetitionIds"] = new MultiSelectList(rvm.Competitions, "CompetitionId", "Name");
+            ViewData["StartingFeeIds"] = new MultiSelectList(rvm.StartingFees, "StartingFeeId", "Name");
+            ViewData["CampingFeeIds"] = new MultiSelectList(rvm.CampingFees, "CampingFeeId", "LongName");
             return View();
         }
 
@@ -62,7 +66,7 @@ namespace RegattaManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RegattaId,Name,FromDate,ToDate,ClubId,WaterId")] Regatta regatta)
+        public async Task<IActionResult> Create([Bind("RegattaId,Name,FromDate,ToDate,ClubId,WaterId")] RegattaVM regatta)
         {
             if (ModelState.IsValid)
             {
@@ -91,21 +95,117 @@ namespace RegattaManager.Controllers
             }
             ViewData["ClubId"] = new SelectList(_context.Clubs, "ClubId", "Name", rvm.ClubId);
             ViewData["WaterId"] = new SelectList(_context.Waters, "WaterId", "Name", rvm.WaterId);            
-            ViewData["OldclassId"] = new MultiSelectList(rvm.Oldclasses, "OldclassId", "Name", rvm.RegattaOldclasses.Select(e => e.OldclassId).ToList());
-            ViewData["CompetitionId"] = new MultiSelectList(rvm.Competitions, "CompetitionId", "Name", rvm.RegattaCompetitions.Select(e => e.CompetitionId).ToList());
-            ViewData["StartingFeeId"] = new MultiSelectList(rvm.StartingFees, "StartingFeeId", "Name", rvm.RegattaStartingFees.Select(e => e.StartingFeeId).ToList());
-            ViewData["CampingFeeId"] = new MultiSelectList(rvm.CampingFees, "CampingFeeId", "Name", rvm.RegattaCampingFees.Select(e => e.CampingFeeId).ToList());
+            ViewData["OldclassIds"] = new MultiSelectList(rvm.Oldclasses, "OldclassId", "Name", rvm.RegattaOldclasses.Select(e => e.OldclassId).ToList());
+            ViewData["CompetitionIds"] = new MultiSelectList(rvm.Competitions, "CompetitionId", "Name", rvm.RegattaCompetitions.Select(e => e.CompetitionId).ToList());
+            ViewData["StartingFeeIds"] = new MultiSelectList(rvm.StartingFees, "StartingFeeId", "Name", rvm.RegattaStartingFees.Select(e => e.StartingFeeId).ToList());
+            ViewData["CampingFeeIds"] = new MultiSelectList(rvm.CampingFees, "CampingFeeId", "LongName", rvm.RegattaCampingFees.Select(e => e.CampingFeeId).ToList());
             return View(rvm);
         }
 
         // POST: Regatta/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RegattaId,Name,FromDate,ToDate,ClubId,WaterId,Choosen")] Regatta regatta)
+        public async Task<IActionResult> Edit(int id, [Bind("RegattaId,RegattaName,RegattaVon,RegattaBis,Waterdepth,Startslots,ReportText,ReportSchedule,ReportOpening," +
+            "ReportAddress,ReportTel,ReportFax,Judge,Awards,Security,ScheduleText,SubscriberFee,Accomodation,Comment,Catering,ClubId,WaterId")] RegattaVM regattaVM, 
+            IEnumerable<int> OldclassIds, IEnumerable<int> CompetitionIds, IEnumerable<int> StartingFeeIds, IEnumerable<int> CampingFeeIds)
         {
-            if (id != regatta.RegattaId)
+            if (id != regattaVM.RegattaId)
             {
                 return NotFound();
+            }
+
+            Regatta regatta = _context.Regattas.FirstOrDefault(e => e.RegattaId == regattaVM.RegattaId);
+
+            regatta.Name = regattaVM.RegattaName;
+            regatta.FromDate = regattaVM.RegattaVon;
+            regatta.ToDate = regattaVM.RegattaBis;
+            regatta.Waterdepth = regattaVM.Waterdepth;
+            regatta.Startslots = regattaVM.Startslots;
+            regatta.ReportText = regattaVM.ReportText;
+            regatta.ReportSchedule = regattaVM.ReportSchedule;
+            regatta.ReportOpening = regattaVM.ReportOpening;
+            regatta.ReportAddress = regattaVM.ReportAddress;
+            regatta.ReportTel = regattaVM.ReportTel;
+            regatta.ReportFax = regattaVM.ReportFax;
+            regatta.Judge = regattaVM.Judge;
+            regatta.Awards = regattaVM.Awards;
+            regatta.Security = regattaVM.Security;
+            regatta.ScheduleText = regattaVM.ScheduleText;
+            regatta.SubscriberFee = regattaVM.SubscriberFee;
+            regatta.Accomodation = regattaVM.Accomodation;
+            regatta.Comment = regattaVM.Comment;
+            regatta.ClubId = regattaVM.ClubId;
+            regatta.WaterId = regattaVM.WaterId;
+
+            IEnumerable<RegattaOldclass> roc = _context.RegattaOldclasses.Where(e => e.RegattaId == regattaVM.RegattaId);
+            IEnumerable<RegattaCampingFee> rcf = _context.RegattaCampingFees.Where(e => e.RegattaId == regattaVM.RegattaId);
+            IEnumerable<RegattaCompetition> rc = _context.RegattaCompetitions.Where(e => e.RegattaId == regattaVM.RegattaId);
+            IEnumerable<RegattaStartingFee> rsf = _context.RegattaStartingFees.Where(e => e.RegattaId == regattaVM.RegattaId);
+
+            foreach(var oc in OldclassIds)
+            {
+                if(roc.Where(e => e.OldclassId == oc && e.RegattaId == regattaVM.RegattaId).Count() == 0)
+                {
+                    _context.Regattas.Include(e => e.RegattaOldclasses).FirstOrDefault(m => m.RegattaId == regattaVM.RegattaId).RegattaOldclasses.Add(new RegattaOldclass { RegattaId = regattaVM.RegattaId, OldclassId = oc });
+                }                
+            }
+
+            foreach(var cf in CampingFeeIds)
+            {
+                if(rcf.Where(e => e.CampingFeeId == cf && e.RegattaId == regattaVM.RegattaId).Count() == 0)
+                {
+                    _context.Regattas.Include(e => e.RegattaCampingFees).FirstOrDefault(m => m.RegattaId == regattaVM.RegattaId).RegattaCampingFees.Add(new RegattaCampingFee { RegattaId = regattaVM.RegattaId, CampingFeeId = cf });
+                }
+            }
+
+            foreach(var rcid in CompetitionIds)
+            {
+                if(rc.Where(e => e.CompetitionId == rcid && e.RegattaId == regattaVM.RegattaId).Count() == 0)
+                {
+                    _context.Regattas.Include(e => e.RegattaCompetitions).FirstOrDefault(m => m.RegattaId == regattaVM.RegattaId).RegattaCompetitions.Add(new RegattaCompetition { RegattaId = regattaVM.RegattaId, CompetitionId = rcid });
+                }
+            }
+
+            foreach(var rsfid in StartingFeeIds)
+            {
+                if(rsf.Where(e => e.StartingFeeId == rsfid && e.RegattaId == regattaVM.RegattaId).Count() == 0)
+                {
+                    _context.Regattas.Include(e => e.RegattaStartingFees).FirstOrDefault(m => m.RegattaId == regattaVM.RegattaId).RegattaStartingFees.Add(new RegattaStartingFee { RegattaId = regattaVM.RegattaId, StartingFeeId = rsfid });
+                }
+            }
+
+            _context.SaveChanges();
+         
+            foreach(var oldoc in roc)
+            {
+                if(!OldclassIds.Contains(oldoc.OldclassId))
+                {
+                    regatta.RegattaOldclasses.Remove(oldoc);
+                }
+            }
+
+            foreach(var oldcf in rcf)
+            {
+                if(!CampingFeeIds.Contains(oldcf.CampingFeeId))
+                {
+                    regatta.RegattaCampingFees.Remove(oldcf);
+                }
+            }
+
+            foreach(var oldrcid in rc)
+            {
+                if(!CompetitionIds.Contains(oldrcid.CompetitionId))
+                {
+                    regatta.RegattaCompetitions.Remove(oldrcid);
+                }
+            }
+
+            foreach(var oldrsfid in rsf)
+            {
+                if(!StartingFeeIds.Contains(oldrsfid.StartingFeeId))
+                {
+                    regatta.RegattaStartingFees.Remove(oldrsfid);
+                }
             }
 
             if (ModelState.IsValid)
@@ -130,7 +230,11 @@ namespace RegattaManager.Controllers
             }
             ViewData["ClubId"] = new SelectList(_context.Clubs, "ClubId", "ClubId", regatta.ClubId);
             ViewData["WaterId"] = new SelectList(_context.Waters, "WaterId", "WaterId", regatta.WaterId);
-            return View(regatta);
+            ViewData["RegattaOldclasses"] = new MultiSelectList(_context.Oldclasses, "OldclassId", "Name", regattaVM.RegattaOldclasses.Select(e => e.OldclassId).ToList());
+            ViewData["RegattaCompetitions"] = new MultiSelectList(_context.Competitions, "CompetitionId", "Name", regattaVM.RegattaCompetitions.Select(e => e.CompetitionId).ToList());
+            ViewData["RegattaStartingFees"] = new MultiSelectList(_context.StartingFees, "StartingFeeId", "Name", regattaVM.RegattaStartingFees.Select(e => e.StartingFeeId).ToList());
+            ViewData["RegattaCampingFees"] = new MultiSelectList(_context.CampingFees, "CampingFeeId", "Name", regattaVM.RegattaCampingFees.Select(e => e.CampingFeeId).ToList());
+            return View(regattaVM);
         }
 
         // GET: Regatta/Delete/5

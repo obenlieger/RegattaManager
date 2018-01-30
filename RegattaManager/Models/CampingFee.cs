@@ -13,6 +13,13 @@ namespace RegattaManager.Models
         public virtual string Name { get; set; }
         [Display(Name="Gebühr")]
         public virtual float Amount { get; set; }
+        public virtual string LongName
+        {
+            get
+            {
+                return string.Format("{0} = {1}", Name, Amount);
+            }
+        }
         public virtual List<RegattaCampingFee> RegattaCampingFees { get; set; }
     }
 }

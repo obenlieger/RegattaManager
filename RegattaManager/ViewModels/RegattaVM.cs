@@ -57,12 +57,12 @@ namespace RegattaManager.ViewModels
         public IEnumerable<RegattaOldclass> RegattaOldclasses { get; set; }        
         public IEnumerable<CampingFee> CampingFees { get; set; }
         [Display(Name = "Zeltplatzgebühren")]
-        public IEnumerable<RegattaCampingFee> RegattaCampingFees { get; set; }
-        [Display(Name = "Startgebühren")]
+        public IEnumerable<RegattaCampingFee> RegattaCampingFees { get; set; }        
         public IEnumerable<StartingFee> StartingFees { get; set; }
-        public IEnumerable<RegattaStartingFee> RegattaStartingFees { get; set; }
-        [Display(Name = "Wettkämpfe")]
+        [Display(Name = "Startgebühren")]
+        public IEnumerable<RegattaStartingFee> RegattaStartingFees { get; set; }        
         public IEnumerable<Competition> Competitions { get; set; }
+        [Display(Name = "Wettkämpfe")]
         public IEnumerable<RegattaCompetition> RegattaCompetitions { get; set; }        
         public IEnumerable<Raceclass> Raceclasses { get; set; }
     }

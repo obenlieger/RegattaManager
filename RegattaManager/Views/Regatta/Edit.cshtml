@@ -67,9 +67,9 @@
                 </tr>
                 <tr>
                     <td><label asp-for="RegattaOldclasses" class="control-label"></label></td>
-                    <td>@Html.ListBox("OldclassId", ViewBag.OldclassId as MultiSelectList, new { size = 15 })</td>
-                    <td><label asp-for="Competitions" class="control-label"></label></td>
-                    <td>@Html.ListBox("CompetitionId", ViewBag.CompetitionId as MultiSelectList, new { size = 15 })</td>
+                    <td>@Html.ListBox("OldclassIds", ViewBag.OldclassId as MultiSelectList, new { size = 15 })</td>
+                    <td><label asp-for="RegattaCompetitions" class="control-label"></label></td>
+                    <td>@Html.ListBox("CompetitionIds", ViewBag.CompetitionId as MultiSelectList, new { size = 15 })</td>
                 </tr>
                 <tr>
                     <td><label asp-for="ReportText" class="control-label"></label></td>
@@ -159,9 +159,9 @@
                     <td></td>
                 </tr>
                 <tr>
-                    <td><label asp-for="StartingFees" class="control-label"></label></td>
+                    <td><label asp-for="RegattaStartingFees" class="control-label"></label></td>
                     <td>
-                        @Html.ListBox("StartingFeeId", ViewBag.StartingFeeId as MultiSelectList, new { size = 15 })
+                        @Html.ListBox("StartingFeeIds", ViewBag.StartingFeeId as MultiSelectList, new { size = 15 })
                     </td>
                     <td></td>
                     <td></td>
@@ -178,7 +178,7 @@
                 <tr>
                     <td><label asp-for="RegattaCampingFees" class="control-label"></label></td>
                     <td>
-                        @Html.ListBox("CampingFeeId", ViewBag.CampingFeeId as MultiSelectList, new { size = 15 })
+                        @Html.ListBox("CampingFeeIds", ViewBag.CampingFeeId as MultiSelectList, new { size = 15 })
                     </td>
                     <td></td>
                     <td></td>
@@ -219,7 +219,6 @@
             </table>
         </form>
     </div>
-</div>
 
 <div>
     <a asp-action="Index">Back to List</a>
