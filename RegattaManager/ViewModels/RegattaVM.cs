@@ -21,12 +21,13 @@ namespace RegattaManager.ViewModels
         [Display(Name = "Startbahnen")]
         public int Startslots { get; set; }
         [Display(Name = "Meldung")]
+        [DataType(DataType.MultilineText)]
         public string ReportText { get; set; }
         [Display(Name = "Meldetermin")]
         public DateTime ReportSchedule { get; set; }
         [Display(Name = "Meldeeröffnung")]
         public DateTime ReportOpening { get; set; }
-        [Display(Name = "Meldeadresse")]
+        [Display(Name = "Meldeanschrift")]
         public string ReportAddress { get; set; }
         [Display(Name = "Telefon")]
         public string ReportTel { get; set; }
@@ -37,20 +38,28 @@ namespace RegattaManager.ViewModels
         [Display(Name = "Kampfrichter")]
         public string Judge { get; set; }
         [Display(Name = "Auszeichnungen")]
+        [DataType(DataType.MultilineText)]
         public string Awards { get; set; }
         [Display(Name = "Sicherheit")]
+        [DataType(DataType.MultilineText)]
         public string Security { get; set; }
         [Display(Name = "Zeitplan")]
+        [DataType(DataType.MultilineText)]
         public string ScheduleText { get; set; }
         [Display(Name = "Teilnehmergebühren")]
         public float SubscriberFee { get; set; }
         [Display(Name = "Unterkunft")]
+        [DataType(DataType.MultilineText)]
         public string Accomodation { get; set; }
         [Display(Name = "Bemerkungen")]
+        [DataType(DataType.MultilineText)]
         public string Comment { get; set; }
         [Display(Name = "Verpflegung")]
+        [DataType(DataType.MultilineText)]
         public string Catering { get; set; }
+        [Display(Name = "Gewässer")]
         public int WaterId { get; set; }
+        [Display(Name = "Ausrichtender Verein")]
         public int ClubId { get; set; }        
         public IEnumerable<Oldclass> Oldclasses { get; set; }
         [Display(Name = "Startklassen")]

@@ -52,12 +52,12 @@ namespace RegattaManager.Controllers
         // GET: Regatta/Create
         public IActionResult Create()
         {
-            ViewData["ClubId"] = new SelectList(_context.Clubs, "ClubId", "Name");
-            ViewData["WaterId"] = new SelectList(_context.Waters, "WaterId", "Name");
-            ViewData["OldclassIds"] = new MultiSelectList(rvm.Oldclasses, "OldclassId", "Name");
-            ViewData["CompetitionIds"] = new MultiSelectList(rvm.Competitions, "CompetitionId", "Name");
-            ViewData["StartingFeeIds"] = new MultiSelectList(rvm.StartingFees, "StartingFeeId", "Name");
-            ViewData["CampingFeeIds"] = new MultiSelectList(rvm.CampingFees, "CampingFeeId", "LongName");
+            ViewData["ClubId"] = new SelectList(_context.Clubs.OrderBy(e => e.Name), "ClubId", "Name");
+            ViewData["WaterId"] = new SelectList(_context.Waters.OrderBy(e => e.Name), "WaterId", "Name");
+            ViewData["OldclassIds"] = new MultiSelectList(_context.Oldclasses.OrderBy(e => e.Name), "OldclassId", "Name");
+            ViewData["CompetitionIds"] = new MultiSelectList(_context.Competitions.Include(e => e.Boatclasses).Include(e => e.Raceclasses), "CompetitionId", "Name");
+            ViewData["StartingFeeIds"] = new MultiSelectList(_context.StartingFees, "StartingFeeId", "Name");
+            ViewData["CampingFeeIds"] = new MultiSelectList(_context.CampingFees, "CampingFeeId", "LongName");
             return View();
         }
 
@@ -66,17 +66,78 @@ namespace RegattaManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RegattaId,Name,FromDate,ToDate,ClubId,WaterId")] RegattaVM regatta)
+        public async Task<IActionResult> Create([Bind("RegattaId,RegattaName,RegattaVon,RegattaBis,Waterdepth,Startslots,ReportText,ReportSchedule,ReportOpening," +
+            "ReportAddress,ReportTel,ReportFax,Judge,Awards,Security,ScheduleText,SubscriberFee,Accomodation,Comment,Catering,ClubId,WaterId")] RegattaVM regattaVM,
+            IEnumerable<int> OldclassIds, IEnumerable<int> CompetitionIds, IEnumerable<int> StartingFeeIds, IEnumerable<int> CampingFeeIds)
         {
+            Regatta regatta = new Regatta();
+
+            regatta.Name = regattaVM.RegattaName;
+            regatta.FromDate = regattaVM.RegattaVon;
+            regatta.ToDate = regattaVM.RegattaBis;
+            regatta.Waterdepth = regattaVM.Waterdepth;
+            regatta.Startslots = regattaVM.Startslots;
+            regatta.ReportText = regattaVM.ReportText;
+            regatta.ReportSchedule = regattaVM.ReportSchedule;
+            regatta.ReportOpening = regattaVM.ReportOpening;
+            regatta.ReportAddress = regattaVM.ReportAddress;
+            regatta.ReportTel = regattaVM.ReportTel;
+            regatta.ReportFax = regattaVM.ReportFax;
+            regatta.Judge = regattaVM.Judge;
+            regatta.Awards = regattaVM.Awards;
+            regatta.Security = regattaVM.Security;
+            regatta.ScheduleText = regattaVM.ScheduleText;
+            regatta.SubscriberFee = regattaVM.SubscriberFee;
+            regatta.Accomodation = regattaVM.Accomodation;
+            regatta.Comment = regattaVM.Comment;
+            regatta.ClubId = regattaVM.ClubId;
+            regatta.WaterId = regattaVM.WaterId;
+
             if (ModelState.IsValid)
             {
                 _context.Add(regatta);
                 await _context.SaveChangesAsync();
+
+                IEnumerable<RegattaOldclass> roc = _context.RegattaOldclasses.Where(e => e.RegattaId == regattaVM.RegattaId);
+                IEnumerable<RegattaCampingFee> rcf = _context.RegattaCampingFees.Where(e => e.RegattaId == regattaVM.RegattaId);
+                IEnumerable<RegattaCompetition> rc = _context.RegattaCompetitions.Where(e => e.RegattaId == regattaVM.RegattaId);
+                IEnumerable<RegattaStartingFee> rsf = _context.RegattaStartingFees.Where(e => e.RegattaId == regattaVM.RegattaId);
+
+                var reg = _context.Regattas.Last();
+
+                foreach (var oc in OldclassIds)
+                {
+                    _context.Regattas.Include(e => e.RegattaOldclasses).FirstOrDefault(m => m.RegattaId == reg.RegattaId).RegattaOldclasses.Add(new RegattaOldclass { RegattaId = regattaVM.RegattaId, OldclassId = oc });
+                }
+
+                foreach (var cf in CampingFeeIds)
+                {
+                    _context.Regattas.Include(e => e.RegattaCampingFees).FirstOrDefault(m => m.RegattaId == reg.RegattaId).RegattaCampingFees.Add(new RegattaCampingFee { RegattaId = regattaVM.RegattaId, CampingFeeId = cf });
+                }
+
+                foreach (var rcid in CompetitionIds)
+                {
+                    _context.Regattas.Include(e => e.RegattaCompetitions).FirstOrDefault(m => m.RegattaId == reg.RegattaId).RegattaCompetitions.Add(new RegattaCompetition { RegattaId = regattaVM.RegattaId, CompetitionId = rcid });
+                }
+
+                foreach (var rsfid in StartingFeeIds)
+                {
+
+                    _context.Regattas.Include(e => e.RegattaStartingFees).FirstOrDefault(m => m.RegattaId == reg.RegattaId).RegattaStartingFees.Add(new RegattaStartingFee { RegattaId = regattaVM.RegattaId, StartingFeeId = rsfid });
+                }
+
+                _context.SaveChanges();
+
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ClubId"] = new SelectList(_context.Clubs, "ClubId", "Name", regatta.ClubId);
             ViewData["WaterId"] = new SelectList(_context.Waters, "WaterId", "Name", regatta.WaterId);
-            return View(regatta);
+            ViewData["OldclassIds"] = new MultiSelectList(_context.Oldclasses, "OldclassId", "Name");
+            ViewData["CompetitionIds"] = new MultiSelectList(_context.Competitions, "CompetitionId", "Name");
+            ViewData["StartingFeeIds"] = new MultiSelectList(_context.StartingFees, "StartingFeeId", "Name");
+            ViewData["CampingFeeIds"] = new MultiSelectList(_context.CampingFees, "CampingFeeId", "LongName");
+            return View(regattaVM);
         }
 
         // GET: Regatta/Edit/5

@@ -22,7 +22,7 @@ namespace RegattaManager.Models
         {
             get
             {
-                return string.Format("{0} {1} = {2}", Boatclasses.Name, Oldclasses.Name, Amount);
+                return string.Format("{0} {1} = {2} EUR", Boatclasses.Name, Oldclasses.Name, Amount);
             }
         }
         public virtual List<RegattaStartingFee> RegattaStartingFees { get; set; }

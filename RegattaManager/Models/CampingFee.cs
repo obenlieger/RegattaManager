@@ -17,7 +17,7 @@ namespace RegattaManager.Models
         {
             get
             {
-                return string.Format("{0} = {1}", Name, Amount);
+                return string.Format("{0} = {1} EUR", Name, Amount);
             }
         }
         public virtual List<RegattaCampingFee> RegattaCampingFees { get; set; }

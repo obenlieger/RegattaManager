@@ -67,14 +67,18 @@ namespace RegattaManager.Controllers
         [HttpGet]        
         public ActionResult CreateAll()
         {
+            var comp = _context.Competitions;
             var bclist = _context.Boatclasses.ToList();
             var rclist = _context.Raceclasses.ToList();
 
-            foreach(var bc in bclist)
+            foreach (var bc in bclist)
             {
                 foreach(var rc in rclist)
-                {
-                    _context.Competitions.Add(new Competition { BoatclassId = bc.BoatclassId, RaceclassId = rc.RaceclassId });
+                {                    
+                    if(comp.Where(e => e.BoatclassId == bc.BoatclassId && e.RaceclassId == rc.RaceclassId).Count() == 0)
+                    { 
+                        _context.Competitions.Add(new Competition { BoatclassId = bc.BoatclassId, RaceclassId = rc.RaceclassId });
+                    }
                 }
             }
             _context.SaveChanges();
