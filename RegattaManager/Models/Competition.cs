@@ -23,5 +23,6 @@ namespace RegattaManager.Models
             }
         }
         public virtual List<RegattaCompetition> RegattaCompetitions { get; set; }
+        public virtual List<ReportedStartboat> ReportedStartboats { get; set; }
     }
 }

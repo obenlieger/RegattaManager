@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using RegattaManager.Data;
 using RegattaManager.Models;
 using RegattaManager.ViewModels;
+using RegattaManager.Extensions;
 
 namespace RegattaManager.Controllers
 {
@@ -342,58 +345,14 @@ namespace RegattaManager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-/*        [HttpGet]
-        public IActionResult Oldclasses(int? id)
-        {
-            if(id == null)
-            {
-                return NotFound();
-            }
-
-            var regatta = _context.Regattas.Include(e => e.RegattaOldclasses).FirstOrDefault(r => r.RegattaId == id);
-            var selectedRegattaOldclasses = _context.RegattaOldclasses.Where(m => m.RegattaId == id).Select(e => e.OldclassId).ToList();
-            ViewData["OldclassId"] = new MultiSelectList(_context.Oldclasses,"OldclassId","Name",selectedRegattaOldclasses);            
-
-            return View(regatta);
-        }
-
-        [HttpPost]
-        public IActionResult Oldclasses(int RegattaId, IEnumerable<int> OldclassId)
-        {
-            foreach(int oid in OldclassId)
-            {
-                _context.Regattas.Include(e => e.RegattaOldclasses).FirstOrDefault(m => m.RegattaId == RegattaId).RegattaOldclasses.Add(new RegattaOldclass { RegattaId = RegattaId, OldclassId = oid });
-            }            
-            _context.SaveChanges();
-            return RedirectToAction(nameof(Index));
-        }
-
         [HttpGet]
-        public IActionResult CampingFees(int? id)
+        public IActionResult CreateProgram(int id)
         {
-            if(id == null)
-            {
-                return NotFound();
-            }
+            var model = _context.Regattas.FirstOrDefault(e => e.RegattaId == id);
 
-            var regatta = _context.Regattas.Include(e => e.RegattaCampingFees).FirstOrDefault(r => r.RegattaId == id);
-            var selectedCampingFees = _context.RegattaCampingFees.Where(m => m.RegattaId == id).Select(e => e.CampingFeeId).ToList();
-            ViewData["CampingFeeId"] = new MultiSelectList(_context.CampingFees, "CampingFeeId", "Name", selectedCampingFees);
-
-            return View(regatta);
+            return View();
         }
 
-        [HttpPost]
-        public IActionResult CampingFees(int RegattaId, IEnumerable<int> CampingFeeId)
-        {
-            foreach(int cfid in CampingFeeId)
-            {
-                _context.Regattas.Include(e => e.RegattaCampingFees).FirstOrDefault(m => m.RegattaId == RegattaId).RegattaCampingFees.Add(new RegattaCampingFee { RegattaId = RegattaId, CampingFeeId = cfid });
-            }
-            _context.SaveChanges();
-            return RedirectToAction(nameof(Index));
-        }
-*/
         private bool RegattaExists(int id)
         {
             return _context.Regattas.Any(e => e.RegattaId == id);

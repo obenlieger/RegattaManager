@@ -28,8 +28,13 @@ namespace RegattaManager.Models
         }
         public virtual int Birthyear { get; set; }
         public virtual string Gender { get; set; }
+        public virtual bool isRented { get; set; }
+        public virtual int RentedToClubId { get; set; }
+        public virtual int RentYear { get; set; }
         public virtual int ClubId { get; set; }
         public virtual Club Club { get; set; }        
         public virtual List<StartboatMember> StartboatMembers { get; set; }
+        public virtual List<ReportedStartboatMember> ReportedStartboatMembers { get; set; }
+        public virtual List<ReportedStartboatStandby> ReportedStartboatStandbys { get; set; }
     }
 }

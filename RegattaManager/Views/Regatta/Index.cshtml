@@ -44,10 +44,8 @@
                 @Html.DisplayFor(modelItem => item.Club.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.RegattaId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RegattaId">Details</a> |
-                <a asp-action="Oldclasses" asp-route-id="@item.RegattaId">Startklassen</a> |
-                <a asp-action="Delete" asp-route-id="@item.RegattaId">Delete</a> |
+                <a asp-action="Edit" asp-route-id="@item.RegattaId">Bearbeiten</a> |                             
+                <a asp-action="Delete" asp-route-id="@item.RegattaId">L&ouml;schen</a> |
                 @if (!item.Choosen)
                 {
                     <a asp-action="Choose" asp-route-id="@item.RegattaId">Auswählen</a>

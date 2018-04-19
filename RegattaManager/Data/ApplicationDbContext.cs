@@ -101,6 +101,39 @@ namespace RegattaManager.Data
                 .HasOne(b => b.Competitions)
                 .WithMany(c => c.RegattaCompetitions)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ReportedStartboatMember>()
+              .HasKey(t => new { t.ReportedStartboatId, t.MemberId });
+
+            builder.Entity<ReportedStartboatMember>()
+                .HasOne(sm => sm.ReportedStartboat)
+                .WithMany(s => s.ReportedStartboatMembers)
+                .HasForeignKey(sm => sm.ReportedStartboatId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ReportedStartboatMember>()
+                .HasOne(sm => sm.Member)
+                .WithMany(m => m.ReportedStartboatMembers)
+                .HasForeignKey(sm => sm.MemberId);
+
+            builder.Entity<ReportedStartboatStandby>()
+               .HasKey(t => new { t.ReportedStartboatId, t.MemberId });
+
+            builder.Entity<ReportedStartboatStandby>()
+                .HasOne(sm => sm.ReportedStartboat)
+                .WithMany(s => s.ReportedStartboatStandbys)
+                .HasForeignKey(sm => sm.ReportedStartboatId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ReportedStartboatStandby>()
+                .HasOne(sm => sm.Member)
+                .WithMany(m => m.ReportedStartboatStandbys)
+                .HasForeignKey(sm => sm.MemberId);
+
+            builder.Entity<ReportedStartboat>()
+                .HasOne(r => r.Regatta)
+                .WithMany(rs => rs.ReportedStartboats)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public DbSet<RegattaManager.Models.Boatclass> Boatclasses { get; set; }
