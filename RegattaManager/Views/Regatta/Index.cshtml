@@ -46,6 +46,7 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.RegattaId">Bearbeiten</a> |                             
                 <a asp-action="Delete" asp-route-id="@item.RegattaId">L&ouml;schen</a> |
+                <a asp-action="CreateProgram" asp-route-id="@item.RegattaId">Rennen auslosen</a> |
                 @if (!item.Choosen)
                 {
                     <a asp-action="Choose" asp-route-id="@item.RegattaId">Auswählen</a>
@@ -53,7 +54,7 @@
                 else
                 {
                     <b>Ausgewählt</b>
-                }
+                }                
             </td>
         </tr>
 }

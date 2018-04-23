@@ -11,9 +11,10 @@ using System;
 namespace RegattaManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180423194553_RaceDraw")]
+    partial class RaceDraw
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -540,15 +541,11 @@ namespace RegattaManager.Migrations
 
                     b.Property<string>("RaceCode");
 
-                    b.Property<int>("RegattaId");
-
                     b.HasKey("ReportedRaceId");
 
                     b.HasIndex("CompetitionId");
 
                     b.HasIndex("OldclassId");
-
-                    b.HasIndex("RegattaId");
 
                     b.ToTable("ReportedRace");
                 });
@@ -888,11 +885,6 @@ namespace RegattaManager.Migrations
                     b.HasOne("RegattaManager.Models.Oldclass", "Oldclass")
                         .WithMany()
                         .HasForeignKey("OldclassId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("RegattaManager.Models.Regatta", "Regatta")
-                        .WithMany()
-                        .HasForeignKey("RegattaId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

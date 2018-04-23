@@ -18,5 +18,6 @@ namespace RegattaManager.Models
         public virtual int ToAge { get; set; }
         public virtual List<Race> Races { get; set; }
         public virtual List<RegattaOldclass> RegattaOldclasses { get; set; }
+        public virtual List<ReportedRace> ReportedRaces { get; set; }
     }
 }

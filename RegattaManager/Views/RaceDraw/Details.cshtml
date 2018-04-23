@@ -1,0 +1,55 @@
+﻿@model RegattaManager.Models.RaceDraw
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>RaceDraw</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ReportedSBCountFrom)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ReportedSBCountFrom)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ReportedSBCountTo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ReportedSBCountTo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.VorlaufCount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.VorlaufCount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HoffnungslaufCount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HoffnungslaufCount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ZwischenlaufCount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ZwischenlaufCount)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EndlaufCount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EndlaufCount)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.RaceDrawId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

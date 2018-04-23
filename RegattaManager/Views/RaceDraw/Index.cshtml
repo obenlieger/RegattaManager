@@ -1,0 +1,66 @@
+﻿@model IEnumerable<RegattaManager.Models.RaceDraw>
+
+@{
+    ViewData["Title"] = "Rennauslosung";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Rennauslosung</h2>
+
+<p>
+    <a asp-action="Create">Neue Auslosung erstellen</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReportedSBCountFrom)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReportedSBCountTo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.VorlaufCount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HoffnungslaufCount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ZwischenlaufCount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EndlaufCount)
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReportedSBCountFrom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReportedSBCountTo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VorlaufCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HoffnungslaufCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ZwischenlaufCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndlaufCount)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.RaceDrawId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.RaceDrawId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.RaceDrawId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
