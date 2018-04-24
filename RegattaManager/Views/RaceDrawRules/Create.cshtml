@@ -1,0 +1,59 @@
+﻿@model RegattaManager.Models.RaceDrawRules
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+<h4>RaceDrawRules</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="RaceDrawId" class="control-label"></label>
+                <select asp-for="RaceDrawId" class ="form-control" asp-items="ViewBag.RaceDrawId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="RaceTypId" class="control-label"></label>
+                <select asp-for="RaceTypId" class ="form-control" asp-items="ViewBag.RaceTypId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="RaceSequence" class="control-label"></label>
+                <input asp-for="RaceSequence" class="form-control" />
+                <span asp-validation-for="RaceSequence" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PlacementFrom" class="control-label"></label>
+                <input asp-for="PlacementFrom" class="form-control" />
+                <span asp-validation-for="PlacementFrom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PlacementTo" class="control-label"></label>
+                <input asp-for="PlacementTo" class="form-control" />
+                <span asp-validation-for="PlacementTo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ToRaceTypId" class="control-label"></label>
+                <select asp-for="ToRaceTypId" class="form-control" asp-items="ViewBag.ToRaceTypId"></select>
+                <span asp-validation-for="ToRaceTypId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ToRaceSequence" class="control-label"></label>
+                <input asp-for="ToRaceSequence" class="form-control" />
+                <span asp-validation-for="ToRaceSequence" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

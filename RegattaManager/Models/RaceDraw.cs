@@ -22,6 +22,13 @@ namespace RegattaManager.Models
         public virtual int ZwischenlaufCount { get; set; }
         [Display(Name = "Anzahl Endläufe")]
         public virtual int EndlaufCount { get; set; }
+        public virtual string Name
+        {
+            get
+            {
+                return string.Format("{0} - {1}", ReportedSBCountFrom, ReportedSBCountTo);
+            }
+        }
         public virtual List<RaceDrawRules> RaceDrawRules { get; set; }
     }
 }

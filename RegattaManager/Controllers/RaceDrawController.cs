@@ -40,6 +40,16 @@ namespace RegattaManager.Controllers
                 return NotFound();
             }
 
+            var raceDrawRules = await _context.RaceDrawRules.Include(e => e.RaceDraw).Where(e => e.RaceDrawId == id).ToListAsync();
+            var raceTyps = await _context.RaceTyps.ToListAsync();
+
+            ViewBag.raceDrawRules = raceDrawRules;
+            ViewBag.raceTyps = raceTyps;
+
+            ViewData["RaceDrawId"] = new SelectList(_context.RaceDraws, "RaceDrawId", "Name");
+            ViewData["RaceTypId"] = new SelectList(_context.RaceTyps, "RaceTypId", "Name");
+            ViewData["ToRaceTypId"] = new SelectList(_context.RaceTyps, "RaceTypId", "Name");
+
             return View(raceDraw);
         }
 
@@ -143,6 +153,14 @@ namespace RegattaManager.Controllers
             _context.RaceDraws.Remove(raceDraw);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult AddRaceDrawRule(int RaceDrawId, int RaceTypId, int RaceSequence, int PlacementFrom, int PlacementTo, int ToRaceTypId, int ToRaceSequence)
+        {
+            _context.RaceDrawRules.Add(new RaceDrawRules { RaceDrawId = RaceDrawId, RaceTypId = RaceTypId, RaceSequence = RaceSequence, PlacementFrom = PlacementFrom, PlacementTo = PlacementTo, ToRaceTypId = ToRaceTypId, ToRaceSequence = ToRaceSequence });
+            _context.SaveChanges();
+
+            return RedirectToAction("Details", new { id = RaceDrawId });
         }
 
         private bool RaceDrawExists(int id)

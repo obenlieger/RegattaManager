@@ -1,0 +1,61 @@
+﻿@model RegattaManager.Models.RaceDrawRules
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>RaceDrawRules</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RaceSequence)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RaceSequence)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PlacementFrom)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PlacementFrom)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PlacementTo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PlacementTo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ToRaceTypId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ToRaceTypId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ToRaceSequence)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ToRaceSequence)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RaceDraw)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RaceDraw.RaceDrawId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RaceTyp)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RaceTyp.RaceTypId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.RaceDrawRuleId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

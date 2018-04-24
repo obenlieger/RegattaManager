@@ -49,6 +49,81 @@
         </dd>
     </dl>
 </div>
+<form asp-action="AddRaceDrawRule">
+    <table class="table">
+        <thead>
+            <tr>
+                <td>Auslosung</td>
+                <td>Renntyp</td>
+                <td>Lauf</td>
+                <td>Von Platz</td>
+                <td>Bis Platz</td>
+                <td>In Renntyp</td>
+                <td>In Lauf</td>
+            </tr>
+        </thead>
+        <tr>
+            <td>
+                <input type="hidden" name="RaceDrawId" value="@Model.RaceDrawId" />
+                @Model.Name
+            </td>
+            <td>
+                <select id="RaceTypId" name="RaceTypId" class="form-control" asp-items="ViewBag.RaceTypId"></select>
+            </td>
+            <td>
+                <input id="RaceSequence" name="RaceSequence" class="form-control" />
+            </td>
+            <td>
+                <input id="PlacementFrom" name="PlacementFrom" class="form-control" />
+            </td>
+            <td>
+                <input id="PlacementTo" name="PlacementTo" class="form-control" />
+            </td>
+            <td>
+                <select id="ToRaceTypId" name="ToRaceTypId" class="form-control" asp-items="ViewBag.ToRaceTypId"></select>
+            </td>
+            <td>
+                <input id="ToRaceSequence" name="ToRaceSequence" class="form-control" />
+            </td>
+        </tr>
+    </table>
+    <div class="form-group">
+        <input type="submit" value="Erstellen" class="btn btn-primary" />
+    </div>
+</form>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <td>Auslosung</td>
+            <td>Renntyp</td>
+            <td>Lauf</td>
+            <td>Von Platz</td>
+            <td>Bis Platz</td>
+            <td>In Renntyp</td>
+            <td>In Lauf</td>
+        </tr>
+    </thead>
+    @foreach (var rdr in ViewBag.raceDrawRules)
+    {
+    <tr>
+        <td>@rdr.RaceDraw.Name</td>
+        <td>@rdr.RaceTyp.Name</td>
+        <td>@rdr.RaceSequence</td>
+        <td>@rdr.PlacementFrom</td>
+        <td>@rdr.PlacementTo</td>
+        <td>
+            @foreach(var rt in ViewBag.raceTyps)
+            {
+                @if(rdr.ToRaceTypId == rt.RaceTypId)
+                {
+                    @rt.Name
+                }
+            }
+        </td>
+        <td>@rdr.ToRaceSequence</td>
+    </tr>
+    }
+</table>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.RaceDrawId">Edit</a> |
     <a asp-action="Index">Back to List</a>
