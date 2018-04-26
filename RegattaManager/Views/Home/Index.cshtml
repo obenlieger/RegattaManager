@@ -127,20 +127,21 @@ else
                 {
                     @:&nbsp;
                     <tr>                    
-                        <td>sb.Startbahn</td>                   
+                        <td>@sb.Startslot</td>                   
                         <td>
-                        foreach (var sbm in ViewBag.startboatmembers)
+                        @foreach (var sbm in ViewBag.startboatmembers)
                             {
-                                if (sbm.StartboatId == sb.StartboatId)
+                            @:bla
+                                @if (sbm.StartboatId == sb.StartboatId)
                                 {
-                                    foreach (var m in ViewBag.members)
+                                    @foreach (var m in ViewBag.members)
                                     {
-                                        if (m.MemberId == sbm.MemberId)
+                                        @if (m.MemberId == sbm.MemberId)
                                         {
-                                            string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                            if (m.ClubId != sb.ClubId)
+                                            @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                            @if (m.ClubId != sb.ClubId)
                                             {
-                                                string.Format(" ({0})", m.Club.Name);
+                                                @string.Format(" ({0})", m.Club.Name);
                                             }
                                             <br />
                                     }

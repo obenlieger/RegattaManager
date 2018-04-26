@@ -179,5 +179,13 @@ namespace RegattaManager.Data
         public DbSet<RegattaManager.Models.RaceDrawRules> RaceDrawRules { get; set; }
 
         public DbSet<RegattaManager.Models.RaceTyp> RaceTyps { get; set; }
+
+        public DbSet<RegattaManager.Models.ReportedRace> ReportedRaces { get; set; }
+
+        public DbSet<RegattaManager.Models.ReportedStartboat> ReportedStartboats { get; set; }
+
+        public DbSet<RegattaManager.Models.ReportedStartboatMember> ReportedStartboatMembers { get; set; }
+
+        public DbSet<RegattaManager.Models.ReportedStartboatStandby> ReportedStartboatStandbys { get; set; }
     }
 }

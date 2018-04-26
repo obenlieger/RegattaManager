@@ -8,9 +8,6 @@ namespace RegattaManager.Models
 {
     public class StartboatMember
     {
-        [Key]
-        public int StartboatMemberId { get; set; }
-
         public int StartboatId { get; set; }
         public Startboat Startboat { get; set; }
         

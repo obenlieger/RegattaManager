@@ -349,6 +349,89 @@ namespace RegattaManager.Controllers
         public IActionResult CreateProgram(int id)
         {
             var model = _context.Regattas.FirstOrDefault(e => e.RegattaId == id);
+            var reportedRaces = _context.ReportedRaces.Include(e => e.Competition).Where(e => e.RegattaId == id);
+            var reportedStartboats = _context.ReportedStartboats.Where(e => e.RegattaId == id);
+            var reportedStartboatMember = _context.ReportedStartboatMembers;
+            var reportedStartboatStandby = _context.ReportedStartboatStandbys;
+            var raceDraw = _context.RaceDraws;
+            int sbcount = 0;
+            int startbahn = 1;            
+
+            foreach(var rr in reportedRaces)
+            {
+                sbcount = reportedStartboats.Where(e => e.ReportedRaceId == rr.ReportedRaceId).Count();
+                if (sbcount > 0)
+                {
+                    foreach(var rd in raceDraw)
+                    {
+                        if(sbcount >= rd.ReportedSBCountFrom && sbcount <= rd.ReportedSBCountTo)
+                        {
+                            for(var vl = 0; vl < rd.VorlaufCount; vl++)
+                            {
+                                _context.Races.Add(new Race { BoatclassId = rr.Competition.BoatclassId, Gender = rr.Gender, OldclassId = rr.OldclassId, RaceclassId = rr.Competition.RaceclassId, RacestatusId = 1, RaceTypId = 1, RegattaId = id, RaceCode = string.Format("{0}V",rr.RaceCode.Substring(0, 5)) });                                                                
+                            }
+
+                            for(var hl = 0; hl < rd.HoffnungslaufCount; hl++)
+                            {
+                                _context.Races.Add(new Race { BoatclassId = rr.Competition.BoatclassId, Gender = rr.Gender, OldclassId = rr.OldclassId, RaceclassId = rr.Competition.RaceclassId, RacestatusId = 1, RaceTypId = 3, RegattaId = id, RaceCode = string.Format("{0}H", rr.RaceCode.Substring(0, 5)) });                                
+                            }
+
+                            for(var zl = 0; zl < rd.ZwischenlaufCount; zl ++)
+                            {
+                                _context.Races.Add(new Race { BoatclassId = rr.Competition.BoatclassId, Gender = rr.Gender, OldclassId = rr.OldclassId, RaceclassId = rr.Competition.RaceclassId, RacestatusId = 1, RaceTypId = 2, RegattaId = id, RaceCode = string.Format("{0}Z", rr.RaceCode.Substring(0, 5)) });
+                            }
+
+                            for(var el = 0; el < rd.EndlaufCount; el++)
+                            {
+                                _context.Races.Add(new Race { BoatclassId = rr.Competition.BoatclassId, Gender = rr.Gender, OldclassId = rr.OldclassId, RaceclassId = rr.Competition.RaceclassId, RacestatusId = 1, RaceTypId = 4, RegattaId = id, RaceCode = rr.RaceCode });                                
+                            }                            
+                        }
+                    }                    
+                }                
+            }
+            _context.SaveChanges();
+
+            foreach (var newrace in _context.Races.Where(e => e.RegattaId == id))
+            {
+                foreach(var rrrr in reportedRaces)
+                {
+                    if (newrace.BoatclassId == rrrr.Competition.BoatclassId && newrace.Gender == rrrr.Gender && newrace.OldclassId == rrrr.OldclassId && newrace.RaceclassId == rrrr.Competition.RaceclassId && newrace.RacestatusId == 1 && newrace.RaceTypId == 1 && newrace.RegattaId == id)
+                    {
+                        startbahn = 1;
+                        for (var i = 1; i <= reportedStartboats.Where(e => e.ReportedRaceId == rrrr.ReportedRaceId).Count(); i++)
+                        {
+                            if(startbahn == 7)
+                            {
+                                startbahn = 1;
+                            }
+                            _context.Startboats.Add(new Startboat { RaceId = newrace.RaceId, RegattaId = id, ClubId = reportedStartboats.FirstOrDefault(e => e.ReportedRaceId == rrrr.ReportedRaceId).ClubId, StartboatstatusId = 6, Startslot = startbahn });
+                            startbahn++;
+                        }
+                    }                    
+                }                
+            }
+            _context.SaveChanges();
+
+            foreach(var nr in _context.Races.Where(e => e.RegattaId == id))
+            {            
+                foreach(var rrrrrr in reportedRaces.Where(e => e.RegattaId == id))
+                {
+                    foreach(var newsb in _context.Startboats.Where(e => e.RegattaId == id))
+                    {
+                        foreach (var rsb in reportedStartboats.Where(e => e.RegattaId == id))
+                        {                            
+                            foreach (var rsbm in reportedStartboatMember)
+                            {
+                                if (rsbm.ReportedStartboatId == rsb.ReportedStartboatId && rsb.ReportedRaceId == rrrrrr.ReportedRaceId)
+                                {
+                                    _context.StartboatMembers.Add(new StartboatMember { StartboatId = newsb.StartboatId, MemberId = rsbm.MemberId, SeatNumber = rsbm.Seatnumber });
+                                }
+                            }
+                            _context.SaveChanges();
+                        }
+                    }                                       
+                }
+            }
 
             return View();
         }
