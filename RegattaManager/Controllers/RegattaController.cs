@@ -414,22 +414,25 @@ namespace RegattaManager.Controllers
 
             foreach(var nr in _context.Races.Where(e => e.RegattaId == id))
             {            
-                foreach(var rrrrrr in reportedRaces.Where(e => e.RegattaId == id))
+                foreach(var rrrrrr in reportedRaces)
                 {
-                    foreach(var newsb in _context.Startboats.Where(e => e.RegattaId == id))
+                    if (nr.BoatclassId == rrrrrr.Competition.BoatclassId && nr.Gender == rrrrrr.Gender && nr.OldclassId == rrrrrr.OldclassId && nr.RaceclassId == rrrrrr.Competition.RaceclassId && nr.RacestatusId == 1 && nr.RaceTypId == 1 && nr.RegattaId == id)
                     {
-                        foreach (var rsb in reportedStartboats.Where(e => e.RegattaId == id))
-                        {                            
-                            foreach (var rsbm in reportedStartboatMember)
-                            {
-                                if (rsbm.ReportedStartboatId == rsb.ReportedStartboatId && rsb.ReportedRaceId == rrrrrr.ReportedRaceId)
+                        foreach(var newsb in _context.Startboats.Where(e => e.RegattaId == id && e.RaceId == nr.RaceId))
+                        {
+                            foreach (var rsb in reportedStartboats.Where(e => e.RegattaId == id && e.ReportedRaceId == rrrrrr.ReportedRaceId))
+                            {        
+                                if(rsb.ClubId == newsb.ClubId && rsb.RegattaId == newsb.RegattaId)       
                                 {
-                                    _context.StartboatMembers.Add(new StartboatMember { StartboatId = newsb.StartboatId, MemberId = rsbm.MemberId, SeatNumber = rsbm.Seatnumber });
-                                }
+                                    foreach (var rsbm in reportedStartboatMember.Where(e => e.ReportedStartboatId == rsb.ReportedStartboatId))
+                                    {
+                                        _context.StartboatMembers.Add(new StartboatMember { StartboatId = newsb.StartboatId, MemberId = rsbm.MemberId, SeatNumber = rsbm.Seatnumber });
+                                    }
+                                }                                             
+                                _context.SaveChanges();
                             }
-                            _context.SaveChanges();
-                        }
-                    }                                       
+                        } 
+                    }                                                          
                 }
             }
 
