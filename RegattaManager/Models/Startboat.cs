@@ -11,6 +11,7 @@ namespace RegattaManager.Models
         [Key]
         public virtual int StartboatId { get; set; }
         public virtual int Startslot { get; set; }
+        public virtual string Gender {get;set;}
         public virtual int Placement { get; set; }
         public virtual DateTime FinishTime { get; set; }
         public virtual int ClubId { get; set; }        

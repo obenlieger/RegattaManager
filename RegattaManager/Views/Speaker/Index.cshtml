@@ -1,0 +1,330 @@
+@model IEnumerable<RegattaManager.Models.Race>
+
+@{
+   ViewBag.Title = "Sprecher";
+}
+
+<h2>&Uuml;bersicht f&uuml;r den Sprecher</h2>
+
+
+@if (ViewBag.regattachosen == 0)
+{
+    <table class="table table-hover">
+        <tr><td><h3>Noch keine Regatta ausgew&auml;hlt!</h3></td></tr>
+        <tr><td></td></tr>
+    </table>
+}
+else
+{
+    @if(ViewBag.result == true)
+    {
+    <table class="table table-hover">
+    <thead>
+        <tr>
+            <th colspan="2">
+                Rennbezeichnung
+            </th>
+            <th colspan="2">
+                Startzeit
+            </th>
+            <th></th>
+            <th></th>            
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+        <tr class="table-primary">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="table-secondary">
+            <td colspan="2">
+                @if (item.Gender == "M")
+                {
+                    @string.Format("männliche");
+                }
+                else if (item.Gender == "W")
+                {
+                    @string.Format("weibliche");
+                }
+                else
+                {
+                    @string.Format("mixed");
+                }
+                @item.Oldclass.Name
+                &nbsp;-&nbsp;
+                @item.Boatclass.Name
+                &nbsp;-&nbsp;
+                @item.Raceclass.Name
+            </td>
+            <td colspan="2">
+                @Html.DisplayFor(modelItem => item.Starttime)
+            </td>
+            <td>
+                @if (item.RaceTypId == 2)
+                {
+                    <span class="badge badge-pill badge-success">@item.RaceTyp.Name</span>
+                }
+                else if (item.RaceTypId == 1)
+                {
+                    <span class="badge badge-pill badge-primary">@item.RaceTyp.Name</span>
+                }
+                else if (item.RaceTypId == 0)
+                {
+                    <span class="badge badge-pill badge-info">@item.RaceTyp.Name</span>
+                }
+                else if (item.RaceTypId == 4)
+                {
+                    <span class="badge badge-pill badge-secondary">@item.RaceTyp.Name</span>
+                }
+                @if (item.Comment != "")
+                {
+                    @:&nbsp;
+                    @:<span class="badge badge-warning">@item.Comment</span>
+                    @if (@item.Comment == "Bier Cup")
+                    {
+                        @:&nbsp;<img src="/images/beer-512.png" height="15" />
+                    }
+                    @if (@item.Comment == "Prosecco Cup")
+                    {
+                        @:&nbsp;<img src="/images/prosecco.png" height="15" />
+                    }
+                }
+            </td>
+            <td>
+                @if(item.Spoken == false)
+                {
+                    <a href="/Speaker/SetSpoken/@item.RaceId/?result=@ViewBag.result" class="btn btn-success">Besprochen</a>
+                }
+                else
+                {
+                    <a href="#" class="btn btn-success disabled">Besprochen</a>
+                }
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#EEEEEE"><i>Platzierung</i></td>
+            <td bgcolor="#EEEEEE"><i>Startbahn</i></td>
+            <td bgcolor="#EEEEEE"><i>Starter</i></td>
+            <td bgcolor="#EEEEEE"><i>Verein</i></td>
+            <td bgcolor="#EEEEEE"><i>Status</i></td>
+        </tr>
+        @foreach (var sb in ViewBag.startboats)
+        {
+            if (sb.RaceId == item.RaceId)
+            {
+                var backcol = "table-light";
+                if (sb.Placement == 0 || sb.Placement == -1)
+                {
+                    backcol = "table-warning;
+                }
+                if (sb.Placement == 1)
+                {
+                    backcol = "table-success";
+                }
+                if (sb.Placement == 2)
+                {
+                    backcol = "table-primary";
+                }
+                if (sb.Placement == 3)
+                {
+                    backcol = "table-info";
+                }
+                if (sb.Placement != 0 && sb.Placement != -1)
+                {
+                    @:
+                    <tr class="@backcol">
+                        <td>@sb.Placement</td>
+                        <td>@sb.Startbahn</td>
+                        <td>
+                @foreach (var sbm in ViewBag.startboatmembers)
+                    {
+                        if (sbm.StartboatId == sb.StartboatId)
+                        {
+                            foreach (var m in ViewBag.members)
+                            {
+                                if (m.MemberId == sbm.MemberId)
+                                {
+                                    @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                    <br />
+                            }
+                            }
+                        }
+                    }
+                </td>
+                <td>@sb.Club.Name</td>
+                <td>@sb.Startboatstatus.Name</td>
+            </tr>
+             }
+            }
+        }
+        @foreach (var sb in ViewBag.disqsbs)
+        {
+            if (sb.RaceId == item.RaceId)
+            {
+                var backcol = "FFFFFF";
+                if (sb.Placement == 0 || sb.Placement == -1)
+                {
+                    backcol = "FFCC99";
+                }
+                if (sb.Placement <= 0)
+                {
+                    @:
+                    <tr>
+                        <td bgcolor=@backcol>0</td>
+                        <td bgcolor=@backcol>@sb.Startbahn</td>
+                        <td bgcolor=@backcol>
+                @foreach (var sbm in ViewBag.startboatmembers)
+                    {
+                        if (sbm.StartboatId == sb.StartboatId)
+                        {
+                            foreach (var m in ViewBag.members)
+                            {
+                                if (m.MemberId == sbm.MemberId)
+                                {
+                                    @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                    @if (m.ClubId != sb.ClubId)
+                                    {
+                                        @string.Format(" ({0})", m.Club.Name);
+                                    }
+                                    <br />
+                            }
+                            }
+                        }
+                    }
+                </td>
+                <td bgcolor=@backcol>@sb.Club.Name</td>
+                <td bgcolor=@backcol>@sb.Startboatstatus.Name</td>
+            </tr>
+             }
+            }
+        }
+    }
+
+</table>
+    }
+    else
+    {
+    <table class="table table-hover">
+    <thead>
+        <tr>
+            <th colspan="3">
+                Rennbezeichnung
+            </th>
+            <th>
+                Rennstatus
+            </th>
+            <th>
+                Startzeit
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+    <tr class="table-primary">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr class="table-secondary">
+        <td>
+            @if (item.RaceTypId == 2)
+            {
+                <span class="badge badge-pill badge-success">@item.RaceTyp.Name</span>
+            }
+            else if (item.RaceTypId == 1)
+            {
+                <span class="badge badge-pill badge-primary">@item.RaceTyp.Name</span>
+            }
+            else if (item.RaceTypId == 0)
+            {
+                <span class="badge badge-pill badge-info">@item.RaceTyp.Name</span>
+            }
+            else if (item.RaceTypId == 4)
+            {
+                <span class="badge badge-pill badge-secondary">@item.RaceTyp.Name</span>
+            }
+        </td>
+        <td colspan="2">
+            @if (item.Gender == "M")
+        {
+            string.Format("männliche");
+        }
+        else if (item.Gender == "W")
+        {
+            string.Format("weibliche");
+        }
+        else
+        {
+            string.Format("mixed");
+        }
+            @Html.DisplayFor(modelItem => item.Oldclass.Name)
+            &nbsp;-&nbsp;
+            @Html.DisplayFor(modelItem => item.Boatclass.Name)
+            &nbsp;-&nbsp;
+            @Html.DisplayFor(modelItem => item.Raceclass.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Starttime)
+        </td>
+        <td></td>
+        <td>
+            <a asp-action="SetSpoken" asp-controller="Speaker" asp-route-id="@item.RaceId" class="btn btn-success">Besprochen</a>
+        </td>
+    </tr>
+    <tr class="table-active">
+        <td><i>@item.RaceId</i></td>
+        <td><i>Startbahn</i></td>
+        <td><i>Starter</i></td>
+        <td><i>Verein</i></td>
+        <td></td>        
+        <td></td>
+    </tr>
+    foreach (var sb in ViewBag.startboats)
+    {
+        if (sb.RaceId == item.RaceId)
+        {
+            @:
+            <tr class="table-info">
+                <td></td>
+                <td>@sb.Startbahn</td>
+                <td>
+                    @foreach (var sbm in ViewBag.startboatmembers)
+                    {
+                        if (sbm.StartboatId == sb.StartboatId)
+                        {
+                            foreach (var m in ViewBag.members)
+                            {
+                                if (m.MemberId == sbm.MemberId)
+                                {
+                                    string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                    if (m.ClubId != sb.ClubId)
+                                    {
+                                        string.Format(" ({0})", m.Club.Name);
+                                    }
+                                    <br />
+                            }
+                        }
+                    }
+                }
+                </td>
+                <td>@sb.Club.Name</td>
+                <td></td>
+                <td></td>
+            </tr>
+            }
+        }
+    }
+     </table>
+    }
+}
+   

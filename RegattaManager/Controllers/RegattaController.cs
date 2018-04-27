@@ -416,13 +416,13 @@ namespace RegattaManager.Controllers
             {            
                 foreach(var rrrrrr in reportedRaces)
                 {
-                    if (nr.BoatclassId == rrrrrr.Competition.BoatclassId && nr.Gender == rrrrrr.Gender && nr.OldclassId == rrrrrr.OldclassId && nr.RaceclassId == rrrrrr.Competition.RaceclassId && nr.RacestatusId == 1 && nr.RaceTypId == 1 && nr.RegattaId == id)
+                    if (nr.RegattaId == rrrrrr.RegattaId && nr.RaceCode.Substring(0, 5) == rrrrrr.RaceCode.Substring(0, 5))
                     {
                         foreach(var newsb in _context.Startboats.Where(e => e.RegattaId == id && e.RaceId == nr.RaceId))
                         {
                             foreach (var rsb in reportedStartboats.Where(e => e.RegattaId == id && e.ReportedRaceId == rrrrrr.ReportedRaceId))
                             {        
-                                if(rsb.ClubId == newsb.ClubId && rsb.RegattaId == newsb.RegattaId)       
+                                if(rsb.ClubId == newsb.ClubId && rsb.RegattaId == newsb.RegattaId && rsb.Gender == newsb.Gender)       
                                 {
                                     foreach (var rsbm in reportedStartboatMember.Where(e => e.ReportedStartboatId == rsb.ReportedStartboatId))
                                     {
