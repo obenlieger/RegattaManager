@@ -368,17 +368,17 @@ namespace RegattaManager.Controllers
                         {
                             for(var vl = 0; vl < rd.VorlaufCount; vl++)
                             {
-                                _context.Races.Add(new Race { BoatclassId = rr.Competition.BoatclassId, Gender = rr.Gender, OldclassId = rr.OldclassId, RaceclassId = rr.Competition.RaceclassId, RacestatusId = 1, RaceTypId = 1, RegattaId = id, RaceCode = string.Format("{0}V",rr.RaceCode.Substring(0, 5)) });                                                                
+                                _context.Races.Add(new Race { BoatclassId = rr.Competition.BoatclassId, Gender = rr.Gender, OldclassId = rr.OldclassId, RaceclassId = rr.Competition.RaceclassId, RacestatusId = 1, RaceTypId = 1, RegattaId = id, RaceCode = string.Format("{0}V{1}",rr.RaceCode.Substring(0, 5),vl+1) });             
                             }
 
                             for(var hl = 0; hl < rd.HoffnungslaufCount; hl++)
                             {
-                                _context.Races.Add(new Race { BoatclassId = rr.Competition.BoatclassId, Gender = rr.Gender, OldclassId = rr.OldclassId, RaceclassId = rr.Competition.RaceclassId, RacestatusId = 1, RaceTypId = 3, RegattaId = id, RaceCode = string.Format("{0}H", rr.RaceCode.Substring(0, 5)) });                                
+                                _context.Races.Add(new Race { BoatclassId = rr.Competition.BoatclassId, Gender = rr.Gender, OldclassId = rr.OldclassId, RaceclassId = rr.Competition.RaceclassId, RacestatusId = 1, RaceTypId = 3, RegattaId = id, RaceCode = string.Format("{0}H{1}", rr.RaceCode.Substring(0, 5),hl+1) });                                
                             }
 
                             for(var zl = 0; zl < rd.ZwischenlaufCount; zl ++)
                             {
-                                _context.Races.Add(new Race { BoatclassId = rr.Competition.BoatclassId, Gender = rr.Gender, OldclassId = rr.OldclassId, RaceclassId = rr.Competition.RaceclassId, RacestatusId = 1, RaceTypId = 2, RegattaId = id, RaceCode = string.Format("{0}Z", rr.RaceCode.Substring(0, 5)) });
+                                _context.Races.Add(new Race { BoatclassId = rr.Competition.BoatclassId, Gender = rr.Gender, OldclassId = rr.OldclassId, RaceclassId = rr.Competition.RaceclassId, RacestatusId = 1, RaceTypId = 2, RegattaId = id, RaceCode = string.Format("{0}Z{1}", rr.RaceCode.Substring(0, 5),zl+1) });
                             }
 
                             for(var el = 0; el < rd.EndlaufCount; el++)
@@ -420,7 +420,7 @@ namespace RegattaManager.Controllers
                     {
                         foreach(var newsb in _context.Startboats.Where(e => e.RegattaId == id && e.RaceId == nr.RaceId))
                         {
-                            foreach (var rsb in reportedStartboats.Where(e => e.RegattaId == id && e.ReportedRaceId == rrrrrr.ReportedRaceId))
+                            foreach (var rsb in reportedStartboats.Where(e => e.RegattaId == id && e.ReportedRaceId == rrrrrr.ReportedRaceId).OrderBy(e => e.Gender).ThenBy(e => e.ClubId))
                             {        
                                 if(rsb.ClubId == newsb.ClubId && rsb.RegattaId == newsb.RegattaId && rsb.Gender == newsb.Gender)       
                                 {

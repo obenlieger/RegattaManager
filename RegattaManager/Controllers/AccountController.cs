@@ -203,7 +203,7 @@ namespace RegattaManager.Controllers
         {
             return View();
         }
-
+/* 
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Register(string returnUrl = null)
@@ -240,7 +240,7 @@ namespace RegattaManager.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-
+*/
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
