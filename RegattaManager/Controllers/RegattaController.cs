@@ -355,7 +355,10 @@ namespace RegattaManager.Controllers
             var reportedStartboatStandby = _context.ReportedStartboatStandbys;
             var raceDraw = _context.RaceDraws;
             int sbcount = 0;
-            int startbahn = 1;            
+            int startbahn = 1;
+            int racetypid = 1;
+            List<ReportedStartboat> repsbtemp = new List<ReportedStartboat>();
+            List<int> rsb = new List<int>();
 
             foreach(var rr in reportedRaces)
             {
@@ -391,50 +394,77 @@ namespace RegattaManager.Controllers
             }
             _context.SaveChanges();
 
-            foreach (var newrace in _context.Races.Where(e => e.RegattaId == id))
-            {
-                foreach(var rrrr in reportedRaces)
+            foreach (var rrrr in reportedRaces)
+            {                
+                foreach (var newrace in _context.Races.Where(e => e.RegattaId == id))
                 {
-                    if (newrace.BoatclassId == rrrr.Competition.BoatclassId && newrace.Gender == rrrr.Gender && newrace.OldclassId == rrrr.OldclassId && newrace.RaceclassId == rrrr.Competition.RaceclassId && newrace.RacestatusId == 1 && newrace.RaceTypId == 1 && newrace.RegattaId == id)
+                    sbcount = reportedStartboats.Where(e => e.ReportedRaceId == rrrr.ReportedRaceId).Count();
+
+                    if(sbcount <= model.Startslots)
                     {
-                        startbahn = 1;
-                        for (var i = 1; i <= reportedStartboats.Where(e => e.ReportedRaceId == rrrr.ReportedRaceId).Count(); i++)
+                        racetypid = 4;
+
+                        if(newrace.RaceCode == rrrr.RaceCode)
                         {
-                            if(startbahn == 7)
+                            repsbtemp = reportedStartboats.Where(e => e.ReportedRaceId == rrrr.ReportedRaceId).ToList();
+                            startbahn = 1;
+                            foreach(var tempsb in repsbtemp)
                             {
-                                startbahn = 1;
+                                if(!rsb.Contains(tempsb.ReportedStartboatId))
+                                {
+                                    _context.Startboats.Add(new Startboat { RaceId = newrace.RaceId, RegattaId = id, ClubId = tempsb.ClubId, ReportedStartboatId = tempsb.ReportedStartboatId, StartboatstatusId = 6, Startslot = startbahn });
+                                }                                
+                                rsb.Add(tempsb.ReportedStartboatId);
+                                startbahn++;
                             }
-                            _context.Startboats.Add(new Startboat { RaceId = newrace.RaceId, RegattaId = id, ClubId = reportedStartboats.FirstOrDefault(e => e.ReportedRaceId == rrrr.ReportedRaceId).ClubId, StartboatstatusId = 6, Startslot = startbahn });
-                            startbahn++;
                         }
-                    }                    
+                    }
+                    else
+                    {
+                        racetypid = 1;
+
+                        if (newrace.RaceCode.Substring(0, 5) == rrrr.RaceCode.Substring(0, 5))
+                        {
+                            repsbtemp = reportedStartboats.Where(e => e.ReportedRaceId == rrrr.ReportedRaceId).ToList();
+                            startbahn = 1;
+                            foreach (var tempsb in repsbtemp)
+                            {
+                                if (!rsb.Contains(tempsb.ReportedStartboatId) && startbahn <= model.Startslots)
+                                {
+                                    _context.Startboats.Add(new Startboat { RaceId = newrace.RaceId, RegattaId = id, ClubId = tempsb.ClubId, ReportedStartboatId = tempsb.ReportedStartboatId, StartboatstatusId = 6, Startslot = startbahn, Gender = tempsb.Gender });
+                                }
+                                rsb.Add(tempsb.ReportedStartboatId);
+                                startbahn++;
+                            }
+                        }
+                    }                   
                 }                
             }
             _context.SaveChanges();
 
             foreach(var nr in _context.Races.Where(e => e.RegattaId == id))
             {            
-                foreach(var rrrrrr in reportedRaces)
+                foreach(var rr in reportedRaces)
                 {
-                    if (nr.RegattaId == rrrrrr.RegattaId && nr.RaceCode.Substring(0, 5) == rrrrrr.RaceCode.Substring(0, 5))
+                    if (nr.RegattaId == rr.RegattaId && nr.RaceCode.Substring(0, 5) == rr.RaceCode.Substring(0, 5))
                     {
                         foreach(var newsb in _context.Startboats.Where(e => e.RegattaId == id && e.RaceId == nr.RaceId))
                         {
-                            foreach (var rsb in reportedStartboats.Where(e => e.RegattaId == id && e.ReportedRaceId == rrrrrr.ReportedRaceId).OrderBy(e => e.Gender).ThenBy(e => e.ClubId))
+                            foreach (var rsbb in reportedStartboats.Where(e => e.RegattaId == id && e.ReportedRaceId == rr.ReportedRaceId).OrderBy(e => e.Gender).ThenBy(e => e.ClubId))
                             {        
-                                if(rsb.ClubId == newsb.ClubId && rsb.RegattaId == newsb.RegattaId && rsb.Gender == newsb.Gender)       
+                                if(newsb.ReportedStartboatId == rsbb.ReportedStartboatId)       
                                 {
-                                    foreach (var rsbm in reportedStartboatMember.Where(e => e.ReportedStartboatId == rsb.ReportedStartboatId))
+                                    foreach (var rsbm in reportedStartboatMember.Where(e => e.ReportedStartboatId == rsbb.ReportedStartboatId))
                                     {
                                         _context.StartboatMembers.Add(new StartboatMember { StartboatId = newsb.StartboatId, MemberId = rsbm.MemberId, SeatNumber = rsbm.Seatnumber });
                                     }
-                                }                                             
-                                _context.SaveChanges();
+                                }                                                                             
                             }
                         } 
                     }                                                          
                 }
             }
+            _context.SaveChanges();
 
             return View();
         }

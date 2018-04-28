@@ -6,7 +6,7 @@
 
 <h2>Rennübersicht</h2>
 
-<table class="table">
+<table class="table table-hover">
 @if (ViewBag.regattachosen == 0)
 {
         <tr><td><h3>Noch keine Regatta ausgewählt!</h3></td></tr>
@@ -14,107 +14,113 @@
 }
 else
 {
-    <tr>
-        <th colspan="3">
-            Rennbezeichnung
-        </th>
-        <th>
-            Rennstatus
-        </th>
-        <th>
-            Startzeit
-        </th>
-        <th></th>
-    </tr>
+        <thead>
+            <tr>
+                <th colspan="3">
+                    Rennbezeichnung
+                </th>
+                <th>
+                    Rennstatus
+                </th>
+                <th>
+                    Startzeit
+                </th>
+                <th></th>
+            </tr>
+        </thead>
     @foreach (var item in Model)
 {
-    <tr>
-        <td bgcolor="#CCCCCC"></td>
-        <td bgcolor="#CCCCCC"></td>
-        <td bgcolor="#CCCCCC"></td>
-        <td bgcolor="#CCCCCC"></td>
-        <td bgcolor="#CCCCCC"></td>
-        <td bgcolor="#CCCCCC"></td>
+    <tr class="table-active">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
     </tr>
-    <tr>
-        <td bgcolor="#DDDDDD">
-            @if (item.FinishType == 2)
-        {
-            <span class="label label-success">Endlauf</span>
-    }
-    else if (item.FinishType == 1)
-    {
-        <span class="label label-primary">Zwischenlauf</span>
-}
-else if (item.FinishType == 0)
-{
-    <span class="label label-default">Vorlauf</span>
-}
+    <tr class="table-primary">
+        <td>
+            @if (item.RaceTypId == 4)
+            {
+                <span class="badge badge-pill badge-primary">Endlauf</span>
+            }
+            else if (item.FinishType == 3)
+            {
+                <span class="badge badge-pill badge-info">Hoffnungslauf</span>
+            }
+            else if (item.FinishType == 2)
+            {
+                <span class="badge badge-pill badge-secondary">Zwischenlauf</span>
+            }
+            else if (item.RaceTypId == 1)
+            {
+                <span class="badge badge-pill badge-success">Vorlauf</span>
+            }
         </td>
-        <td bgcolor="#DDDDDD" colspan="2">
+        <td colspan="2">
             @if (item.Gender == "M")
-        {
-            string.Format("männliche");
-        }
-        else if (item.Gender == "W")
-        {
-            string.Format("weibliche");
-        }
-        else
-        {
-            string.Format("mixed");
-        }
+            {
+                string.Format("männliche");
+            }
+            else if (item.Gender == "W")
+            {
+                string.Format("weibliche");
+            }
+            else
+            {
+                string.Format("mixed");
+            }
             @Html.DisplayFor(modelItem => item.Oldclass.Name)
             &nbsp;-&nbsp;
             @Html.DisplayFor(modelItem => item.Boatclass.Name)
             &nbsp;-&nbsp;
             @Html.DisplayFor(modelItem => item.Raceclass.Name)
         </td>
-        <td bgcolor="#DDDDDD">
+        <td>
             @Html.DisplayFor(modelItem => item.Starttime)
         </td>
-        <td bgcolor="#DDDDDD">
+        <td>
             <a asp-action="Details" asp-controller="Race" asp-route-id="@item.RaceId">Startboot hinzufügen</a>
         </td>
-        <td bgcolor="#DDDDDD">
+        <td>
             @Html.ActionLink("Löschen", "Delete", new { id = item.RaceId })
         </td>
     </tr>
-    <tr>
-        <td bgcolor="#EEEEEE"><i>@item.RaceId</i></td>
-        <td bgcolor="#EEEEEE"><i>Startbahn</i></td>
-        <td bgcolor="#EEEEEE"><i>Starter</i></td>
-        <td bgcolor="#EEEEEE"><i>Verein</i></td>
-        <td bgcolor="#EEEEEE"></td>
-        <td bgcolor="#EEEEEE">@Html.ActionLink("Ändern", "Edit", new { id = item.RaceId })</td>
+    <tr class="table-secondary">
+        <td><i>@item.RaceCode</i></td>
+        <td><i>Startbahn</i></td>
+        <td><i>Starter</i></td>
+        <td><i>Verein</i></td>
+        <td></td>
+        <td>@Html.ActionLink("Ändern", "Edit", new { id = item.RaceId })</td>
     </tr>
 foreach (var sb in ViewBag.startboats)
 {
     if (sb.RaceId == item.RaceId)
     {
         @:
-        <tr>
+        <tr class="table-light">
             <td></td>
-            <td>@sb.Startbahn</td>
+            <td>@sb.Startslot</td>
             <td>
                 @foreach (var sbm in ViewBag.startboatmembers)
-            {
-                if (sbm.StartboatId == sb.StartboatId)
-                {
-                    foreach (var m in ViewBag.members)
-                    {
-                        if (m.MemberId == sbm.MemberId)
-                        {
-                            string.Format("{0}, {1}", m.LastName, m.FirstName);
-                            if (m.ClubId != sb.ClubId)
+                        {                            
+                            @if (sbm.StartboatId == sb.StartboatId)
                             {
-                                string.Format(" ({0})", m.Club.Name);
+                                @foreach (var m in ViewBag.members)
+                                {
+                                    @if (m.MemberId == sbm.MemberId)
+                                    {
+                                        @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                        @if (m.ClubId != sb.ClubId)
+                                        {
+                                            @string.Format(" ({0})", m.Club.Name);
+                                        }
+                                        <br />
+                                }
+                                }
                             }
-                            <br />
-                    }
-                }
-            }
-        }
+                        }
             </td>
             <td>@sb.Club.Name</td>
             <td></td>

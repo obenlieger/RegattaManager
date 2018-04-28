@@ -33,14 +33,14 @@
     @if (@Model != null)
     {
         <tr>
-            <td bgcolor="#CCCCCC"></td>
-            <td bgcolor="#CCCCCC"></td>
-            <td bgcolor="#CCCCCC"></td>
-            <td bgcolor="#CCCCCC"></td>
-            <td bgcolor="#CCCCCC"></td>
-            <td bgcolor="#CCCCCC"></td>
-            <td bgcolor="#CCCCCC"></td>
-            <td bgcolor="#CCCCCC"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
         <tr>
             <td bgcolor="#DDDDDD"></td>
@@ -91,7 +91,7 @@
                 @:
                 <tr>
                     <td></td>
-                    <td>@sb.Startbahn</td>
+                    <td>@sb.Startslot</td>
                     <td>
                 @foreach (var sbm in ViewBag.startboatmembers)
                 {
@@ -120,7 +120,7 @@
                             <button type="submit" class="btn btn-success">@ViewBag.pmmax</button>
                             <input type="hidden" name="placement" id="placement" value="@ViewBag.pmmax" />
                         }
-                        <input type="hidden" name="statusid" id="statusid" value="5" />
+                        <input type="hidden" name="statusid" id="statusid" value="3" />
                     </form>
                 </td>
                 <td>
@@ -148,7 +148,7 @@
                             <button type="submit" class="btn btn-warning">Gekentert</button>
                             <input type="hidden" name="placement" id="placement" value="-1" />
                         }
-                        <input type="hidden" name="statusid" id="statusid" value="6" />
+                        <input type="hidden" name="statusid" id="statusid" value="4" />
                     </form>
                 </td>
                 <td>

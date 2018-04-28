@@ -30,39 +30,54 @@ else
         </div>
     </p>
 </form>
-<table class="table">
-    <tr>
-        <th colspan="2">
-            Rennbezeichnung
-        </th>
-        <th colspan="2">
-            Startzeit
-        </th>
-        <th></th>
-    </tr>
-
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th colspan="2">
+                Rennbezeichnung
+            </th>
+            <th colspan="2">
+                Startzeit
+            </th>
+            <th></th>
+        </tr>
+    </thead>
     @foreach (var item in Model)
     {
-        <tr>
-            <td bgcolor="#CCCCCC"></td>
-            <td bgcolor="#CCCCCC"></td>
-            <td bgcolor="#CCCCCC"></td>
-            <td bgcolor="#CCCCCC"></td>
-            <td bgcolor="#CCCCCC"></td>
+        <tr class="table-active">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
-        <tr>
-            <td bgcolor="#DDDDDD" colspan="2">
-                @if (item.Gender == "M")
+        <tr class="table-primary">
+            <td colspan="2">
+                @if (item.Gender.Equals("M"))
                 {
-                    @string.Format("männliche");
+                    @if(item.Oldclass.FromAge >=17 && item.Oldclass.ToAge <= 99)
+                    {
+                        @:Herren
+                    }
+                    else if(item.Oldclass.FromAge >= 15 && item.Oldclass.ToAge <= 16)
+                    {
+                        @:männliche    
+                    }                            
                 }
-                else if (item.Gender == "W")
+                else if (string.Equals(item.Gender, "W"))
                 {
-                    @string.Format("weibliche");
+                    @if (item.Oldclass.FromAge >= 17 && item.Oldclass.ToAge <= 99)
+                    {
+                        @:Damen
+                    }
+                    else
+                    {
+                        @:weibliche
+                    }
                 }
-                else
+                else if (string.Equals(item.Gender, "X"))
                 {
-                    @string.Format("mixed");
+                    @:mixed
                 }
                 @item.Oldclass.Name
                 &nbsp;-&nbsp;
@@ -70,25 +85,25 @@ else
                 &nbsp;-&nbsp;
                 @item.Raceclass.Name
             </td>
-            <td bgcolor="#DDDDDD" colspan="2">
+            <td colspan="2">
                 @Html.DisplayFor(modelItem => item.Starttime)
             </td>
-            <td bgcolor="#DDDDDD">
-                @if (item.FinishType == 2)
+            <td>
+                @if (item.RaceTypId == 4)
                 {
-                    <span class="label label-success">Endlauf</span>
+                    <span class="badge badge-pill badge-primary">Endlauf</span>
                 }
-                else if (item.FinishType == 1)
+                else if (item.RaceTypId == 2)
                 {
-                    <span class="label label-primary">Zwischenlauf</span>
+                    <span class="badge badge-pill badge-secondary">Zwischenlauf</span>
                 }
-                else if (item.FinishType == 0)
+                else if (item.RaceTypId == 1)
                 {
-                    <span class="label label-default">Vorlauf</span>
+                    <span class="badge badge-pill badge-success">Vorlauf</span>
                 }
-                else if (item.FinishType == 4)
+                else if (item.RaceTypId == 3)
                 {
-                    <span class="label label-info">Hoffnungslauf</span>
+                    <span class="badge badge-pill badge-info">Hoffnungslauf</span>
                 }
                 @if (item.Comment != "")
                 {
@@ -105,41 +120,24 @@ else
                 }
             </td>
         </tr>
-        <tr>
-            <td bgcolor="#EEEEEE"><i>Platzierung</i></td>
-            <td bgcolor="#EEEEEE"><i>Startbahn</i></td>
-            <td bgcolor="#EEEEEE"><i>Starter</i></td>
-            <td bgcolor="#EEEEEE"><i>Verein</i></td>
-            <td bgcolor="#EEEEEE"><i>Status</i></td>
+        <tr class="table-secondary">
+            <td><i>Platzierung</i></td>
+            <td><i>Startbahn</i></td>
+            <td><i>Starter</i></td>
+            <td><i>Verein</i></td>
+            <td><i>Status</i></td>
         </tr>
         @foreach (var sb in ViewBag.startboats)
         {
             if (sb.RaceId == item.RaceId)
             {
-                var backcol = "FFFFFF";
-                if (sb.Placement == 0 || sb.Placement == -1)
-                {
-                    backcol = "FFCC99";
-                }
-                if (sb.Placement == 1)
-                {
-                    backcol = "B3FFB3";
-                }
-                if (sb.Placement == 2)
-                {
-                    backcol = "CCFFCC";
-                }
-                if (sb.Placement == 3)
-                {
-                    backcol = "E6FFE6";
-                }
                 if (sb.Placement != 0 && sb.Placement != -1)
                 {
                     @:
-                    <tr>
-                        <td bgcolor=@backcol>@sb.Placement</td>
-                        <td bgcolor=@backcol>@sb.Startbahn</td>
-                        <td bgcolor=@backcol>
+                    <tr class="table-light">
+                        <td>@sb.Placement</td>
+                        <td>@sb.Startslot</td>
+                        <td>
                 @foreach (var sbm in ViewBag.startboatmembers)
                     {
                         if (sbm.StartboatId == sb.StartboatId)
@@ -155,8 +153,8 @@ else
                         }
                     }
                 </td>
-                <td bgcolor=@backcol>@sb.Club.Name</td>
-                <td bgcolor=@backcol>@sb.Startboatstatus.Name</td>
+                <td>@sb.Club.Name</td>
+                <td>@sb.Startboatstatus.Name</td>
             </tr>
              }
             }
@@ -165,18 +163,13 @@ else
         {
             if (sb.RaceId == item.RaceId)
             {
-                var backcol = "FFFFFF";
-                if (sb.Placement == 0 || sb.Placement == -1)
-                {
-                    backcol = "FFCC99";
-                }
                 if (sb.Placement <= 0)
                 {
                     @:
                     <tr>
-                        <td bgcolor=@backcol>0</td>
-                        <td bgcolor=@backcol>@sb.Startbahn</td>
-                        <td bgcolor=@backcol>
+                        <td>0</td>
+                        <td>@sb.Startslot</td>
+                        <td>
                 @foreach (var sbm in ViewBag.startboatmembers)
                     {
                         if (sbm.StartboatId == sb.StartboatId)
@@ -196,8 +189,8 @@ else
                         }
                     }
                 </td>
-                <td bgcolor=@backcol>@sb.Club.Name</td>
-                <td bgcolor=@backcol>@sb.Startboatstatus.Name</td>
+                <td>@sb.Club.Name</td>
+                <td>@sb.Startboatstatus.Name</td>
             </tr>
              }
             }

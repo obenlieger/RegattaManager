@@ -10,7 +10,7 @@ namespace RegattaManager.Models
     {
         [Key]
         public int ReportedStartboatId { get; set; }
-        public string Gender { get; set; }
+        public string Gender { get; set; }        
         public int ClubId { get; set; }
         public Club Club { get; set; }
         public int RegattaId { get; set; }
@@ -19,5 +19,6 @@ namespace RegattaManager.Models
         public ReportedRace ReportedRace { get; set; }
         public List<ReportedStartboatMember> ReportedStartboatMembers { get; set; }
         public List<ReportedStartboatStandby> ReportedStartboatStandbys { get; set; }
+        public List<Startboat> Startboats { get; set; }
     }
 }
