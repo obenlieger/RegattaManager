@@ -3,9 +3,10 @@
 @{
    ViewBag.Title = "Rennen";
 }
-
+<br/>
 <h2>Rennübersicht</h2>
-
+<a asp-action="Create" asp-controller="Race">Neues Rennen erstellen</a>
+<br/>
 <table class="table table-hover">
 @if (ViewBag.regattachosen == 0)
 {
@@ -41,35 +42,35 @@ else
     <tr class="table-primary">
         <td>
             @if (item.RaceTypId == 4)
-            {
-                <span class="badge badge-pill badge-primary">Endlauf</span>
-            }
-            else if (item.FinishType == 3)
-            {
-                <span class="badge badge-pill badge-info">Hoffnungslauf</span>
-            }
-            else if (item.FinishType == 2)
-            {
-                <span class="badge badge-pill badge-secondary">Zwischenlauf</span>
-            }
-            else if (item.RaceTypId == 1)
-            {
-                <span class="badge badge-pill badge-success">Vorlauf</span>
-            }
+                {
+                    <span class="badge badge-pill badge-primary">Endlauf</span>
+                }
+                else if (item.RaceTypId == 2)
+                {
+                    <span class="badge badge-pill badge-secondary">Zwischenlauf</span>
+                }
+                else if (item.RaceTypId == 1)
+                {
+                    <span class="badge badge-pill badge-success">Vorlauf</span>
+                }
+                else if (item.RaceTypId == 3)
+                {
+                    <span class="badge badge-pill badge-info">Hoffnungslauf</span>
+                }
         </td>
         <td colspan="2">
-            @if (item.Gender == "M")
-            {
-                string.Format("männliche");
-            }
-            else if (item.Gender == "W")
-            {
-                string.Format("weibliche");
-            }
-            else
-            {
-                string.Format("mixed");
-            }
+            @if (item.Gender.Equals("M"))
+                {
+                    @string.Format("männliche");
+                }
+                else if (item.Gender.Equals("W"))
+                {
+                    @string.Format("weibliche");
+                }
+                else
+                {
+                    @string.Format("mixed");
+                }
             @Html.DisplayFor(modelItem => item.Oldclass.Name)
             &nbsp;-&nbsp;
             @Html.DisplayFor(modelItem => item.Boatclass.Name)
@@ -87,7 +88,7 @@ else
         </td>
     </tr>
     <tr class="table-secondary">
-        <td><i>@item.RaceCode</i></td>
+        <td id="@item.RaceId"><i>@item.RaceCode</i></td>
         <td><i>Startbahn</i></td>
         <td><i>Starter</i></td>
         <td><i>Verein</i></td>

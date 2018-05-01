@@ -24,6 +24,6 @@ namespace RegattaManager.Models
         public Competition Competition { get; set; }
         public int RegattaId { get; set; }
         public Regatta Regatta { get; set; }
-        public List<ReportedStartboat> ReportedStartboats { get; set; }
+        public List<ReportedStartboat> ReportedStartboats { get; set; }        
     }
 }

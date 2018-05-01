@@ -29,6 +29,6 @@ namespace RegattaManager.Models
                 return string.Format("{0} - {1}", ReportedSBCountFrom, ReportedSBCountTo);
             }
         }
-        public virtual List<RaceDrawRules> RaceDrawRules { get; set; }
+        public virtual List<RaceDrawRules> RaceDrawRules { get; set; }        
     }
 }

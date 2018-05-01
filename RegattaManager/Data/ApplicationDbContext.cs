@@ -36,6 +36,20 @@ namespace RegattaManager.Data
                 .WithMany(m => m.StartboatMembers)
                 .HasForeignKey(sm => sm.MemberId);
 
+            builder.Entity<StartboatStandby>()
+               .HasKey(t => new { t.StartboatId, t.MemberId });
+
+            builder.Entity<StartboatStandby>()
+                .HasOne(sm => sm.Startboat)
+                .WithMany(s => s.StartboatStandbys)
+                .HasForeignKey(sm => sm.StartboatId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<StartboatStandby>()
+                .HasOne(sm => sm.Member)
+                .WithMany(m => m.StartboatStandbys)
+                .HasForeignKey(sm => sm.MemberId);
+
             builder.Entity<Startboat>()
                 .HasOne(r => r.Race)
                 .WithMany(rr => rr.Startboats)
@@ -134,6 +148,20 @@ namespace RegattaManager.Data
                 .HasOne(r => r.Regatta)
                 .WithMany(rs => rs.ReportedStartboats)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<RegattaClub>()
+                .HasKey(t => new { t.ClubId, t.RegattaId });
+
+            builder.Entity<RegattaClub>()
+                .HasOne(r => r.Regatta)
+                .WithMany(c => c.RegattaClubs)
+                .HasForeignKey(rr => rr.RegattaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<RegattaClub>()
+                .HasOne(b => b.Club)
+                .WithMany(c => c.RegattaClubs)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public DbSet<RegattaManager.Models.Boatclass> Boatclasses { get; set; }
@@ -187,5 +215,9 @@ namespace RegattaManager.Data
         public DbSet<RegattaManager.Models.ReportedStartboatMember> ReportedStartboatMembers { get; set; }
 
         public DbSet<RegattaManager.Models.ReportedStartboatStandby> ReportedStartboatStandbys { get; set; }
+
+        public DbSet<RegattaManager.Models.RegattaClub> RegattaClubs { get; set; }
+
+        public DbSet<RegattaManager.Models.StartboatStandby> StartboatStandbys { get; set; }
     }
 }

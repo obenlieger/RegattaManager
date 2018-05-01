@@ -34,6 +34,7 @@ namespace RegattaManager.Models
         public virtual int ClubId { get; set; }
         public virtual Club Club { get; set; }        
         public virtual List<StartboatMember> StartboatMembers { get; set; }
+        public virtual List<StartboatStandby> StartboatStandbys { get; set; }
         public virtual List<ReportedStartboatMember> ReportedStartboatMembers { get; set; }
         public virtual List<ReportedStartboatStandby> ReportedStartboatStandbys { get; set; }
     }

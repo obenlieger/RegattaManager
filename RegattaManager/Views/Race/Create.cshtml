@@ -1,0 +1,97 @@
+﻿@model RegattaManager.Models.Race
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+<h4>Race</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Starttime" class="control-label"></label>
+                <input asp-for="Starttime" class="form-control" />
+                <span asp-validation-for="Starttime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Realstarttime" class="control-label"></label>
+                <input asp-for="Realstarttime" class="form-control" />
+                <span asp-validation-for="Realstarttime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <input asp-for="Gender" class="form-control" />
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="Spoken" /> @Html.DisplayNameFor(model => model.Spoken)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="RaceCode" class="control-label"></label>
+                <input asp-for="RaceCode" class="form-control" />
+                <span asp-validation-for="RaceCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FinishType" class="control-label"></label>
+                <input asp-for="FinishType" class="form-control" />
+                <span asp-validation-for="FinishType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Comment" class="control-label"></label>
+                <input asp-for="Comment" class="form-control" />
+                <span asp-validation-for="Comment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RegattaId" class="control-label"></label>
+                <select asp-for="RegattaId" class ="form-control" asp-items="ViewBag.RegattaId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="RaceclassId" class="control-label"></label>
+                <select asp-for="RaceclassId" class ="form-control" asp-items="ViewBag.RaceclassId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="OldclassId" class="control-label"></label>
+                <select asp-for="OldclassId" class ="form-control" asp-items="ViewBag.OldclassId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="BoatclassId" class="control-label"></label>
+                <select asp-for="BoatclassId" class ="form-control" asp-items="ViewBag.BoatclassId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="RacestatusId" class="control-label"></label>
+                <select asp-for="RacestatusId" class ="form-control" asp-items="ViewBag.RacestatusId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="RaceTypId" class="control-label"></label>
+                <select asp-for="RaceTypId" class ="form-control" asp-items="ViewBag.RaceTypId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReportedRaceId" class="control-label"></label>
+                <input asp-for="ReportedRaceId" class="form-control" />
+                <span asp-validation-for="ReportedRaceId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RaceDrawId" class="control-label"></label>
+                <input asp-for="RaceDrawId" class="form-control" />
+                <span asp-validation-for="RaceDrawId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Zur&uuml;ck zur Liste</a>
+</div>
+

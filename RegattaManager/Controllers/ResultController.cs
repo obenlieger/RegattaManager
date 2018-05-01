@@ -70,7 +70,7 @@ namespace RegattaManager.Controllers
             ViewBag.disqsbs = _context.Startboats.Include(e => e.Club).Include(e => e.Startboatstatus).Where(e => e.Placement <= 0).OrderBy(e => e.Startslot);
             ViewBag.startboatmembers = _context.StartboatMembers;
             ViewBag.members = _context.Members;
-            ViewBag.raceplanned = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1 && e.FinishType > 0 && e.Startboats.Count > 0).OrderBy(e => e.Starttime).Take(6);
+            ViewBag.raceplanned = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1 && e.RaceTypId > 1 && e.Startboats.Count > 0).OrderBy(e => e.Starttime).Take(6);
 
             return View();
         }

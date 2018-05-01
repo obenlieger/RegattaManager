@@ -121,7 +121,7 @@ else
                 var backcol = "table-light";
                 if (sb.Placement == 0 || sb.Placement == -1)
                 {
-                    backcol = "table-warning;
+                    backcol = "table-warning";
                 }
                 if (sb.Placement == 1)
                 {
@@ -296,26 +296,26 @@ else
             @:
             <tr class="table-info">
                 <td></td>
-                <td>@sb.Startbahn</td>
+                <td>@sb.Startslot</td>
                 <td>
                     @foreach (var sbm in ViewBag.startboatmembers)
-                    {
-                        if (sbm.StartboatId == sb.StartboatId)
-                        {
-                            foreach (var m in ViewBag.members)
+                        {                            
+                            @if (sbm.StartboatId == sb.StartboatId)
                             {
-                                if (m.MemberId == sbm.MemberId)
+                                @foreach (var m in ViewBag.members)
                                 {
-                                    string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                    if (m.ClubId != sb.ClubId)
+                                    @if (m.MemberId == sbm.MemberId)
                                     {
-                                        string.Format(" ({0})", m.Club.Name);
-                                    }
-                                    <br />
+                                        @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                        @if (m.ClubId != sb.ClubId)
+                                        {
+                                            @string.Format(" ({0})", m.Club.Name);
+                                        }
+                                        <br />
+                                }
+                                }
                             }
                         }
-                    }
-                }
                 </td>
                 <td>@sb.Club.Name</td>
                 <td></td>

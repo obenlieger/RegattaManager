@@ -11,9 +11,10 @@ using System;
 namespace RegattaManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180429212620_startboatstandby2")]
+    partial class startboatstandby2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -302,8 +303,6 @@ namespace RegattaManager.Migrations
 
                     b.Property<string>("RaceCode");
 
-                    b.Property<int>("RaceDrawId");
-
                     b.Property<int>("RaceTypId");
 
                     b.Property<int>("RaceclassId");
@@ -313,8 +312,6 @@ namespace RegattaManager.Migrations
                     b.Property<DateTime>("Realstarttime");
 
                     b.Property<int>("RegattaId");
-
-                    b.Property<int>("ReportedRaceId");
 
                     b.Property<bool>("Spoken");
 

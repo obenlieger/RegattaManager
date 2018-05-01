@@ -23,6 +23,7 @@ namespace RegattaManager.Models
         public virtual ReportedStartboat ReportedStartboat { get; set; }
         public virtual Startboatstatus Startboatstatus { get; set; }
         public virtual List<StartboatMember> StartboatMembers { get; set; }
+        public virtual List<StartboatStandby> StartboatStandbys { get; set; }
         public virtual int RegattaId { get; set; }
         public virtual Regatta Regatta { get; set; }
     }

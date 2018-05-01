@@ -6,6 +6,13 @@
 }
 
 <h2>Ziel</h2>
+@if (ViewBag.RunningRacesCount > 0)
+{
+    <form asp-action="Index" asp-controller="Finish">
+        <select name="id" id="id" asp-items="ViewBag.RunningRaces"></select>
+        <input type="submit" class="btn btn-primary" value="Auswählen" />
+    </form>
+}
 
 <table class="table">
     <tr>
@@ -93,79 +100,79 @@
                     <td></td>
                     <td>@sb.Startslot</td>
                     <td>
-                @foreach (var sbm in ViewBag.startboatmembers)
-                {
-                    if (sbm.StartboatId == sb.StartboatId)
-                    {
-                        foreach (var m in ViewBag.members)
+                        @foreach (var sbm in ViewBag.startboatmembers)
                         {
-                            if (m.MemberId == sbm.MemberId)
+                            if (sbm.StartboatId == sb.StartboatId)
                             {
-                                @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                <br />
+                                foreach (var m in ViewBag.members)
+                                {
+                                    if (m.MemberId == sbm.MemberId)
+                                    {
+                                        @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                        <br />
+                                    }
+                                }
                             }
                         }
-                    }
-                }                
-            </td>
-                <td>@sb.Club.Name</td>
-                <td>
-                    <form asp-action="FinishStartboat" asp-controller="Finish" asp-route-id="@sb.StartboatId">
-                        @if (sb.Placement != 0)
-                        {
-                            <a href="#" class="btn btn-success disabled">@sb.Placement</a>
-                        }
-                        else
-                        {
-                            <button type="submit" class="btn btn-success">@ViewBag.pmmax</button>
-                            <input type="hidden" name="placement" id="placement" value="@ViewBag.pmmax" />
-                        }
-                        <input type="hidden" name="statusid" id="statusid" value="3" />
-                    </form>
-                </td>
-                <td>
-                    <form asp-action="FinishStartboat" asp-controller="Finish" asp-route-id="@sb.StartboatId">
-                        @if (sb.Placement != 0)
-                        {
-                            <button type="submit" class="btn btn-danger">Löschen</button>
-                            <input type="hidden" name="placement" id="placement" value="0" />
-                        }
-                        else
-                        {
-                            <a href="#" class="btn btn-danger disabled">Löschen</a>
-                        }
-                        <input type="hidden" name="statusid" id="statusid" value="5" />
-                    </form>
-                </td>
-                <td>
-                    <form asp-action="FinishStartboat" asp-controller="Finish" asp-route-id="@sb.StartboatId">
-                        @if (sb.Placement != 0)
-                        {
-                            <a href="#" class="btn btn-warning disabled">Gekentert</a>
-                        }
-                        else
-                        {
-                            <button type="submit" class="btn btn-warning">Gekentert</button>
-                            <input type="hidden" name="placement" id="placement" value="-1" />
-                        }
-                        <input type="hidden" name="statusid" id="statusid" value="4" />
-                    </form>
-                </td>
-                <td>
-                    <form asp-action="FinishStartboat" asp-controller="Finish" asp-route-id="@sb.StartboatId">
-                        @if (sb.Placement != 0)
-                        {
-                            <a href="#" class="btn btn-warning disabled">falsch eingefahren</a>
-                        }
-                        else
-                        {
-                            <button type="submit" class="btn btn-warning">falsch eingefahren</button>
-                            <input type="hidden" name="placement" id="placement" value="-1" />
-                        }
-                        <input type="hidden" name="statusid" id="statusid" value="7" />
-                    </form>
-                </td>
-            </tr>
+                    </td>
+                    <td>@sb.Club.Name</td>
+                    <td>
+                        <form asp-action="FinishStartboat" asp-controller="Finish" asp-route-id="@sb.StartboatId">
+                            @if (sb.Placement != 0)
+                            {
+                                <a href="#" class="btn btn-success disabled">@sb.Placement</a>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-success">@ViewBag.pmmax</button>
+                                <input type="hidden" name="placement" id="placement" value="@ViewBag.pmmax" />
+                            }
+                            <input type="hidden" name="statusid" id="statusid" value="3" />
+                        </form>
+                    </td>
+                    <td>
+                        <form asp-action="FinishStartboat" asp-controller="Finish" asp-route-id="@sb.StartboatId">
+                            @if (sb.Placement != 0)
+                            {
+                                <button type="submit" class="btn btn-danger">Löschen</button>
+                                <input type="hidden" name="placement" id="placement" value="0" />
+                            }
+                            else
+                            {
+                                <a href="#" class="btn btn-danger disabled">Löschen</a>
+                            }
+                            <input type="hidden" name="statusid" id="statusid" value="5" />
+                        </form>
+                    </td>
+                    <td>
+                        <form asp-action="FinishStartboat" asp-controller="Finish" asp-route-id="@sb.StartboatId">
+                            @if (sb.Placement != 0)
+                            {
+                                <a href="#" class="btn btn-warning disabled">Gekentert</a>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-warning">Gekentert</button>
+                                <input type="hidden" name="placement" id="placement" value="-1" />
+                            }
+                            <input type="hidden" name="statusid" id="statusid" value="4" />
+                        </form>
+                    </td>
+                    <td>
+                        <form asp-action="FinishStartboat" asp-controller="Finish" asp-route-id="@sb.StartboatId">
+                            @if (sb.Placement != 0)
+                            {
+                                <a href="#" class="btn btn-warning disabled">falsch eingefahren</a>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-warning">falsch eingefahren</button>
+                                <input type="hidden" name="placement" id="placement" value="-1" />
+                            }
+                            <input type="hidden" name="statusid" id="statusid" value="7" />
+                        </form>
+                    </td>
+                </tr>
             }
         }
 

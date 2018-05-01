@@ -11,9 +11,10 @@ using System;
 namespace RegattaManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180429210559_regattaclub")]
+    partial class regattaclub
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -302,8 +303,6 @@ namespace RegattaManager.Migrations
 
                     b.Property<string>("RaceCode");
 
-                    b.Property<int>("RaceDrawId");
-
                     b.Property<int>("RaceTypId");
 
                     b.Property<int>("RaceclassId");
@@ -313,8 +312,6 @@ namespace RegattaManager.Migrations
                     b.Property<DateTime>("Realstarttime");
 
                     b.Property<int>("RegattaId");
-
-                    b.Property<int>("ReportedRaceId");
 
                     b.Property<bool>("Spoken");
 
@@ -691,21 +688,6 @@ namespace RegattaManager.Migrations
                     b.ToTable("StartboatMembers");
                 });
 
-            modelBuilder.Entity("RegattaManager.Models.StartboatStandby", b =>
-                {
-                    b.Property<int>("StartboatId");
-
-                    b.Property<int>("MemberId");
-
-                    b.Property<int>("Standbynumber");
-
-                    b.HasKey("StartboatId", "MemberId");
-
-                    b.HasIndex("MemberId");
-
-                    b.ToTable("StartboatStandbys");
-                });
-
             modelBuilder.Entity("RegattaManager.Models.Startboatstatus", b =>
                 {
                     b.Property<int>("StartboatstatusId")
@@ -1043,19 +1025,6 @@ namespace RegattaManager.Migrations
 
                     b.HasOne("RegattaManager.Models.Startboat", "Startboat")
                         .WithMany("StartboatMembers")
-                        .HasForeignKey("StartboatId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("RegattaManager.Models.StartboatStandby", b =>
-                {
-                    b.HasOne("RegattaManager.Models.Member", "Member")
-                        .WithMany("StartboatStandbys")
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("RegattaManager.Models.Startboat", "Startboat")
-                        .WithMany("StartboatStandbys")
                         .HasForeignKey("StartboatId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });

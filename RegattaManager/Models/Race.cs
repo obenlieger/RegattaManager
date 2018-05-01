@@ -30,7 +30,9 @@ namespace RegattaManager.Models
         public virtual Raceclass Raceclass { get; set; }
         public virtual Oldclass Oldclass { get; set; }
         public virtual Boatclass Boatclass { get; set; }
-        public virtual Racestatus Racestatus { get; set; }
+        public virtual Racestatus Racestatus { get; set; }    
+        public virtual int ReportedRaceId { get; set; }
+        public virtual int RaceDrawId { get; set; }
         public virtual List<Startboat> Startboats { get; set; }
     }
 }

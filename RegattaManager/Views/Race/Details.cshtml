@@ -1,84 +1,131 @@
 ﻿@model RegattaManager.Models.Race
-
 @{
-    ViewBag.Title = "Startboot hinzufügen";
+    ViewData["Title"] = "Startboot hinzufügen";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 @{var x = Model.Boatclass.Seats;}
 
 
-<a asp-action="Details" asp-controller="Race" asp-route-id="@string.Format("{0}",Model.RaceId - 1)">Vorheriges Rennen</a>
-&nbsp; - &nbsp;
-<a asp-action="Details" asp-controller="Race" asp-route-id="@string.Format("{0}",Model.RaceId + 1)">Nächstes Rennen</a>
 <h2>Startboot erstellen</h2>
-<h4>@Model.Boatclass.Name - @Model.Raceclass.Name - @Model.Oldclass.Name - @Model.Gender - @Model.Starttime</h4>
-<hr />
-<form asp-action="AddStartboat" asp-controller="Race" asp-route-id="@Model.RaceId">
-    <table class="table">
-        <tr>
-            <th>
-                Startbahn
-            </th>
+
+<h4>@Model.RaceCode - @Model.Boatclass.Name - @Model.Raceclass.Name - @ViewBag.genderdesc @Model.Oldclass.Name</h4>
+@if (ViewBag.allAvailable == true)
+{
+    <div align="right">
+        <a href="/Race/Details/@Model.RaceId" class="btn btn-outline-primary">Nur Sportler der Altersklasse anzeigen</a>
+    </div>
+    <br />
+}
+else
+{
+    <div align="right">
+        <a href="/Race/Details/@Model.RaceId/?allAvailable=true" class="btn btn-outline-primary">Alle verf&uuml;gbaren Sportler anzeigen</a>
+    </div>
+    <br />
+}
+<div class="form-group">
+    <form asp-action="Details" asp-controller="Race" asp-route-id="@Model.RaceId">
+        <label>Vereine Filtern: </label>
+        <input class="form-control" name="filterclub" id="filterclub" />
+        <button type="submit" class="btn btn-primary">Filtern</button>
+    </form>
+</div>
+@if (@ViewBag.doppelt == true)
+{
+    <div class="alert alert-dismissible alert-danger">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Fehler!</strong> Die Starter d&uuml;rfen nicht doppelt vergeben werden.
+    </div>
+}
+    <form asp-action="AddStartboat" asp-controller="Race" asp-route-id="@Model.RaceId">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        Sitz
+                    </th>
+                    <th>
+                        Starter
+                    </th>
+                    <th colspan="2">
+                        Ersatz
+                    </th>
+                </tr>
+            </thead>
             @for (var i = 1; i <= x; i++)
             {
-                <th>
-                    Sitz @i
-                </th>
-            }
-            <th>
-                Verein
-            </th>
-            <th>
-                Startbootstatus
-            </th>
-        </tr>
-        <tr>
-            <td>
-                @if (ViewBag.laststartbahn != null)
-                {
-                    <input class="form-control" type="number" name="startbahn" id="startbahn" value="@string.Format("{0}",ViewBag.laststartbahn+1)" />
-                }
-                else
-                {
-                    <input class="form-control" type="number" name="startbahn" id="startbahn" value="1" />
-                }
-            </td>
-            @for (var i = 1; i <= x; i++)
-            {
-                <td>
-                    <div class="form-group">
-                        <div class="col-md-10">
-                            <select name="@string.Format("seat{0}",i)" id="@string.Format("seat{0}",i)" asp-items="@ViewBag.MemberId"></select>
+                <tr>
+                    <td>
+                        @i
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <select name="@string.Format("seat{0}",i)" id="@string.Format("seat{0}",i)" class="form-control" asp-items="@ViewBag.MemberId"><option value="0" selected>---Sportler ausw&auml;hlen---</option></select>
+                            </div>
                         </div>
-                    </div>
-                </td>
+                    </td>
+                    <td>
+                        <label class="form-check-label">
+                            <input class="form-check-input" name="@string.Format("standbycheck{0}",i)" value="true" type="checkbox" onchange="document.getElementById('@string.Format("standby{0}",i)').disabled = !this.checked;"> Ersatz melden
+                        </label>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <select name="@string.Format("standby{0}",i)" id="@string.Format("standby{0}",i)" class="form-control" asp-items="@ViewBag.MemberId" disabled><option value="0" selected>---Sportler ausw&auml;hlen---</option></select>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
             }
-            <td>
-                <div class="form-group">
-                    <div class="col-md-10">
-                        @Html.DropDownList("ClubId", null, htmlAttributes: new { @class = "form-control" })
-                    </div>
-                </div>
-            </td>
-            <td>
-                <div class="form-group">
-                    <div class="col-md-10">
-                        @Html.DropDownList("StartboatstatusId", null, htmlAttributes: new { @class = "form-control" })
-                    </div>
-                </div>
-            </td>
-        </tr>
-    </table>
-    <input type="hidden" name="seatnumber" value="@x" />
-    <input type="submit" value="Startboot speichern" />
-</form>
+            <tr>
+                <td>
+                    <label>F&uuml;r Verein: </label>
+                </td>
+                <td>
+                    <select class="form-control" name="ClubId" id="ClubId" asp-items="ViewBag.ClubId"><option selected>---Verein ausw&auml;hlen---</option></select>
+                </td>
+                <td>
+                    <label>Startbahn: </label>
+                </td>
+                <td>
+                    @if(ViewBag.laststartbahn != null)
+                    {
+                        <input class="form-control" type="number" name="startbahn" id="startbahn" value="@string.Format("{0}",ViewBag.laststartbahn+1)"/>
+                    } else {
+                        <input class="form-control" type="number" name="startbahn" id="startbahn" value="1"/>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Startbootstatus:</label>
+                </td>
+                <td>
+                    @Html.DropDownList("StartboatstatusId", null, htmlAttributes: new { @class = "form-control" })
+                </td>
+                <td>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+        <input type="hidden" name="seatnumber" value="@x" />        
+        <input type="submit" class="btn btn-primary" value="Startboot speichern" />
+    </form>
+<hr />
 <h2>Startboote</h2>
-<table class="table">
+<table class="table table-hover">
     <tr>
         <th>
             Startbahn
         </th>
         <th>
             Starter
+        </th>
+        <th>
+            Ersatz
         </th>
         <th>
             Verein
@@ -90,7 +137,9 @@
         if (startboat.RaceId == Model.RaceId)
         {
             <tr>
-                <td>@startboat.Startslot</td>
+                <td>
+                    @startboat.Startslot
+                </td>
                 <td>
                     @foreach (var sbm in ViewBag.startboatmembers)
                     {
@@ -101,19 +150,74 @@
                                 if (member.MemberId == sbm.MemberId)
                                 {
                                     @string.Format("{0}", member.FullName);
-                                    @if (member.ClubId != startboat.ClubId)
+                                    @if (member.ClubId != startboat.ClubId && member.isRented == false)
                                     {
                                         @string.Format(" ({0})", member.Club.Name);
                                     }
+                                    @if (member.isRented == true && member.RentedToClubId != startboat.ClubId && member.RentYear == ViewBag.ThisYear)
+                                    {
+                                        @foreach (var ac in ViewBag.AllClubs)
+                                        {
+                                            if (ac.ClubId == member.RentedToClubId)
+                                            {
+                                                @: (@ac.Name)
+                                            }
+                                        }
+                                    }
+                                    @if (member.isRented == true && member.RentedToClubId == startboat.ClubId && member.RentYear == ViewBag.ThisYear)
+                                    {
+                                        @: (ausgeliehen)
+                                    }
                                     @:<br />
-                    }
+                                }
                             }
                         }
                     }
                 </td>
-                <td>@startboat.Club.Name</td>
-                <td><a asp-action="DeleteStartboat" asp-controller="Race" asp-route-id="@startboat.StartboatId">Löschen</a></td>
+                <td>
+                    @foreach (var sbs in ViewBag.startboatstandbys)
+                    {
+                        if (sbs.StartboatId == startboat.StartboatId)
+                        {
+                            foreach (var member in ViewBag.members)
+                            {
+                                if (member.MemberId == sbs.MemberId)
+                                {
+                                    @string.Format("{0}", member.FullName);
+                                    @if (member.ClubId != startboat.ClubId && member.isRented == false)
+                                    {
+                                        @string.Format(" ({0})", member.Club.Name);
+                                    }
+                                    @if (member.isRented == true && member.RentedToClubId != startboat.ClubId && member.RentYear == ViewBag.ThisYear)
+                                    {
+                                        @foreach (var ac in ViewBag.AllClubs)
+                                        {
+                                            if (ac.ClubId == member.RentedToClubId)
+                                            {
+                                                @: (@ac.Name)
+                                            }
+                                        }
+                                    }
+                                    @:<br />
+                                }
+                            }
+                        }
+                    }
+                </td>
+                <td>
+                    @startboat.Club.Name
+                </td>
+                <td>
+                    <a href="/Race/DeleteStartboat/@startboat.StartboatId" class="btn btn-danger">L&ouml;schen</a> | <a href="/Race/EditStartboat/@startboat.StartboatId" class="btn btn-secondary">Bearbeiten</a>
+                </td>
+                <td>
+                    <a href="/Race/StartSlotUp/@startboat.StartboatId" class="btn btn-outline-primary">hoch</a>
+                </td>
+                <td>
+                    <a href="/Race/StartSlotDown/@startboat.StartboatId" class="btn btn-outline-primary">runter</a>
+                </td>
             </tr>
         }
     }
 </table>
+<a href="/Race/#@Model.RaceId">Zur&uuml;ck</a>

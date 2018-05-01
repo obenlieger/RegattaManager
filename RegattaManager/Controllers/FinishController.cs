@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using RegattaManager.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace RegattaManager.Controllers
 {
@@ -23,16 +24,28 @@ namespace RegattaManager.Controllers
         {
             var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 2).OrderBy(e => e.Starttime).FirstOrDefault();
 
-            if (id != null)
-            {
-                var model_id = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 2).OrderBy(e => e.Starttime).Where(e => e.RaceId == id);
-                return View(model_id);
-            }
-
-            ViewBag.startboats = _context.Startboats.Include(e => e.Club).Include(e => e.Startboatstatus).Where(e => e.StartboatstatusId != 3).OrderBy(e => e.Startslot);
+            ViewBag.startboats = _context.Startboats.Include(e => e.Club).Include(e => e.Startboatstatus).Where(e => e.StartboatstatusId != 5).OrderBy(e => e.Startslot);
             ViewBag.startboatmembers = _context.StartboatMembers;
             ViewBag.members = _context.Members;
             ViewBag.raceid = id;
+            ViewBag.RunningRaces = new SelectList(_context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 2).OrderBy(e => e.Starttime).ToList(), "RaceId", "Starttime");
+            ViewBag.RunningRacesCount = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 2).OrderBy(e => e.Starttime).Count();
+
+            if (id != null)
+            {
+                var model_id = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 2).OrderBy(e => e.Starttime).Where(e => e.RaceId == id).FirstOrDefault();
+                
+                if (model_id != null)
+                {
+                    ViewBag.pmmax = model_id.Startboats.Max(e => e.Placement) + 1;
+                }
+                else
+                {
+                    ViewBag.pmmax = 0;
+                }
+                return View(model_id);
+            }            
+
             if (model != null)
             {
                 ViewBag.pmmax = model.Startboats.Max(e => e.Placement) + 1;
