@@ -53,6 +53,7 @@ else
         </tr>
         <tr class="table-primary">
             <td colspan="2">
+                <strong>
                 @if (item.Gender.Equals("M"))
                 {
                     @if(item.Oldclass.FromAge >=17 && item.Oldclass.ToAge <= 99)
@@ -84,18 +85,21 @@ else
                 @item.Boatclass.Name
                 &nbsp;-&nbsp;
                 @item.Raceclass.Name
+              </strong>
             </td>
             <td colspan="2">
-                @Html.DisplayFor(modelItem => item.Starttime)
+                <strong>
+                    @Html.DisplayFor(modelItem => item.Starttime)
+                </strong>
             </td>
             <td>
                 @if (item.RaceTypId == 4)
                 {
-                    <span class="badge badge-pill badge-primary">Endlauf</span>
+                    <span class="badge badge-pill badge-danger">Endlauf</span>
                 }
                 else if (item.RaceTypId == 2)
                 {
-                    <span class="badge badge-pill badge-secondary">Zwischenlauf</span>
+                    <span class="badge badge-pill badge-warning">Zwischenlauf</span>
                 }
                 else if (item.RaceTypId == 1)
                 {
@@ -138,20 +142,24 @@ else
                         <td>@sb.Placement</td>
                         <td>@sb.Startslot</td>
                         <td>
-                @foreach (var sbm in ViewBag.startboatmembers)
-                    {
-                        if (sbm.StartboatId == sb.StartboatId)
-                        {
-                            foreach (var m in ViewBag.members)
+                        @foreach (var sbm in ViewBag.startboatmembers)
+                        {                            
+                            @if (sbm.StartboatId == sb.StartboatId)
                             {
-                                if (m.MemberId == sbm.MemberId)
+                                @foreach (var m in ViewBag.members)
                                 {
-                                    @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                    <br />
-                            }
+                                    @if (m.MemberId == sbm.MemberId)
+                                    {
+                                        @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                        @if (m.ClubId != sb.ClubId)
+                                        {
+                                            @string.Format(" ({0})", m.Club.Name);
+                                        }
+                                        <br />
+                                }
+                                }
                             }
                         }
-                    }
                 </td>
                 <td>@sb.Club.Name</td>
                 <td></td>

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using RegattaManager.Data;
 using RegattaManager.Models;
 using Microsoft.EntityFrameworkCore;
+using Rotativa;
 
 namespace RegattaManager.Controllers
 {
@@ -26,7 +27,7 @@ namespace RegattaManager.Controllers
             ViewBag.startboats = _context.Startboats.Include(e => e.Club).Include(e => e.Startboatstatus).OrderBy(e => e.RaceId).ThenBy(e => e.Placement);
             ViewBag.disqsbs = _context.Startboats.Include(e => e.Club).Include(e => e.Startboatstatus).Where(e => e.Placement <= 0).OrderBy(e => e.Startslot);
             ViewBag.startboatmembers = _context.StartboatMembers;
-            ViewBag.members = _context.Members;
+            ViewBag.members = _context.Members.Include(e => e.Club);
 
             if (!String.IsNullOrEmpty(searchLastName))
             {

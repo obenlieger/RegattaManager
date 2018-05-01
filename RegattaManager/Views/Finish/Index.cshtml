@@ -6,7 +6,7 @@
 }
 
 <h2>Ziel</h2>
-@if (ViewBag.RunningRacesCount > 0)
+@if (ViewBag.RunningRacesCount > 1)
 {
     <form asp-action="Index" asp-controller="Finish">
         <select name="id" id="id" asp-items="ViewBag.RunningRaces"></select>
