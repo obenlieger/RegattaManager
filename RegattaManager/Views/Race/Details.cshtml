@@ -13,21 +13,21 @@
 @if (ViewBag.allAvailable == true)
 {
     <div align="right">
-        <a href="/Race/Details/@Model.RaceId" class="btn btn-outline-primary">Nur Sportler der Altersklasse anzeigen</a>
+        <a href="/Race/Details/@Model.RaceId/?filterclub=@ViewBag.filterclub" class="btn btn-outline-primary">Nur Sportler der Altersklasse anzeigen</a>
     </div>
     <br />
 }
 else
 {
     <div align="right">
-        <a href="/Race/Details/@Model.RaceId/?allAvailable=true" class="btn btn-outline-primary">Alle verf&uuml;gbaren Sportler anzeigen</a>
+        <a href="/Race/Details/@Model.RaceId/?allAvailable=true&filterclub=@ViewBag.filterclub" class="btn btn-outline-primary">Alle verf&uuml;gbaren Sportler anzeigen</a>
     </div>
     <br />
 }
 <div class="form-group">
     <form asp-action="Details" asp-controller="Race" asp-route-id="@Model.RaceId">
         <label>Vereine Filtern: </label>
-        <input class="form-control" name="filterclub" id="filterclub" />
+        <input class="form-control" name="filterclub" id="filterclub" value="@ViewBag.filterclub"/>
         <button type="submit" class="btn btn-primary">Filtern</button>
     </form>
 </div>

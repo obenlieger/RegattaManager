@@ -17,7 +17,8 @@ else
 {
         <thead>
             <tr>
-                <th colspan="3">
+                <th>Renncode</th>
+                <th colspan="2">
                     Rennbezeichnung
                 </th>
                 <th>
@@ -26,109 +27,101 @@ else
                 <th>
                     Startzeit
                 </th>
+                <th></th>                
                 <th></th>
             </tr>
         </thead>
     @foreach (var item in Model)
-{
-    <tr class="table-active">
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr class="table-primary">
-        <td>
-            @if (item.RaceTypId == 4)
-                {
-                    <span class="badge badge-pill badge-primary">Endlauf</span>
-                }
-                else if (item.RaceTypId == 2)
-                {
-                    <span class="badge badge-pill badge-secondary">Zwischenlauf</span>
-                }
-                else if (item.RaceTypId == 1)
-                {
-                    <span class="badge badge-pill badge-success">Vorlauf</span>
-                }
-                else if (item.RaceTypId == 3)
-                {
-                    <span class="badge badge-pill badge-info">Hoffnungslauf</span>
-                }
-        </td>
+    {
+        @if(item.RacestatusId == 3)
+        {
+            @:<tr class="table-success">
+        }
+        else if(item.RacestatusId == 4)
+        {
+            @:<tr class="table-danger">
+        }
+        else if(item.RacestatusId == 2)
+        {
+            @:<tr class="table-active">
+        }
+        else if(item.RacestatusId == 1004)
+        {
+            @:<tr class="table-primary">
+        } 
+        else
+        {
+            @:<tr>
+        }
+        <td id="@item.RaceId"><i>@item.RaceCode</i></td>
         <td colspan="2">
-            @if (item.Gender.Equals("M"))
+                @if (item.Gender.Equals("M"))
                 {
-                    @string.Format("männliche");
+                    @if(item.Oldclass.FromAge >=17 && item.Oldclass.ToAge <= 99)
+                    {
+                        @:Herren
+                    }
+                    else if(item.Oldclass.FromAge >= 15 && item.Oldclass.ToAge <= 16)
+                    {
+                        @:männliche    
+                    }                            
                 }
-                else if (item.Gender.Equals("W"))
+                else if (string.Equals(item.Gender, "W"))
                 {
-                    @string.Format("weibliche");
+                    @if (item.Oldclass.FromAge >= 17 && item.Oldclass.ToAge <= 99)
+                    {
+                        @:Damen
+                    }
+                    else
+                    {
+                        @:weibliche
+                    }
                 }
-                else
+                else if (string.Equals(item.Gender, "X"))
                 {
-                    @string.Format("mixed");
-                }
+                    @:mixed
+                }                
             @Html.DisplayFor(modelItem => item.Oldclass.Name)
             &nbsp;-&nbsp;
             @Html.DisplayFor(modelItem => item.Boatclass.Name)
             &nbsp;-&nbsp;
             @Html.DisplayFor(modelItem => item.Raceclass.Name)
+            <br/>
+            @if (item.RaceTypId == 4)
+            {
+                <span class="badge badge-pill badge-danger">Endlauf</span>
+            }
+            else if (item.RaceTypId == 2)
+            {
+                <span class="badge badge-pill badge-warning">Zwischenlauf</span>
+            }
+            else if (item.RaceTypId == 1)
+            {
+                <span class="badge badge-pill badge-success">Vorlauf</span>
+            }
+            else if (item.RaceTypId == 3)
+            {
+                <span class="badge badge-pill badge-info">Hoffnungslauf</span>
+            }
+        </td>        
+        <td>
+            @item.Racestatus.Name
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Starttime)
         </td>
         <td>
-            <a asp-action="Details" asp-controller="Race" asp-route-id="@item.RaceId">Startboot hinzufügen</a>
+            <a asp-action="Details" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-secondary">Details</a>
         </td>
         <td>
-            @Html.ActionLink("Löschen", "Delete", new { id = item.RaceId })
+            <a asp-action="Delete" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-danger">L&ouml;schen</a>
+            <a asp-action="Edit" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-primary">&Auml;ndern</a>
+            @if(item.RacestatusId == 1002)
+            {
+                <a asp-action="Approve" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-success">Abnehmen</a>
+            }
         </td>
-    </tr>
-    <tr class="table-secondary">
-        <td id="@item.RaceId"><i>@item.RaceCode</i></td>
-        <td><i>Startbahn</i></td>
-        <td><i>Starter</i></td>
-        <td><i>Verein</i></td>
-        <td></td>
-        <td>@Html.ActionLink("Ändern", "Edit", new { id = item.RaceId })</td>
-    </tr>
-foreach (var sb in ViewBag.startboats)
-{
-    if (sb.RaceId == item.RaceId)
-    {
-        @:
-        <tr class="table-light">
-            <td></td>
-            <td>@sb.Startslot</td>
-            <td>
-                @foreach (var sbm in ViewBag.startboatmembers)
-                        {                            
-                            @if (sbm.StartboatId == sb.StartboatId)
-                            {
-                                @foreach (var m in ViewBag.members)
-                                {
-                                    @if (m.MemberId == sbm.MemberId)
-                                    {
-                                        @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                        @if (m.ClubId != sb.ClubId)
-                                        {
-                                            @string.Format(" ({0})", m.Club.Name);
-                                        }
-                                        <br />
-                                }
-                                }
-                            }
-                        }
-            </td>
-            <td>@sb.Club.Name</td>
-            <td></td>
-            <td></td>
-        </tr>
-}
-}
-}
+    @:</tr>
+    }
 }
     </table>

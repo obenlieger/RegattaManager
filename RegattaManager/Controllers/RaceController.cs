@@ -34,10 +34,7 @@ namespace RegattaManager.Controllers
 
             if (rid != 0)
             {
-                IEnumerable<Race> model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid).OrderBy(e => e.Starttime);
-                ViewBag.startboats = _context.Startboats.Include(e => e.Club).OrderBy(e => e.Startslot);
-                ViewBag.startboatmembers = _context.StartboatMembers;
-                ViewBag.members = _context.Members.Include(e => e.Club);                
+                IEnumerable<Race> model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid).OrderBy(e => e.Starttime);       
 
                 return View(model);
             }
@@ -119,6 +116,8 @@ namespace RegattaManager.Controllers
                 ViewBag.ThisYear = yearnow;
                 ViewBag.doppelt = doppelt;
                 ViewBag.allAvailable = allAvailable;
+                ViewBag.filterclub = filterclub;
+
                 if(filterclub != null)
                 {
                     ViewBag.ClubId = new SelectList(_context.Clubs.Where(e => e.Name.Contains(filterclub)), "ClubId", "Name");
@@ -184,6 +183,7 @@ namespace RegattaManager.Controllers
             ViewBag.OldclassId = new SelectList(_context.Oldclasses.OrderBy(e => e.FromAge), "OldclassId", "Name", model.OldclassId);
             ViewBag.RacestatusId = new SelectList(_context.Racestati, "RacestatusId", "Name", model.RacestatusId);
             ViewBag.RaceTypId = new SelectList(_context.RaceTyps, "RaceTypId", "Name", model.RaceTypId);
+            ViewBag.RacestatusId = new SelectList(_context.Racestati, "RacestatusId", "Name", model.RacestatusId);
 
             return View(model);
         }

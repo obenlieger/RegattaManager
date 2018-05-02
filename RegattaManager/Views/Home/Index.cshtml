@@ -68,15 +68,29 @@ else
             <td>
                 @if (item.Gender.Equals("M"))
                 {
-                    @string.Format("männliche");
+                    @if(item.Oldclass.FromAge >=17 && item.Oldclass.ToAge <= 99)
+                    {
+                        @:Herren
+                    }
+                    else if(item.Oldclass.FromAge >= 15 && item.Oldclass.ToAge <= 16)
+                    {
+                        @:männliche    
+                    }                            
                 }
-                else if (item.Gender.Equals("W"))
+                else if (string.Equals(item.Gender, "W"))
                 {
-                    @string.Format("weibliche");
+                    @if (item.Oldclass.FromAge >= 17 && item.Oldclass.ToAge <= 99)
+                    {
+                        @:Damen
+                    }
+                    else
+                    {
+                        @:weibliche
+                    }
                 }
-                else
+                else if (string.Equals(item.Gender, "X"))
                 {
-                    @string.Format("mixed");
+                    @:mixed
                 }
                 @Html.DisplayFor(modelItem => item.Oldclass.Name)
                 &nbsp;-&nbsp;
@@ -90,11 +104,11 @@ else
             <td>
                 @if (item.RaceTypId == 4)
                 {
-                    <span class="badge badge-pill badge-primary">Endlauf</span>
+                    <span class="badge badge-pill badge-danger">Endlauf</span>
                 }
                 else if (item.RaceTypId == 2)
                 {
-                    <span class="badge badge-pill badge-secondary">Zwischenlauf</span>
+                    <span class="badge badge-pill badge-warning">Zwischenlauf</span>
                 }
                 else if (item.RaceTypId == 1)
                 {

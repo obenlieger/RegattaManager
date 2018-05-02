@@ -21,13 +21,29 @@ namespace RegattaManager.Controllers
 
         public IActionResult Index(int? id)
         {
-            var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderBy(e => e.Starttime);
+            var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderBy(e => e.Starttime).FirstOrDefault();
             ViewBag.startboats = _context.Startboats.Include(e => e.Club).Include(e => e.Startboatstatus).OrderBy(e => e.Startslot);
             ViewBag.startboatmembers = _context.StartboatMembers;
             ViewBag.members = _context.Members;
             ViewBag.raceid = id;
 
-            return View(model.ToList());
+            if(model != null)
+            {
+                var allStartboats = _context.Startboats.Where(e => e.RaceId == model.RaceId).ToList();
+
+                ViewBag.allClicked = true;
+
+                foreach(var asb in allStartboats)
+                {
+                    if(asb.StartboatstatusId == 6)
+                    {
+                        ViewBag.allClicked = false;
+                    }                
+                }
+
+                return View(model);
+            }
+            return View();
         }
 
         [HttpPost]
@@ -40,6 +56,7 @@ namespace RegattaManager.Controllers
                 _context.Entry(startboat).State = EntityState.Modified;
                 _context.SaveChanges();
             }
+            
             return RedirectToAction("Index");
         }
 

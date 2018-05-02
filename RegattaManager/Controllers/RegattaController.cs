@@ -356,7 +356,6 @@ namespace RegattaManager.Controllers
             var raceDraw = _context.RaceDraws;
             int sbcount = 0;
             int startbahn = 1;
-            int racetypid = 1;
             List<ReportedStartboat> repsbtemp = new List<ReportedStartboat>();
             List<int> rsb = new List<int>();
 
@@ -402,8 +401,6 @@ namespace RegattaManager.Controllers
 
                     if(sbcount <= model.Startslots)
                     {
-                        racetypid = 4;
-
                         if(newrace.RaceCode == rrrr.RaceCode)
                         {
                             repsbtemp = reportedStartboats.Where(e => e.ReportedRaceId == rrrr.ReportedRaceId).ToList();
@@ -421,8 +418,6 @@ namespace RegattaManager.Controllers
                     }
                     else
                     {
-                        racetypid = 1;
-
                         if (newrace.RaceCode.Substring(0, 5) == rrrr.RaceCode.Substring(0, 5))
                         {
                             repsbtemp = reportedStartboats.Where(e => e.ReportedRaceId == rrrr.ReportedRaceId).ToList();

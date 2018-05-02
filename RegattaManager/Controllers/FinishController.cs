@@ -76,7 +76,7 @@ namespace RegattaManager.Controllers
         public IActionResult FinishRace(int id)
         {
             var race = _context.Races.FirstOrDefault(e => e.RaceId == id);
-            race.RacestatusId = 3;
+            race.RacestatusId = 1002;
             if (ModelState.IsValid)
             {
                 _context.Entry(race).State = EntityState.Modified;
