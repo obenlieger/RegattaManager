@@ -34,7 +34,7 @@ namespace RegattaManager.Controllers
 
             if (rid != 0)
             {
-                IEnumerable<Race> model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid).OrderBy(e => e.Starttime);       
+                IEnumerable<Race> model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid).OrderByDescending(e => e.Starttime);       
 
                 return View(model);
             }
@@ -75,7 +75,12 @@ namespace RegattaManager.Controllers
                 }
 
                 var allMembers = _context.Members.Include(e => e.Club).ToList();
-                var vStartboats = _context.Startboats.Where(e => e.RaceId == id).OrderBy(e => e.Startslot).ToList();
+                var vStartboats = _context.Startboats.Include(e => e.Startboatstatus).Where(e => e.RaceId == id).OrderBy(e => e.Startslot).ToList();
+
+                if(model.RacestatusId == 1002 || model.RacestatusId == 3)
+                {
+                    vStartboats = vStartboats.OrderBy(e => e.Placement).ToList();
+                }
 
                 var sbMembers = _context.StartboatMembers.Include(e => e.Member).Where(e => e.Startboat.RaceId == id).Select(e => e.MemberId).ToList();
                 var sbStandbys = _context.StartboatStandbys.Include(e => e.Member).Where(e => e.Startboat.RaceId == id).Select(e => e.MemberId).ToList();
@@ -139,6 +144,11 @@ namespace RegattaManager.Controllers
                 if (model.Gender == "X")
                 {
                     ViewBag.genderdesc = "mixed";
+                }
+
+                if(model.RacestatusId == 1002)
+                {
+                    ViewBag.StarboatStatusId = new SelectList(_context.Startboatstati, "StartboatstatusId", "Name");
                 }
 
                 return View(model);
@@ -313,24 +323,47 @@ namespace RegattaManager.Controllers
         public IActionResult StartSlotDown(int id)
         {
             var original = _context.Startboats.FirstOrDefault(e => e.StartboatId == id);
-            var race = _context.Races.FirstOrDefault(e => e.RaceId == original.RaceId);
-            var regatta = _context.Regattas.FirstOrDefault(e => e.RegattaId == race.RegattaId);
 
             if (original != null)
             {
-                if (original.Startslot < regatta.Startslots)
+                if(!_context.Startboats.Any(e => e.RaceId == original.RaceId && e.Startslot == original.Startslot + 1))
                 {
-                    if(!_context.Startboats.Any(e => e.RaceId == original.RaceId && e.Startslot == original.Startslot + 1))
+                    original.Startslot = original.Startslot + 1;
+                    _context.Startboats.Update(original);
+                    _context.SaveChanges();
+                }          
+                else
+                {
+                    var nextsb = _context.Startboats.FirstOrDefault(e => e.RaceId == original.RaceId && e.Startslot == original.Startslot + 1);
+                    nextsb.Startslot = nextsb.Startslot - 1;
+                    original.Startslot = original.Startslot + 1;
+                    _context.Startboats.Update(original);
+                    _context.SaveChanges();
+                }
+            }
+
+            return RedirectToAction("Details", "Race", new { id = original.RaceId });
+        }
+
+        public IActionResult PlacementUp(int id)
+        {
+            var original = _context.Startboats.FirstOrDefault(e => e.StartboatId == id);
+
+            if (original != null)
+            {
+                if (original.Placement > 1)
+                {
+                    if (!_context.Startboats.Any(e => e.RaceId == original.RaceId && e.Placement == original.Placement - 1))
                     {
-                        original.Startslot = original.Startslot + 1;
+                        original.Placement = original.Placement - 1;
                         _context.Startboats.Update(original);
                         _context.SaveChanges();
-                    }          
+                    }
                     else
                     {
-                        var nextsb = _context.Startboats.FirstOrDefault(e => e.RaceId == original.RaceId && e.Startslot == original.Startslot + 1);
-                        nextsb.Startslot = nextsb.Startslot - 1;
-                        original.Startslot = original.Startslot + 1;
+                        var nextsb = _context.Startboats.FirstOrDefault(e => e.RaceId == original.RaceId && e.Placement == original.Placement - 1);
+                        nextsb.Placement = nextsb.Placement + 1;
+                        original.Placement = original.Placement - 1;
                         _context.Startboats.Update(original);
                         _context.SaveChanges();
                     }
@@ -338,6 +371,79 @@ namespace RegattaManager.Controllers
             }
 
             return RedirectToAction("Details", "Race", new { id = original.RaceId });
+        }
+
+        public IActionResult PlacementDown(int id)
+        {
+            var original = _context.Startboats.FirstOrDefault(e => e.StartboatId == id);
+
+            if (original != null)
+            {
+                if (!_context.Startboats.Any(e => e.RaceId == original.RaceId && e.Placement == original.Placement + 1))
+                {
+                    original.Placement = original.Placement + 1;
+                    _context.Startboats.Update(original);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    var nextsb = _context.Startboats.FirstOrDefault(e => e.RaceId == original.RaceId && e.Placement == original.Placement + 1);
+                    nextsb.Placement = nextsb.Placement - 1;
+                    original.Placement = original.Placement + 1;
+                    _context.Startboats.Update(original);
+                    _context.SaveChanges();
+                }
+            }
+
+            return RedirectToAction("Details", "Race", new { id = original.RaceId });
+        }
+
+        public IActionResult Approve(int id)
+        {
+            var model = _context.Races.FirstOrDefault(e => e.RaceId == id);
+
+            if(model != null)
+            {
+                model.RacestatusId = 3;
+                _context.Races.Update(model);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult DisApprove(int id)
+        {
+            var model = _context.Races.FirstOrDefault(e => e.RaceId == id);
+
+            if (model != null)
+            {
+                model.RacestatusId = 1002;
+                _context.Races.Update(model);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Details", new { id = id });
+        }
+
+        public IActionResult EditStartboatStatus(int id, int statusid)
+        {
+            var startboat = _context.Startboats.FirstOrDefault(e => e.StartboatId == id);
+
+            if(startboat != null)
+            {
+                startboat.StartboatstatusId = statusid;
+
+                if(statusid == 4 || statusid == 7 || statusid == 8)
+                {
+                    startboat.Placement = -1;
+                }
+
+                _context.Startboats.Update(startboat);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Details", new { id = startboat.RaceId });
         }
 
         [HttpGet]

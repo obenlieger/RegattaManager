@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using RegattaManager.Data;
 using RegattaManager.Models;
 using Microsoft.EntityFrameworkCore;
-using Rotativa;
 
 namespace RegattaManager.Controllers
 {

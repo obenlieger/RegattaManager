@@ -29,16 +29,11 @@ namespace RegattaManager.Controllers
 
             if(model != null)
             {
-                var allStartboats = _context.Startboats.Where(e => e.RaceId == model.RaceId).ToList();
-
                 ViewBag.allClicked = true;
 
-                foreach(var asb in allStartboats)
+                if(_context.Startboats.Any(e => e.RaceId == model.RaceId && e.StartboatstatusId == 6))
                 {
-                    if(asb.StartboatstatusId == 6)
-                    {
-                        ViewBag.allClicked = false;
-                    }                
+                    ViewBag.allClicked = false;
                 }
 
                 return View(model);

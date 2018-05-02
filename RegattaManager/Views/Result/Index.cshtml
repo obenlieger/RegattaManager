@@ -136,8 +136,7 @@ else
             if (sb.RaceId == item.RaceId)
             {
                 if (sb.Placement != 0 && sb.Placement != -1)
-                {
-                    @:
+                {            
                     <tr class="table-light">
                         <td>@sb.Placement</td>
                         <td>@sb.Startslot</td>
@@ -174,7 +173,7 @@ else
                 if (sb.Placement <= 0)
                 {
                     @:
-                    <tr>
+                    <tr class="table-warning">
                         <td>0</td>
                         <td>@sb.Startslot</td>
                         <td>

@@ -30,31 +30,48 @@ namespace RegattaManager.Controllers
             ViewBag.raceid = id;
             ViewBag.RunningRaces = new SelectList(_context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 2).OrderBy(e => e.Starttime).ToList(), "RaceId", "Starttime");
             ViewBag.RunningRacesCount = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 2).OrderBy(e => e.Starttime).Count();
+            ViewBag.allClicked = true;            
 
             if (id != null)
             {
-                var model_id = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 2).OrderBy(e => e.Starttime).Where(e => e.RaceId == id).FirstOrDefault();
-                
+                var model_id = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 2).OrderBy(e => e.Starttime).Where(e => e.RaceId == id).FirstOrDefault();                
+
                 if (model_id != null)
                 {
                     ViewBag.pmmax = model_id.Startboats.Max(e => e.Placement) + 1;
+
+                    ViewBag.NextRaces = _context.Races.Include(e => e.Oldclass).Include(e => e.Boatclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Where(e => e.RaceId != model.RaceId && e.RacestatusId == 1).Take(10).OrderBy(e => e.Starttime).ToList();
                 }
                 else
                 {
                     ViewBag.pmmax = 0;
                 }
+
+                if(_context.Startboats.Any(e => e.RaceId == model.RaceId && (e.StartboatstatusId == 1 || e.StartboatstatusId == 2 || e.StartboatstatusId == 6)))
+                {
+                    ViewBag.allClicked = false;
+                }
+
                 return View(model_id);
             }            
 
             if (model != null)
             {
                 ViewBag.pmmax = model.Startboats.Max(e => e.Placement) + 1;
+
+                ViewBag.NextRaces = _context.Races.Include(e => e.Oldclass).Include(e => e.Boatclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Where(e => e.RaceId != model.RaceId && e.RacestatusId == 1).Take(10).OrderBy(e => e.Starttime).ToList();
+
+                if (_context.Startboats.Any(e => e.RaceId == model.RaceId && (e.StartboatstatusId == 1 || e.StartboatstatusId == 2 || e.StartboatstatusId == 6)))
+                {
+                    ViewBag.allClicked = false;
+                }
+
             }
             else
             {
                 ViewBag.pmmax = 0;
             }
-
+            
             return View(model);
         }
 

@@ -4,7 +4,7 @@
     ViewData["Title"] = "Ziel";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<br/>
+<br />
 <h2>Ziel</h2>
 @if (ViewBag.RunningRacesCount > 1)
 {
@@ -13,35 +13,32 @@
         <input type="submit" class="btn btn-primary" value="Auswählen" />
     </form>
 }
-
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th></th>
-            <th>
-                @Html.DisplayNameFor(model => model.Boatclass.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Raceclass.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Oldclass.Name)
-            </th>
-            <th>
-                Rennstatus
-            </th>
-            <th>
-                Startzeit
-            </th>
-            <th>
-                Renncode
-            </th>
-            <th>
-            </th>
-        </tr>
-    </thead>
-    @if (@Model != null)
-    {
+@if (@Model != null)
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Boatclass.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Raceclass.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Oldclass.Name)
+                </th>
+                <th>
+                    Rennstatus
+                </th>
+                <th>
+                    Startzeit
+                </th>
+                <th>
+                    Renncode
+                </th>
+            </tr>
+        </thead>
         <tr class="table-secondary">
             <td></td>
             <td>
@@ -76,14 +73,12 @@
                     @Html.DisplayFor(model => Model.RaceCode)
                 </strong>
             </td>
-            <td></td>
         </tr>
         <tr class="table-success">
             <td></td>
             <td><i>Startbahn</i></td>
             <td><i>Starter</i></td>
             <td><i>Verein</i></td>
-            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -154,8 +149,7 @@
                             }
                             <input type="hidden" name="statusid" id="statusid" value="4" />
                         </form>
-                    </td>
-                    <td>
+                        <br />
                         <form asp-action="FinishStartboat" asp-controller="Finish" asp-route-id="@sb.StartboatId">
                             @if (sb.Placement != 0)
                             {
@@ -167,6 +161,19 @@
                                 <input type="hidden" name="placement" id="placement" value="-1" />
                             }
                             <input type="hidden" name="statusid" id="statusid" value="7" />
+                        </form>
+                        <br />
+                        <form asp-action="FinishStartboat" asp-controller="Finish" asp-route-id="@sb.StartboatId">
+                            @if (sb.Placement != 0)
+                            {
+                                <a href="#" class="btn btn-warning disabled">disqualifiziert</a>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-warning">disqualifiziert</button>
+                                <input type="hidden" name="placement" id="placement" value="-1" />
+                            }
+                            <input type="hidden" name="statusid" id="statusid" value="8" />
                         </form>
                     </td>
                 </tr>
@@ -183,6 +190,106 @@
             </td>
             <td></td>
             <td></td>
+            <td></td>
         </tr>
-    }
+    </table>
+    <hr />
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Renncode</th>
+                <th colspan="2">
+                    Rennbezeichnung
+                </th>
+                <th>
+                    Rennstatus
+                </th>
+                <th>
+                    Startzeit
+                </th>
+            </tr>
+        </thead>
+        @foreach (var item in ViewBag.NextRaces)
+        {
+            @if (item.RacestatusId == 3)
+            {
+                @:<tr class="table-light">
+                    }
+                    else if (item.RacestatusId == 4)
+                    {
+                        @:<tr class="table-danger">
+                    }
+                    else if (item.RacestatusId == 2)
+                    {
+                        @:<tr class="table-active">
+                    }
+                    else if (item.RacestatusId == 1002)
+                    {
+                        @:<tr class="table-success">
+                    }
+                    else
+                    {
+                        @:<tr>
+                    }
+                        <td id="@item.RaceId"><i>@item.RaceCode</i></td>
+                    <td colspan="2">
+                        @if (item.Gender.Equals("M"))
+                        {
+                            @if (item.Oldclass.FromAge >= 17 && item.Oldclass.ToAge <= 99)
+                            {
+                                @:Herren
+                            }
+                            else if (item.Oldclass.FromAge >= 15 && item.Oldclass.ToAge <= 16)
+                            {
+                                @:männliche
+                            }
+                        }
+                        else if (string.Equals(item.Gender, "W"))
+                        {
+                            @if (item.Oldclass.FromAge >= 17 && item.Oldclass.ToAge <= 99)
+                            {
+                                @:Damen
+                            }
+                            else
+                            {
+                                @:weibliche
+                            }
+                        }
+                        else if (string.Equals(item.Gender, "X"))
+                        {
+                            @:mixed
+                        }
+                        @item.Oldclass.Name
+                        &nbsp;-&nbsp;
+                        @item.Boatclass.Name
+                        &nbsp;-&nbsp;
+                        @item.Raceclass.Name
+                        <br />
+                        @if (item.RaceTypId == 4)
+                        {
+                            <span class="badge badge-pill badge-danger">Endlauf</span>
+                        }
+                        else if (item.RaceTypId == 2)
+                        {
+                            <span class="badge badge-pill badge-warning">Zwischenlauf</span>
+                        }
+                        else if (item.RaceTypId == 1)
+                        {
+                            <span class="badge badge-pill badge-success">Vorlauf</span>
+                        }
+                        else if (item.RaceTypId == 3)
+                        {
+                            <span class="badge badge-pill badge-info">Hoffnungslauf</span>
+                        }
+                    </td>
+                    <td>
+                        @item.Racestatus.Name
+                    </td>
+                    <td>
+                        @item.Starttime
+                    </td>
+                @:</tr>
+                }
+          }
 </table>
+}
