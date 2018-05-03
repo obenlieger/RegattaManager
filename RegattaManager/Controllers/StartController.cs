@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using RegattaManager.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace RegattaManager.Controllers
 {
@@ -27,8 +28,24 @@ namespace RegattaManager.Controllers
             ViewBag.members = _context.Members;
             ViewBag.raceid = id;
             ViewBag.currentTime = System.DateTime.Now;
+            ViewBag.ReadyRaces = new SelectList(_context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderBy(e => e.Starttime).ToList(), "RaceId", "Starttime");
+            ViewBag.ReadyRacesCount = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderBy(e => e.Starttime).Count();
 
-            if(model != null)
+            if(id != null)
+            {
+                model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderBy(e => e.Starttime).FirstOrDefault(e => e.RaceId == id);
+
+                ViewBag.allClicked = true;
+
+                if (_context.Startboats.Any(e => e.RaceId == model.RaceId && e.StartboatstatusId == 6))
+                {
+                    ViewBag.allClicked = false;
+                }
+
+                return View(model);
+            }
+
+            if (model != null)
             {
                 ViewBag.allClicked = true;
 

@@ -409,6 +409,8 @@ namespace RegattaManager.Controllers
                 _context.SaveChanges();
             }
 
+
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -1300,6 +1302,43 @@ namespace RegattaManager.Controllers
             }
 
             return 0;
+        }
+
+        private bool TryDrawRaces(int id)
+        {
+            var race = _context.Races.FirstOrDefault(e => e.RaceId == id);
+            var racedraw = _context.RaceDraws.FirstOrDefault(e => e.RaceDrawId == race.RaceDrawId);
+            var torace = _context.Races.FirstOrDefault(e => e.RaceCode.Substring(0, 5) == race.RaceCode.Substring(0, 5) && e.RaceTypId == 4);
+            int i = 1;
+
+            if(race.RaceTypId == 1)
+            {
+                if(!_context.Races.Any(e => e.RacestatusId != 3 && e.ReportedRaceId == race.ReportedRaceId))
+                {
+                    var racedrawrules = _context.RaceDrawRules.Where(e => e.RaceDrawId == race.RaceDrawId && e.RaceTypId == race.RaceTypId && e.RaceSequence == race.Sequence);
+                    var startboats = _context.Startboats.Where(e => e.RaceId == race.RaceId);
+
+                    foreach(var rdr in racedrawrules)
+                    {
+                        foreach(var sb in startboats)
+                        {
+                            if(sb.Placement >= rdr.PlacementFrom && sb.Placement <= rdr.PlacementTo)
+                            {
+                                torace = _context.Races.FirstOrDefault(e => e.ReportedRaceId == race.ReportedRaceId && e.RaceTypId == rdr.RaceTypId && e.Sequence == rdr.ToRaceSequence);
+                                if(torace != null)
+                                {
+                                    _context.Startboats.Add(new Startboat { ClubId = sb.ClubId, RaceId = torace.RaceId, StartboatstatusId = 6, Startslot = i, RegattaId = race.RegattaId, Gender = race.Gender, ReportedStartboatId = sb.ReportedStartboatId });
+                                    i++;
+                                }
+                            }
+                        }
+                    }
+
+                    _context.SaveChanges();
+                }
+            }
+
+            return true;
         }
     }
 }

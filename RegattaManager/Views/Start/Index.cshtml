@@ -4,117 +4,124 @@
     ViewData["Title"] = "Start";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<br/>
+<br />
 <h2>Start</h2>
-@if(Model != null)
+@if (Model != null)
 {
-<table class="table">
-    <thead>
-        <tr>
-            <th>Renncode</th>
-            <th colspan="2">
-                Rennbezeichnung
-            </th>
-            <th>
-            </th>
-            <th>
-            </th>
-            <th>
-                Startzeit
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-            <tr class="table-success">
-                <td>@Model.RaceCode</td>
-                <td colspan="4">
-                    @if (Model.Gender.Equals("M"))
-                    {
-                        @if(Model.Oldclass.FromAge >=17 && Model.Oldclass.ToAge <= 99)
-                        {
-                            @:Herren
-                        }
-                        else if(Model.Oldclass.FromAge >= 15 && Model.Oldclass.ToAge <= 16)
-                        {
-                            @:männliche    
-                        }                            
-                    }
-                    else if (string.Equals(Model.Gender, "W"))
-                    {
-                        @if (Model.Oldclass.FromAge >= 17 && Model.Oldclass.ToAge <= 99)
-                        {
-                            @:Damen
-                        }
-                        else
-                        {
-                            @:weibliche
-                        }
-                    }
-                    else if (string.Equals(Model.Gender, "X"))
-                    {
-                        @:mixed
-                    }
-                    @Model.Oldclass.Name
-                    &nbsp;-&nbsp;
-                    @Model.Boatclass.Name
-                    &nbsp;-&nbsp;
-                    @Model.Raceclass.Name
-                </td>
-                <td colspan="2">
-                    @Model.Starttime
-                </td>
+    @if (ViewBag.ReadyRacesCount > 1)
+    {
+        <form asp-action="Index" asp-controller="Start">
+            <select class="form-control" name="id" id="id" asp-items="ViewBag.ReadyRaces"></select>
+            <input type="submit" class="btn btn-primary" value="Auswählen" />
+        </form>
+    }
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Renncode</th>
+                <th colspan="2">
+                    Rennbezeichnung
+                </th>
+                <th>
+                </th>
+                <th>
+                </th>
+                <th>
+                    Startzeit
+                </th>
+                <th></th>
             </tr>
-            <tr class="table-secondary">
-                <td><i>Startbahn</i></td>
-                <td><i>Starter</i></td>
-                <td><i>Verein</i></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            @foreach (var sb in ViewBag.startboats)
-            {
-                if (sb.RaceId == Model.RaceId)
+        </thead>
+        <tr class="table-success">
+            <td>@Model.RaceCode</td>
+            <td colspan="4">
+                @if (Model.Gender.Equals("M"))
                 {
-                    @:
-                    <tr>
-                        <td>@sb.Startslot</td>
-                        <td>
-                            @foreach (var sbm in ViewBag.startboatmembers)
+                    @if (Model.Oldclass.FromAge >= 17 && Model.Oldclass.ToAge <= 99)
+                    {
+                        @:Herren
+                    }
+                    else if (Model.Oldclass.FromAge >= 15 && Model.Oldclass.ToAge <= 16)
+                    {
+                        @:männliche
+                    }
+                }
+                else if (string.Equals(Model.Gender, "W"))
+                {
+                    @if (Model.Oldclass.FromAge >= 17 && Model.Oldclass.ToAge <= 99)
+                    {
+                        @:Damen
+                    }
+                    else
+                    {
+                        @:weibliche
+                    }
+                }
+                else if (string.Equals(Model.Gender, "X"))
+                {
+                    @:mixed
+                }
+                @Model.Oldclass.Name
+                &nbsp;-&nbsp;
+                @Model.Boatclass.Name
+                &nbsp;-&nbsp;
+                @Model.Raceclass.Name
+            </td>
+            <td colspan="2">
+                @Model.Starttime
+            </td>
+        </tr>
+        <tr class="table-secondary">
+            <td><i>Startbahn</i></td>
+            <td><i>Starter</i></td>
+            <td><i>Verein</i></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        @foreach (var sb in ViewBag.startboats)
+        {
+            if (sb.RaceId == Model.RaceId)
+            {
+                @:
+                <tr>
+                    <td>@sb.Startslot</td>
+                    <td>
+                        @foreach (var sbm in ViewBag.startboatmembers)
+                        {
+                            if (sbm.StartboatId == sb.StartboatId)
                             {
-                                if (sbm.StartboatId == sb.StartboatId)
+                                foreach (var m in ViewBag.members)
                                 {
-                                    foreach (var m in ViewBag.members)
+                                    if (m.MemberId == sbm.MemberId)
                                     {
-                                        if (m.MemberId == sbm.MemberId)
-                                        {
-                                    @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                    <br />
-                                    }
+                                        @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                        <br />
                                     }
                                 }
                             }
-                        </td>
-                        <td>@sb.Club.Name</td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <form asp-action="VerifyStartboat" asp-controller="Start" asp-route-id="@sb.StartboatId">
-                                <input type="hidden" name="statusid" id="statusid" value="1" />
-                                    @if (@sb.StartboatstatusId == 1)
-                                    {
-                                        <a href="#" class="btn btn-success disabled">Am Start</a>
-                                    }
-                                    else
-                                    {
-                                        <button type="submit" class="btn btn-success">Am Start</button>
-                                    }
-                            </form>
-                        </td>
-                        <td>
-                            <form asp-action="VerifyStartboat" asp-controller="Start" asp-route-id="@sb.StartboatId">
-                                <input type="hidden" name="statusid" id="statusid" value="5" />
+                        }
+                    </td>
+                    <td>@sb.Club.Name</td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <form asp-action="VerifyStartboat" asp-controller="Start" asp-route-id="@sb.StartboatId">
+                            <input type="hidden" name="statusid" id="statusid" value="1" />
+                            @if (@sb.StartboatstatusId == 1)
+                            {
+                                <a href="#" class="btn btn-success disabled">Am Start</a>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-success">Am Start</button>
+                            }
+                        </form>
+                    </td>
+                    <td>
+                        <form asp-action="VerifyStartboat" asp-controller="Start" asp-route-id="@sb.StartboatId">
+                            <input type="hidden" name="statusid" id="statusid" value="5" />
                             @if (@sb.StartboatstatusId == 5)
                             {
                                 <button type="submit" class="btn btn-danger disabled">Nicht Am Start</button>
@@ -123,32 +130,32 @@
                             {
                                 <button type="submit" class="btn btn-danger">Nicht Am Start</button>
                             }
-                            </form>
-                        </td>
-                    </tr>
-                }
+                        </form>
+                    </td>
+                </tr>
             }
+        }
 
-            <tr>
-                <td colspan="3">   
-                    <h3>@ViewBag.currentTime</h3>  
-                </td>
-                <td></td>
-                <td></td>
-                <td colspan="3">
-                    <div align="right">
-                    @if(ViewBag.allClicked == true)
+        <tr>
+            <td colspan="3">
+                <h3>@ViewBag.currentTime</h3>
+            </td>
+            <td></td>
+            <td></td>
+            <td colspan="3">
+                <div align="right">
+                    @if (ViewBag.allClicked == true)
                     {
                         <a asp-action="StartRace" asp-controller="Start" asp-route-id="@Model.RaceId" class="btn btn-success btn-lg">START</a>
                     }
                     else
                     {
                         <a href="#" class="btn btn-success btn-lg disabled">START</a>
-                    }                        
-                    </div>
-                </td>
-            </tr>
-</table>
+                    }
+                </div>
+            </td>
+        </tr>
+    </table>
 }
 else
 {

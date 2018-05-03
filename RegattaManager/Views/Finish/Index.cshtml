@@ -186,7 +186,14 @@
             <td></td>
             <td></td>
             <td colspan="2">
-                <a asp-action="FinishRace" asp-controller="Finish" asp-route-id="@Model.RaceId" class="btn btn-success btn-lg">BEENDEN</a>
+                @if(ViewBag.allClicked == true)
+                {
+                    <a asp-action="FinishRace" asp-controller="Finish" asp-route-id="@Model.RaceId" class="btn btn-success btn-lg">BEENDEN</a>    
+                }
+                else
+                {
+                    <a href="#" class="btn btn-success btn-lg disabled">BEENDEN</a>
+                }
             </td>
             <td></td>
             <td></td>
