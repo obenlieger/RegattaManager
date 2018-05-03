@@ -9,49 +9,25 @@
 @if(Model != null)
 {
 <table class="table">
-    <tr>
-        <th></th>
-        <th>
-            @Html.DisplayNameFor(model => model.Boatclass.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Raceclass.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Oldclass.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Regatta.Name)
-        </th>
-        <th>
-            Rennstatus
-        </th>
-        <th>
-            Startzeit
-        </th>
-        <th></th>
-        <th></th>
-    </tr>
-            <tr class="table-active">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr class="table-primary">
-                <td></td>
-                <td>
-                    @Model.Boatclass.Name
-                </td>
-                <td>
-                    @Model.Raceclass.Name
-                </td>
-                <td>
+    <thead>
+        <tr>
+            <th>Renncode</th>
+            <th colspan="2">
+                Rennbezeichnung
+            </th>
+            <th>
+            </th>
+            <th>
+            </th>
+            <th>
+                Startzeit
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+            <tr class="table-success">
+                <td>@Model.RaceCode</td>
+                <td colspan="4">
                     @if (Model.Gender.Equals("M"))
                     {
                         @if(Model.Oldclass.FromAge >=17 && Model.Oldclass.ToAge <= 99)
@@ -79,22 +55,16 @@
                         @:mixed
                     }
                     @Model.Oldclass.Name
+                    &nbsp;-&nbsp;
+                    @Model.Boatclass.Name
+                    &nbsp;-&nbsp;
+                    @Model.Raceclass.Name
                 </td>
-                <td>
-                    @Model.Regatta.Name
-                </td>
-                <td>
-                    @Model.Racestatus.Name
-                </td>
-                <td>
+                <td colspan="2">
                     @Model.Starttime
                 </td>
-                <td></td>
-                <td></td>
             </tr>
             <tr class="table-secondary">
-                <td></td>
-                <td>@Model.RaceCode</td>
                 <td><i>Startbahn</i></td>
                 <td><i>Starter</i></td>
                 <td><i>Verein</i></td>
@@ -109,8 +79,6 @@
                 {
                     @:
                     <tr>
-                        <td></td>
-                        <td></td>
                         <td>@sb.Startslot</td>
                         <td>
                             @foreach (var sbm in ViewBag.startboatmembers)
@@ -162,9 +130,8 @@
             }
 
             <tr>
-                <td></td>
-                <td colspan="3">
-                    <a asp-action="Index" asp-controller="Start" asp-route-id="@Model.RaceId" class="btn btn-danger btn-lg">ABSAGEN</a>
+                <td colspan="3">   
+                    <h3>@ViewBag.currentTime</h3>  
                 </td>
                 <td></td>
                 <td></td>

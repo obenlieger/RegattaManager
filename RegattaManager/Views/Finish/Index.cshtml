@@ -18,60 +18,60 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th></th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Boatclass.Name)
+                <th>Renncode</th>
+                <th colspan="3">
+                    Rennbezeichnung
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Raceclass.Name)
+                Startzeit
+                </th>
+                <th> 
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Oldclass.Name)
-                </th>
-                <th>
-                    Rennstatus
-                </th>
-                <th>
-                    Startzeit
-                </th>
-                <th>
-                    Renncode
                 </th>
             </tr>
         </thead>
         <tr class="table-secondary">
-            <td></td>
-            <td>
-                @Html.DisplayFor(model => Model.Boatclass.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(model => Model.Raceclass.Name)
-            </td>
-            <td>
-                @if (Model.Gender == "M")
-                {
-                    @string.Format("männliche");
-                }
-                else if (Model.Gender == "W")
-                {
-                    @string.Format("weibliche");
-                }
-                else
-                {
-                    @string.Format("gemischte");
-                }
-                @Html.DisplayFor(model => Model.Oldclass.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(model => Model.Racestatus.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(model => Model.Starttime)
-            </td>
             <td>
                 <strong>
                     @Html.DisplayFor(model => Model.RaceCode)
                 </strong>
+            </td>
+            <td colspan="3">
+                @if (Model.Gender.Equals("M"))
+                    {
+                        @if(Model.Oldclass.FromAge >=17 && Model.Oldclass.ToAge <= 99)
+                        {
+                            @:Herren
+                        }
+                        else if(Model.Oldclass.FromAge >= 15 && Model.Oldclass.ToAge <= 16)
+                        {
+                            @:männliche    
+                        }                            
+                    }
+                    else if (string.Equals(Model.Gender, "W"))
+                    {
+                        @if (Model.Oldclass.FromAge >= 17 && Model.Oldclass.ToAge <= 99)
+                        {
+                            @:Damen
+                        }
+                        else
+                        {
+                            @:weibliche
+                        }
+                    }
+                    else if (string.Equals(Model.Gender, "X"))
+                    {
+                        @:mixed
+                    }
+                    @Model.Oldclass.Name
+                    &nbsp;-&nbsp;
+                    @Model.Boatclass.Name
+                    &nbsp;-&nbsp;
+                    @Model.Raceclass.Name
+            </td>
+            <td colspan="3">
+                @Html.DisplayFor(model => Model.Starttime)
             </td>
         </tr>
         <tr class="table-success">
@@ -194,15 +194,13 @@
         </tr>
     </table>
     <hr />
+    <h3>Die n&auml;chsten 10 Rennen</h3>
     <table class="table table-hover">
         <thead>
             <tr>
                 <th>Renncode</th>
                 <th colspan="2">
                     Rennbezeichnung
-                </th>
-                <th>
-                    Rennstatus
                 </th>
                 <th>
                     Startzeit
@@ -283,13 +281,10 @@
                         }
                     </td>
                     <td>
-                        @item.Racestatus.Name
-                    </td>
-                    <td>
                         @item.Starttime
                     </td>
                 @:</tr>
                 }
-          }
+          
 </table>
 }

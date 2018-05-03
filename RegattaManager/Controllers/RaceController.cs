@@ -34,7 +34,7 @@ namespace RegattaManager.Controllers
 
             if (rid != 0)
             {
-                IEnumerable<Race> model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid).OrderByDescending(e => e.Starttime);       
+                IEnumerable<Race> model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid).OrderByDescending(e => e.RacestatusId).ThenBy(e => e.Starttime);       
 
                 return View(model);
             }

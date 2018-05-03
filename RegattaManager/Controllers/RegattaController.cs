@@ -370,22 +370,22 @@ namespace RegattaManager.Controllers
                         {
                             for(var vl = 0; vl < rd.VorlaufCount; vl++)
                             {
-                                _context.Races.Add(new Race { BoatclassId = rr.Competition.BoatclassId, Gender = rr.Gender, OldclassId = rr.OldclassId, RaceclassId = rr.Competition.RaceclassId, RacestatusId = 1, RaceTypId = 1, RegattaId = id, RaceCode = string.Format("{0}V{1}",rr.RaceCode.Substring(0, 5),vl+1) });             
+                                _context.Races.Add(new Race { BoatclassId = rr.Competition.BoatclassId, Gender = rr.Gender, OldclassId = rr.OldclassId, RaceclassId = rr.Competition.RaceclassId, ReportedRaceId = rr.ReportedRaceId, RaceDrawId = rd.RaceDrawId, RacestatusId = 1, RaceTypId = 1, RegattaId = id, RaceCode = string.Format("{0}V{1}",rr.RaceCode.Substring(0, 5),vl+1) });             
                             }
 
                             for(var hl = 0; hl < rd.HoffnungslaufCount; hl++)
                             {
-                                _context.Races.Add(new Race { BoatclassId = rr.Competition.BoatclassId, Gender = rr.Gender, OldclassId = rr.OldclassId, RaceclassId = rr.Competition.RaceclassId, RacestatusId = 1, RaceTypId = 3, RegattaId = id, RaceCode = string.Format("{0}H{1}", rr.RaceCode.Substring(0, 5),hl+1) });                                
+                                _context.Races.Add(new Race { BoatclassId = rr.Competition.BoatclassId, Gender = rr.Gender, OldclassId = rr.OldclassId, RaceclassId = rr.Competition.RaceclassId, ReportedRaceId = rr.ReportedRaceId, RaceDrawId = rd.RaceDrawId, RacestatusId = 1, RaceTypId = 3, RegattaId = id, RaceCode = string.Format("{0}H{1}", rr.RaceCode.Substring(0, 5),hl+1) });                                
                             }
 
                             for(var zl = 0; zl < rd.ZwischenlaufCount; zl ++)
                             {
-                                _context.Races.Add(new Race { BoatclassId = rr.Competition.BoatclassId, Gender = rr.Gender, OldclassId = rr.OldclassId, RaceclassId = rr.Competition.RaceclassId, RacestatusId = 1, RaceTypId = 2, RegattaId = id, RaceCode = string.Format("{0}Z{1}", rr.RaceCode.Substring(0, 5),zl+1) });
+                                _context.Races.Add(new Race { BoatclassId = rr.Competition.BoatclassId, Gender = rr.Gender, OldclassId = rr.OldclassId, RaceclassId = rr.Competition.RaceclassId, ReportedRaceId = rr.ReportedRaceId, RaceDrawId = rd.RaceDrawId, RacestatusId = 1, RaceTypId = 2, RegattaId = id, RaceCode = string.Format("{0}Z{1}", rr.RaceCode.Substring(0, 5),zl+1) });
                             }
 
                             for(var el = 0; el < rd.EndlaufCount; el++)
                             {
-                                _context.Races.Add(new Race { BoatclassId = rr.Competition.BoatclassId, Gender = rr.Gender, OldclassId = rr.OldclassId, RaceclassId = rr.Competition.RaceclassId, RacestatusId = 1, RaceTypId = 4, RegattaId = id, RaceCode = rr.RaceCode });                                
+                                _context.Races.Add(new Race { BoatclassId = rr.Competition.BoatclassId, Gender = rr.Gender, OldclassId = rr.OldclassId, RaceclassId = rr.Competition.RaceclassId, ReportedRaceId = rr.ReportedRaceId, RaceDrawId = rd.RaceDrawId, RacestatusId = 1, RaceTypId = 4, RegattaId = id, RaceCode = rr.RaceCode });                                
                             }                            
                         }
                     }                    
@@ -395,13 +395,13 @@ namespace RegattaManager.Controllers
 
             foreach (var rrrr in reportedRaces)
             {                
-                foreach (var newrace in _context.Races.Where(e => e.RegattaId == id))
+                foreach (var newrace in _context.Races.Where(e => e.RegattaId == id && (e.RaceTypId == 4 || e.RaceTypId == 1)))
                 {
                     sbcount = reportedStartboats.Where(e => e.ReportedRaceId == rrrr.ReportedRaceId).Count();
 
                     if(sbcount <= model.Startslots)
                     {
-                        if(newrace.RaceCode == rrrr.RaceCode)
+                        if(newrace.ReportedRaceId == rrrr.ReportedRaceId && newrace.RaceTypId == 4)
                         {
                             repsbtemp = reportedStartboats.Where(e => e.ReportedRaceId == rrrr.ReportedRaceId).ToList();
                             startbahn = 1;
@@ -418,7 +418,7 @@ namespace RegattaManager.Controllers
                     }
                     else
                     {
-                        if (newrace.RaceCode.Substring(0, 5) == rrrr.RaceCode.Substring(0, 5))
+                        if (newrace.ReportedRaceId == rrrr.ReportedRaceId && newrace.RaceTypId == 1)
                         {
                             repsbtemp = reportedStartboats.Where(e => e.ReportedRaceId == rrrr.ReportedRaceId).ToList();
                             startbahn = 1;
@@ -441,7 +441,7 @@ namespace RegattaManager.Controllers
             {            
                 foreach(var rr in reportedRaces)
                 {
-                    if (nr.RegattaId == rr.RegattaId && nr.RaceCode.Substring(0, 5) == rr.RaceCode.Substring(0, 5))
+                    if (nr.ReportedRaceId == rr.ReportedRaceId)
                     {
                         foreach(var newsb in _context.Startboats.Where(e => e.RegattaId == id && e.RaceId == nr.RaceId))
                         {
@@ -451,7 +451,7 @@ namespace RegattaManager.Controllers
                                 {
                                     foreach (var rsbm in reportedStartboatMember.Where(e => e.ReportedStartboatId == rsbb.ReportedStartboatId))
                                     {
-                                        _context.StartboatMembers.Add(new StartboatMember { StartboatId = newsb.StartboatId, MemberId = rsbm.MemberId, SeatNumber = rsbm.Seatnumber });
+                                        _context.StartboatMembers.Add(new StartboatMember { StartboatId = newsb.StartboatId, MemberId = rsbm.MemberId, SeatNumber = rsbm.Seatnumber });                                        
                                     }
                                 }                                                                             
                             }

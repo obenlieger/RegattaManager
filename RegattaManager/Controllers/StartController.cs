@@ -26,6 +26,7 @@ namespace RegattaManager.Controllers
             ViewBag.startboatmembers = _context.StartboatMembers;
             ViewBag.members = _context.Members;
             ViewBag.raceid = id;
+            ViewBag.currentTime = System.DateTime.Now;
 
             if(model != null)
             {
@@ -59,7 +60,10 @@ namespace RegattaManager.Controllers
         public IActionResult StartRace(int id)
         {
             var race = _context.Races.FirstOrDefault(e => e.RaceId == id);
+            
             race.RacestatusId = 2;
+            race.Realstarttime = System.DateTime.Now;
+
             if (ModelState.IsValid)
             {
                 _context.Entry(race).State = EntityState.Modified;
