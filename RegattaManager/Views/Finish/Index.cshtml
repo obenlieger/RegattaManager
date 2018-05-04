@@ -140,37 +140,35 @@
                         <form asp-action="FinishStartboat" asp-controller="Finish" asp-route-id="@sb.StartboatId">
                             @if (sb.Placement != 0)
                             {
-                                <a href="#" class="btn btn-warning disabled">Gekentert</a>
+                                <a href="#" class="btn btn-warning disabled btn-sm">Gekentert</a>
                             }
                             else
                             {
-                                <button type="submit" class="btn btn-warning">Gekentert</button>
+                                <button type="submit" class="btn btn-warning btn-sm">Gekentert</button>
                                 <input type="hidden" name="placement" id="placement" value="-1" />
                             }
                             <input type="hidden" name="statusid" id="statusid" value="4" />
                         </form>
-                        <br />
                         <form asp-action="FinishStartboat" asp-controller="Finish" asp-route-id="@sb.StartboatId">
                             @if (sb.Placement != 0)
                             {
-                                <a href="#" class="btn btn-warning disabled">falsch eingefahren</a>
+                                <a href="#" class="btn btn-warning disabled btn-sm">falsch eingefahren</a>
                             }
                             else
                             {
-                                <button type="submit" class="btn btn-warning">falsch eingefahren</button>
+                                <button type="submit" class="btn btn-warning btn-sm">falsch eingefahren</button>
                                 <input type="hidden" name="placement" id="placement" value="-1" />
                             }
                             <input type="hidden" name="statusid" id="statusid" value="7" />
                         </form>
-                        <br />
                         <form asp-action="FinishStartboat" asp-controller="Finish" asp-route-id="@sb.StartboatId">
                             @if (sb.Placement != 0)
                             {
-                                <a href="#" class="btn btn-warning disabled">disqualifiziert</a>
+                                <a href="#" class="btn btn-warning disabled btn-sm">disqualifiziert</a>
                             }
                             else
                             {
-                                <button type="submit" class="btn btn-warning">disqualifiziert</button>
+                                <button type="submit" class="btn btn-warning btn-sm">disqualifiziert</button>
                                 <input type="hidden" name="placement" id="placement" value="-1" />
                             }
                             <input type="hidden" name="statusid" id="statusid" value="8" />

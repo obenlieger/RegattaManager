@@ -69,8 +69,8 @@ namespace RegattaManager.Controllers
                 _context.Entry(startboat).State = EntityState.Modified;
                 _context.SaveChanges();
             }
-            
-            return RedirectToAction("Index");
+                        
+            return Redirect(Url.RouteUrl(new { controller = "Start", action = "Index" }) + "#" + id);
         }
 
         [HttpGet]

@@ -409,7 +409,7 @@ namespace RegattaManager.Controllers
                 _context.SaveChanges();
             }
 
-
+            bool drawresult = TryDrawRaces(id);
 
             return RedirectToAction(nameof(Index));
         }

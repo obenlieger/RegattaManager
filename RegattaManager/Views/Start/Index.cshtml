@@ -85,7 +85,7 @@
             if (sb.RaceId == Model.RaceId)
             {
                 @:
-                <tr>
+                <tr id="@sb.StartboatId">
                     <td>@sb.Startslot</td>
                     <td>
                         @foreach (var sbm in ViewBag.startboatmembers)

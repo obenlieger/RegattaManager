@@ -355,6 +355,8 @@ namespace RegattaManager.Controllers
             var reportedStartboatStandby = _context.ReportedStartboatStandbys;
             var raceDraw = _context.RaceDraws;
             int sbcount = 0;
+            int sbcounter = 0;
+            int rrcounter = 0;
             int startbahn = 1;
             List<ReportedStartboat> repsbtemp = new List<ReportedStartboat>();
             List<int> rsb = new List<int>();
@@ -398,6 +400,8 @@ namespace RegattaManager.Controllers
                 foreach (var newrace in _context.Races.Where(e => e.RegattaId == id && (e.RaceTypId == 4 || e.RaceTypId == 1)))
                 {
                     sbcount = reportedStartboats.Where(e => e.ReportedRaceId == rrrr.ReportedRaceId).Count();
+                    sbcounter = sbcount;
+                    rrcounter = _context.Races.Where(e => e.RegattaId == id && (e.RaceTypId == 4 || e.RaceTypId == 1)).Count();
 
                     if(sbcount <= model.Startslots)
                     {
@@ -412,7 +416,7 @@ namespace RegattaManager.Controllers
                                     _context.Startboats.Add(new Startboat { RaceId = newrace.RaceId, RegattaId = id, ClubId = tempsb.ClubId, ReportedStartboatId = tempsb.ReportedStartboatId, StartboatstatusId = 6, Startslot = startbahn });
                                 }                                
                                 rsb.Add(tempsb.ReportedStartboatId);
-                                startbahn++;
+                                startbahn++;                                
                             }
                         }
                     }
@@ -424,13 +428,22 @@ namespace RegattaManager.Controllers
                             startbahn = 1;
                             foreach (var tempsb in repsbtemp)
                             {
-                                if (!rsb.Contains(tempsb.ReportedStartboatId) && startbahn <= model.Startslots)
+                                if (!rsb.Contains(tempsb.ReportedStartboatId) && startbahn <= model.Startslots && rrcounter > 1 && sbcounter > 3)
                                 {
                                     _context.Startboats.Add(new Startboat { RaceId = newrace.RaceId, RegattaId = id, ClubId = tempsb.ClubId, ReportedStartboatId = tempsb.ReportedStartboatId, StartboatstatusId = 6, Startslot = startbahn, Gender = tempsb.Gender });
-                                }
-                                rsb.Add(tempsb.ReportedStartboatId);
-                                startbahn++;
+                                    rsb.Add(tempsb.ReportedStartboatId);
+                                    startbahn++;
+                                    sbcounter--;
+                                }    
+                                else if(!rsb.Contains(tempsb.ReportedStartboatId) && startbahn <= model.Startslots && rrcounter == 1 && sbcounter <= 3)
+                                {
+                                    _context.Startboats.Add(new Startboat { RaceId = newrace.RaceId, RegattaId = id, ClubId = tempsb.ClubId, ReportedStartboatId = tempsb.ReportedStartboatId, StartboatstatusId = 6, Startslot = startbahn, Gender = tempsb.Gender });
+                                    rsb.Add(tempsb.ReportedStartboatId);
+                                    startbahn++;
+                                    sbcounter--;
+                                }                          
                             }
+                            rrcounter--;
                         }
                     }                   
                 }                
@@ -462,6 +475,33 @@ namespace RegattaManager.Controllers
             _context.SaveChanges();
 
             return View();
+        }
+
+        public IActionResult SetRaceTimes(int id)
+        {
+            var regatta = _context.Regattas.FirstOrDefault(e => e.RegattaId == id);
+
+            if(regatta != null)
+            {
+                DateTime timestamp = regatta.FromDate;
+                var races = _context.Races.Where(e => e.RegattaId == id).OrderBy(e => e.RaceTypId).ThenBy(e => e.RaceclassId).ThenBy(e => e.OldclassId);
+
+                foreach(var r in races)
+                {
+                    r.Starttime = timestamp;
+                    _context.Races.Update(r);
+                    if(timestamp.Hour == 12)
+                    {
+                        timestamp = timestamp.AddMinutes(60);    
+                    }
+                    else
+                    {
+                        timestamp = timestamp.AddMinutes(3);
+                    }                    
+                }
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Index","Races");
         }
 
         private bool RegattaExists(int id)
