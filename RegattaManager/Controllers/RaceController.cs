@@ -428,6 +428,22 @@ namespace RegattaManager.Controllers
             return RedirectToAction("Details", new { id = id });
         }
 
+        public IActionResult ApproveDraw(int id)
+        {
+            var model = _context.Races.FirstOrDefault(e => e.RaceId == id);
+
+            if (model != null)
+            {
+                model.RacestatusId = 1005;
+                _context.Races.Update(model);
+                _context.SaveChanges();
+            }
+
+            bool drawresult = TryDrawRaces(id);
+
+            return RedirectToAction(nameof(Index));
+        }
+
         public IActionResult EditStartboatStatus(int id, int statusid)
         {
             var startboat = _context.Startboats.FirstOrDefault(e => e.StartboatId == id);
@@ -1334,6 +1350,8 @@ namespace RegattaManager.Controllers
                                     torace = _context.Races.FirstOrDefault(e => e.ReportedRaceId == race.ReportedRaceId && e.RaceTypId == rdr.ToRaceTypId && e.Sequence == rdr.ToRaceSequence);
                                     if (torace != null)
                                     {
+                                        torace.RacestatusId = 1004;
+                                        _context.Races.Update(torace);
                                         _context.Startboats.Add(new Startboat { ClubId = sb.ClubId, RaceId = torace.RaceId, StartboatstatusId = 6, Startslot = i, RegattaId = race.RegattaId, Gender = race.Gender, ReportedStartboatId = sb.ReportedStartboatId });
                                         _context.SaveChanges();
                                         startboatmembers = _context.StartboatMembers.Where(e => e.StartboatId == sb.StartboatId).ToList();

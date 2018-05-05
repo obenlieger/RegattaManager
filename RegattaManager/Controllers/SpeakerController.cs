@@ -43,7 +43,7 @@ namespace RegattaManager.Controllers
                                 
                 ViewBag.startboats = _context.Startboats.Include(e => e.Club).OrderBy(e => e.Startslot);
                 ViewBag.startboatmembers = _context.StartboatMembers;
-                ViewBag.members = _context.Members; 
+                ViewBag.members = _context.Members.Include(e => e.Club); 
                 ViewBag.result = result;               
 
                 return View(model.ToList());

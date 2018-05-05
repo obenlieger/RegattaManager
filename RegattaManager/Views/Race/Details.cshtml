@@ -150,111 +150,111 @@
     {
         if (startboat.RaceId == Model.RaceId)
         {
-    <tr>
-        <td>
-            @startboat.Placement
-        </td>
-        <td>
-            @startboat.Startslot
-        </td>
-        <td>
-            @foreach (var sbm in ViewBag.startboatmembers)
-        {
-            if (sbm.StartboatId == startboat.StartboatId)
-            {
-                foreach (var member in ViewBag.members)
-                {
-                    if (member.MemberId == sbm.MemberId)
+            <tr>
+                <td>
+                    @startboat.Placement
+                </td>
+                <td>
+                    @startboat.Startslot
+                </td>
+                <td>
+                    @foreach (var sbm in ViewBag.startboatmembers)
                     {
-                        @string.Format("{0}", member.FullName);
-                    @if (member.ClubId != startboat.ClubId && member.isRented == false)
-                {
-                    @string.Format(" ({0})", member.Club.Name);
-            }
-                    @if (member.isRented == true && member.RentedToClubId != startboat.ClubId && member.RentYear == ViewBag.ThisYear)
-                {
-                    @foreach (var ac in ViewBag.AllClubs)
-                {
-                    if (ac.ClubId == member.RentedToClubId)
+                        if (sbm.StartboatId == startboat.StartboatId)
+                        {
+                            foreach (var member in ViewBag.members)
+                            {
+                                if (member.MemberId == sbm.MemberId)
+                                {
+                                    @string.Format("{0}", member.FullName);
+                                    @if (member.ClubId != startboat.ClubId && member.isRented == false)
+                                    {
+                                        @string.Format(" ({0})", member.Club.Name);
+                                    }
+                                    @if (member.isRented == true && member.RentedToClubId != startboat.ClubId && member.RentYear == ViewBag.ThisYear)
+                                    {
+                                        @foreach (var ac in ViewBag.AllClubs)
+                                        {
+                                            if (ac.ClubId == member.RentedToClubId)
+                                            {
+                                                @: (@ac.Name)
+                                            }
+                                        }
+                                    }
+                                    @if (member.isRented == true && member.RentedToClubId == startboat.ClubId && member.RentYear == ViewBag.ThisYear)
+                                    {
+                                        @: (ausgeliehen)
+                                    }
+                                    @:<br />
+                                }
+                            }
+                        }
+                    }
+                </td>
+                <td>
+                    @foreach (var sbs in ViewBag.startboatstandbys)
                     {
-                        @: (@ac.Name)
+                        if (sbs.StartboatId == startboat.StartboatId)
+                        {
+                            foreach (var member in ViewBag.members)
+                            {
+                                if (member.MemberId == sbs.MemberId)
+                                {
+                                    @string.Format("{0}", member.FullName);
+                                    @if (member.ClubId != startboat.ClubId && member.isRented == false)
+                                    {
+                                        @string.Format(" ({0})", member.Club.Name);
+                                    }
+                                    @if (member.isRented == true && member.RentedToClubId != startboat.ClubId && member.RentYear == ViewBag.ThisYear)
+                                    {
+                                        @foreach (var ac in ViewBag.AllClubs)
+                                        {
+                                            if (ac.ClubId == member.RentedToClubId)
+                                            {
+                                                @: (@ac.Name)
+                                            }
+                                        }
+                                    }
+                                    @:<br />
+                                }
+                            }
+                        }
+                    }
+                </td>
+                <td>
+                    @startboat.Club.Name
+                </td>
+                <td>
+                    @startboat.Startboatstatus.Name
+                </td>
+                @if (Model.RacestatusId == 1 || Model.RacestatusId == 1004)
+                {
+                    <td>
+                        <a href="/Race/DeleteStartboat/@startboat.StartboatId" class="btn btn-danger">L&ouml;schen</a> | <a href="/Race/EditStartboat/@startboat.StartboatId" class="btn btn-secondary">Bearbeiten</a>
+                    </td>
+                    <td>
+                        <a href="/Race/StartSlotUp/@startboat.StartboatId" class="btn btn-outline-primary">hoch</a>
+                    </td>
+                    <td>
+                        <a href="/Race/StartSlotDown/@startboat.StartboatId" class="btn btn-outline-primary">runter</a>
+                    </td>
                 }
-            }
-            }
-                    @if (member.isRented == true && member.RentedToClubId == startboat.ClubId && member.RentYear == ViewBag.ThisYear)
+                @if (Model.RacestatusId == 1002)
                 {
-                    @: (ausgeliehen)
-            }
-                    @:<br />
-            }
-        }
-    }
-}
-        </td>
-        <td>
-            @foreach (var sbs in ViewBag.startboatstandbys)
-        {
-            if (sbs.StartboatId == startboat.StartboatId)
-            {
-                foreach (var member in ViewBag.members)
-                {
-                    if (member.MemberId == sbs.MemberId)
-                    {
-                        @string.Format("{0}", member.FullName);
-                    @if (member.ClubId != startboat.ClubId && member.isRented == false)
-                {
-                    @string.Format(" ({0})", member.Club.Name);
-            }
-                    @if (member.isRented == true && member.RentedToClubId != startboat.ClubId && member.RentYear == ViewBag.ThisYear)
-                {
-                    @foreach (var ac in ViewBag.AllClubs)
-                {
-                    if (ac.ClubId == member.RentedToClubId)
-                    {
-                        @: (@ac.Name)
+                    <td>
+                        <form asp-action="EditStartboatStatus" asp-controller="Race" asp-route-id="@startboat.StartboatId">
+                            <select name="statusid" id="statusid" asp-items="@ViewBag.StartboatstatusId"></select>
+                            <input type="submit" class="btn btn-warning" value="Status setzen" />
+                        </form>
+                    </td>
+                    <td>
+                        <a href="/Race/PlacementUp/@startboat.StartboatId" class="btn btn-outline-primary">hoch</a>
+                    </td>
+                    <td>
+                        <a href="/Race/PlacementDown/@startboat.StartboatId" class="btn btn-outline-primary">runter</a>
+                    </td>
                 }
-            }
-            }
-                    @:<br />
-            }
-        }
-    }
-}
-        </td>
-        <td>
-            @startboat.Club.Name
-        </td>
-        <td>
-            @startboat.Startboatstatus.Name
-        </td>
-        @if (Model.RacestatusId == 1)
-        { 
-        <td>
-            <a href="/Race/DeleteStartboat/@startboat.StartboatId" class="btn btn-danger">L&ouml;schen</a> | <a href="/Race/EditStartboat/@startboat.StartboatId" class="btn btn-secondary">Bearbeiten</a>
-        </td>
-        <td>
-            <a href="/Race/StartSlotUp/@startboat.StartboatId" class="btn btn-outline-primary">hoch</a>
-        </td>
-        <td>
-            <a href="/Race/StartSlotDown/@startboat.StartboatId" class="btn btn-outline-primary">runter</a>
-        </td>
-        }
-        @if (Model.RacestatusId == 1002)
-        { 
-        <td>
-            <form asp-action="EditStartboatStatus" asp-controller="Race" asp-route-id="@startboat.StartboatId">
-                <select name="statusid" id="statusid" asp-items="@ViewBag.StartboatstatusId"></select>
-                <input type="submit" class="btn btn-warning" value="Status setzen" />
-            </form>
-        </td>
-        <td>
-            <a href="/Race/PlacementUp/@startboat.StartboatId" class="btn btn-outline-primary">Platzierung rauf</a>
-        </td>
-        <td>
-            <a href="/Race/PlacementDown/@startboat.StartboatId" class="btn btn-outline-primary">Platzierung runter</a>
-        </td>
-        }
-    </tr>
+            </tr>
         }
     }
 </table>
@@ -262,9 +262,13 @@
 {
     <a asp-action="Approve" asp-controller="Race" asp-route-id="@Model.RaceId" class="btn btn-success">Abnehmen</a>
 }
-@if(Model.RacestatusId == 3)
+@if (Model.RacestatusId == 3)
 {
     <a asp-action="DisApprove" asp-controller="Race" asp-route-id="@Model.RaceId" class="btn btn-warning">Abnahme zur&uuml;cknehmen</a>
+}
+@if (Model.RacestatusId == 1004)
+{
+    <a asp-action="ApproveDraw" asp-controller="Race" asp-route-id="@Model.RaceId" class="btn btn-info">Auslosung abnehmen</a>
 }
 <hr />
 <a href="/Race/#@Model.RaceId">Zur&uuml;ck</a>

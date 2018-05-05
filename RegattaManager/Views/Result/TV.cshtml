@@ -76,18 +76,32 @@
                         </tr>
                         <tr>
                             <td bgcolor="#DDDDDD" colspan="3">
-                                @if (rrs.Gender == "M")
+                                @if (rrs.Gender.Equals("M"))
                                 {
-                                    @string.Format("männliche");
+                                    @if(rrs.Oldclass.FromAge >=17 && rrs.Oldclass.ToAge <= 99)
+                                    {
+                                        @:Herren
+                                    }
+                                    else if(rrs.Oldclass.FromAge >= 15 && rrs.Oldclass.ToAge <= 16)
+                                    {
+                                        @:männliche    
+                                    }                            
                                 }
-                                else if (rrs.Gender == "W")
+                                else if (string.Equals(rrs.Gender, "W"))
                                 {
-                                    @string.Format("weibliche");
+                                    @if (rrs.Oldclass.FromAge >= 17 && rrs.Oldclass.ToAge <= 99)
+                                    {
+                                        @:Damen
+                                    }
+                                    else
+                                    {
+                                        @:weibliche
+                                    }
                                 }
-                                else
+                                else if (string.Equals(rrs.Gender, "X"))
                                 {
-                                    @string.Format("mixed");
-                                }
+                                    @:mixed
+                                } 
                                 @rrs.Oldclass.Name
                                 &nbsp;-&nbsp;
                                 @rrs.Boatclass.Name

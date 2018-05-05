@@ -27,7 +27,9 @@ else
                 <th>
                     Startzeit
                 </th>
-                <th></th>                
+                <th></th>
+                <th></th>
+                <th></th>
                 <th></th>
             </tr>
         </thead>
@@ -35,7 +37,7 @@ else
     {
         @if(item.RacestatusId == 3)
         {
-            @:<tr class="table-primary">
+            @:<tr class="table-success">
         }
         else if(item.RacestatusId == 4)
         {
@@ -47,8 +49,20 @@ else
         }
         else if(item.RacestatusId == 1002)
         {
-            @:<tr class="table-success">
+            @:<tr class="table-warning">
         } 
+        else if(item.RacestatusId == 1003)
+        {
+            @:<tr class="table-info">
+        } 
+        else if(item.RacestatusId == 1004)
+        {
+            @:<tr class="table-danger">
+        }
+        else if(item.RacestatusId == 1005)
+        {
+            @:<tr class="table-success">
+        }
         else
         {
             @:<tr>
@@ -115,10 +129,18 @@ else
         </td>
         <td>
             <a asp-action="Delete" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-danger">L&ouml;schen</a>
+        </td>
+        <td>
             <a asp-action="Edit" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-primary">&Auml;ndern</a>
+        </td>
+        <td>
             @if(item.RacestatusId == 1002)
             {
                 <a asp-action="Approve" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-success">Abnehmen</a>
+            }
+            @if(item.RacestatusId == 1004)
+            {
+                <a asp-action="ApproveDraw" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-info">Auslosung Abnehmen</a>
             }
         </td>
     @:</tr>

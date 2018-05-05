@@ -146,11 +146,11 @@
                 <div align="right">
                     @if (ViewBag.allClicked == true)
                     {
-                        <a asp-action="StartRace" asp-controller="Start" asp-route-id="@Model.RaceId" class="btn btn-success btn-lg">START</a>
+                        <a asp-action="StartRace" asp-controller="Start" asp-route-id="@Model.RaceId" class="btn btn-success btn-lg btn-block">START</a>
                     }
                     else
                     {
-                        <a href="#" class="btn btn-success btn-lg disabled">START</a>
+                        <a href="#" class="btn btn-success btn-lg disabled btn-block">START</a>
                     }
                 </div>
             </td>

@@ -68,7 +68,7 @@ namespace RegattaManager.Controllers
             if (!String.IsNullOrEmpty(ZE))
             {
                 ViewData["ZE"] = "1";
-                var races = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Include(e => e.RaceTyp).Where(e => e.RacestatusId == 1).Where(e => e.RaceTyp.RaceTypId == 4 || e.RaceTyp.RaceTypId == 2).OrderBy(e => e.Starttime);
+                var races = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Include(e => e.RaceTyp).Where(e => e.RacestatusId == 1005).OrderBy(e => e.Starttime);
 
                 return View(races);
             }

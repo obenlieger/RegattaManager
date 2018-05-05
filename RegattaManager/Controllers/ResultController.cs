@@ -66,11 +66,11 @@ namespace RegattaManager.Controllers
         public IActionResult TV()
         {
             ViewBag.raceresults = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 3).OrderByDescending(e => e.Starttime).Take(6);
-            ViewBag.startboats = _context.Startboats.Include(e => e.Club).Include(e => e.Startboatstatus).OrderBy(e => e.RaceId).ThenBy(e => e.Placement);
+            ViewBag.startboats = _context.Startboats.Include(e => e.Club).Include(e => e.Startboatstatus).OrderBy(e => e.RaceId).ThenBy(e => e.Placement).ThenBy(e => e.Startslot);
             ViewBag.disqsbs = _context.Startboats.Include(e => e.Club).Include(e => e.Startboatstatus).Where(e => e.Placement <= 0).OrderBy(e => e.Startslot);
             ViewBag.startboatmembers = _context.StartboatMembers;
-            ViewBag.members = _context.Members;
-            ViewBag.raceplanned = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1 && e.RaceTypId > 1 && e.Startboats.Count > 0).OrderBy(e => e.Starttime).Take(6);
+            ViewBag.members = _context.Members.Include(e => e.Club);
+            ViewBag.raceplanned = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1005).OrderBy(e => e.Starttime).Take(6);
 
             return View();
         }

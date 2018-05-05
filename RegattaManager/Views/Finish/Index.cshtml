@@ -23,15 +23,15 @@
                     Rennbezeichnung
                 </th>
                 <th>
-                Startzeit
+                    Startzeit
                 </th>
-                <th> 
-                </th>
-                <th>
-                </th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
-        <tr class="table-secondary">
+        <tr class="table-success">
             <td>
                 <strong>
                     @Html.DisplayFor(model => Model.RaceCode)
@@ -73,12 +73,16 @@
             <td colspan="3">
                 @Html.DisplayFor(model => Model.Starttime)
             </td>
+            <td></td>
+            <td></td>
         </tr>
-        <tr class="table-success">
+        <tr class="table-secondary">
             <td></td>
             <td><i>Startbahn</i></td>
             <td><i>Starter</i></td>
             <td><i>Verein</i></td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -112,11 +116,11 @@
                         <form asp-action="FinishStartboat" asp-controller="Finish" asp-route-id="@sb.StartboatId">
                             @if (sb.Placement != 0)
                             {
-                                <a href="#" class="btn btn-success disabled">@sb.Placement</a>
+                                <a href="#" class="btn btn-success disabled btn-lg">@sb.Placement</a>
                             }
                             else
                             {
-                                <button type="submit" class="btn btn-success">@ViewBag.pmmax</button>
+                                <button type="submit" class="btn btn-success btn-lg">@ViewBag.pmmax</button>
                                 <input type="hidden" name="placement" id="placement" value="@ViewBag.pmmax" />
                             }
                             <input type="hidden" name="statusid" id="statusid" value="3" />
@@ -149,6 +153,8 @@
                             }
                             <input type="hidden" name="statusid" id="statusid" value="4" />
                         </form>
+                    </td>
+                    <td>
                         <form asp-action="FinishStartboat" asp-controller="Finish" asp-route-id="@sb.StartboatId">
                             @if (sb.Placement != 0)
                             {
@@ -161,6 +167,8 @@
                             }
                             <input type="hidden" name="statusid" id="statusid" value="7" />
                         </form>
+                    </td>
+                    <td>
                         <form asp-action="FinishStartboat" asp-controller="Finish" asp-route-id="@sb.StartboatId">
                             @if (sb.Placement != 0)
                             {
@@ -186,7 +194,7 @@
             <td colspan="2">
                 @if(ViewBag.allClicked == true)
                 {
-                    <a asp-action="FinishRace" asp-controller="Finish" asp-route-id="@Model.RaceId" class="btn btn-success btn-lg">BEENDEN</a>    
+                    <a asp-action="FinishRace" asp-controller="Finish" asp-route-id="@Model.RaceId" class="btn btn-success btn-lg btn-block">BEENDEN</a>    
                 }
                 else
                 {
