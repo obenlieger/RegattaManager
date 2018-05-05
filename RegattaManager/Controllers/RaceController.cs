@@ -1308,33 +1308,47 @@ namespace RegattaManager.Controllers
         {
             var race = _context.Races.FirstOrDefault(e => e.RaceId == id);
             var racedraw = _context.RaceDraws.FirstOrDefault(e => e.RaceDrawId == race.RaceDrawId);
-            var torace = _context.Races.FirstOrDefault(e => e.RaceCode.Substring(0, 5) == race.RaceCode.Substring(0, 5) && e.RaceTypId == 4);
+            var torace = _context.Races.FirstOrDefault(e => e.ReportedRaceId == race.ReportedRaceId && e.RaceTypId == 4);
             int i = 1;
 
-            if(race.RaceTypId == 1)
+            if (race.RaceTypId == 1)
             {
-                if(!_context.Races.Any(e => e.RacestatusId != 3 && e.ReportedRaceId == race.ReportedRaceId))
+                if (!_context.Races.Any(e => e.RacestatusId != 3 && e.ReportedRaceId == race.ReportedRaceId && e.RaceTypId == 1))
                 {
-                    var racedrawrules = _context.RaceDrawRules.Where(e => e.RaceDrawId == race.RaceDrawId && e.RaceTypId == race.RaceTypId && e.RaceSequence == race.Sequence);
-                    var startboats = _context.Startboats.Where(e => e.RaceId == race.RaceId);
+                    var finishedraces = _context.Races.Where(e => e.ReportedRaceId == race.ReportedRaceId && e.RacestatusId == 3 && e.RaceTypId == 1).ToList();
+                    var racedrawrules = _context.RaceDrawRules.Where(e => e.RaceDrawId == race.RaceDrawId && e.RaceTypId == race.RaceTypId && e.RaceSequence == race.Sequence).ToList();
+                    var startboats = _context.Startboats.Where(e => e.RaceId == race.RaceId).ToList();
+                    var startboatmembers = _context.StartboatMembers.Where(e => e.StartboatId == _context.Startboats.Last().StartboatId).ToList();
 
-                    foreach(var rdr in racedrawrules)
+                    foreach (var fr in finishedraces)
                     {
-                        foreach(var sb in startboats)
+                        startboats = _context.Startboats.Where(e => e.RaceId == fr.RaceId).ToList();
+                        racedrawrules = _context.RaceDrawRules.Where(e => e.RaceDrawId == fr.RaceDrawId && e.RaceTypId == fr.RaceTypId && e.RaceSequence == fr.Sequence).ToList();
+
+                        foreach (var rdr in racedrawrules)
                         {
-                            if(sb.Placement >= rdr.PlacementFrom && sb.Placement <= rdr.PlacementTo)
+                            foreach (var sb in startboats)
                             {
-                                torace = _context.Races.FirstOrDefault(e => e.ReportedRaceId == race.ReportedRaceId && e.RaceTypId == rdr.RaceTypId && e.Sequence == rdr.ToRaceSequence);
-                                if(torace != null)
+                                if (sb.Placement >= rdr.PlacementFrom && sb.Placement <= rdr.PlacementTo)
                                 {
-                                    _context.Startboats.Add(new Startboat { ClubId = sb.ClubId, RaceId = torace.RaceId, StartboatstatusId = 6, Startslot = i, RegattaId = race.RegattaId, Gender = race.Gender, ReportedStartboatId = sb.ReportedStartboatId });
-                                    i++;
+                                    torace = _context.Races.FirstOrDefault(e => e.ReportedRaceId == race.ReportedRaceId && e.RaceTypId == rdr.ToRaceTypId && e.Sequence == rdr.ToRaceSequence);
+                                    if (torace != null)
+                                    {
+                                        _context.Startboats.Add(new Startboat { ClubId = sb.ClubId, RaceId = torace.RaceId, StartboatstatusId = 6, Startslot = i, RegattaId = race.RegattaId, Gender = race.Gender, ReportedStartboatId = sb.ReportedStartboatId });
+                                        _context.SaveChanges();
+                                        startboatmembers = _context.StartboatMembers.Where(e => e.StartboatId == sb.StartboatId).ToList();
+                                        foreach (var sbm in startboatmembers)
+                                        {
+                                            _context.StartboatMembers.Add(new StartboatMember { MemberId = sbm.MemberId, SeatNumber = sbm.SeatNumber, StartboatId = _context.Startboats.Last().StartboatId });
+                                        }
+                                        _context.SaveChanges();
+
+                                        i++;
+                                    }
                                 }
                             }
                         }
                     }
-
-                    _context.SaveChanges();
                 }
             }
 
