@@ -508,7 +508,7 @@ namespace RegattaManager.Controllers
                 }
                 _context.SaveChanges();
             }
-            return RedirectToAction("Index","Races");
+            return RedirectToAction("Index","Race");
         }
 
         private bool RegattaExists(int id)

@@ -1327,11 +1327,12 @@ namespace RegattaManager.Controllers
             var torace = _context.Races.FirstOrDefault(e => e.ReportedRaceId == race.ReportedRaceId && e.RaceTypId == 4);
             int i = 1;
 
-            if (race.RaceTypId == 1)
+            if (race.RaceTypId == 1 || race.RaceTypId == 2 || race.RaceTypId == 3)
             {
-                if (!_context.Races.Any(e => e.RacestatusId != 3 && e.ReportedRaceId == race.ReportedRaceId && e.RaceTypId == 1))
+                var rtid = race.RaceTypId;
+                if (!_context.Races.Any(e => e.RacestatusId != 3 && e.ReportedRaceId == race.ReportedRaceId && e.RaceTypId == rtid))
                 {
-                    var finishedraces = _context.Races.Where(e => e.ReportedRaceId == race.ReportedRaceId && e.RacestatusId == 3 && e.RaceTypId == 1).ToList();
+                    var finishedraces = _context.Races.Where(e => e.ReportedRaceId == race.ReportedRaceId && e.RacestatusId == 3 && e.RaceTypId == rtid).ToList();
                     var racedrawrules = _context.RaceDrawRules.Where(e => e.RaceDrawId == race.RaceDrawId && e.RaceTypId == race.RaceTypId && e.RaceSequence == race.Sequence).ToList();
                     var startboats = _context.Startboats.Where(e => e.RaceId == race.RaceId).ToList();
                     var startboatmembers = _context.StartboatMembers.Where(e => e.StartboatId == _context.Startboats.Last().StartboatId).ToList();
@@ -1369,6 +1370,7 @@ namespace RegattaManager.Controllers
                     }
                 }
             }
+
 
             return true;
         }
