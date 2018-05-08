@@ -82,7 +82,24 @@
             <td><i>Starter</i></td>
             <td><i>Verein</i></td>
             <td></td>
-            <td></td>
+            <td>
+                @if (Model.RaceTypId == 4)
+                {
+                    <span class="badge badge-pill badge-danger">Endlauf</span>
+                }
+                else if (Model.RaceTypId == 2)
+                {
+                    <span class="badge badge-pill badge-warning">Zwischenlauf</span>
+                }
+                else if (Model.RaceTypId == 1)
+                {
+                    <span class="badge badge-pill badge-success">Vorlauf</span>
+                }
+                else if (Model.RaceTypId == 3)
+                {
+                    <span class="badge badge-pill badge-info">Hoffnungslauf</span>
+                }
+            </td>
             <td></td>
             <td></td>
             <td></td>
@@ -198,7 +215,7 @@
                 }
                 else
                 {
-                    <a href="#" class="btn btn-success btn-lg disabled">BEENDEN</a>
+                    <a href="#" class="btn btn-success btn-lg btn-block disabled">BEENDEN</a>
                 }
             </td>
             <td></td>
@@ -206,6 +223,7 @@
             <td></td>
         </tr>
     </table>
+}    
     <hr />
     <h3>Die n&auml;chsten 10 Rennen</h3>
     <table class="table table-hover">
@@ -297,7 +315,5 @@
                         @item.Starttime
                     </td>
                 @:</tr>
-                }
-          
+                }          
 </table>
-}

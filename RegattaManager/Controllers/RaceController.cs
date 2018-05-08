@@ -34,7 +34,14 @@ namespace RegattaManager.Controllers
 
             if (rid != 0)
             {
-                IEnumerable<Race> model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid).OrderByDescending(e => e.RacestatusId).ThenBy(e => e.Starttime);       
+                IEnumerable<Race> model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId != 1002 && e.RacestatusId != 1004 && e.RacestatusId != 3).OrderBy(e => e.Starttime);       
+                var approveable = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId == 1002).OrderBy(e => e.Starttime).ToList();
+                var raceable = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId == 1004).OrderBy(e => e.Starttime).ToList();
+                var finished = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId == 3).OrderBy(e => e.Starttime).ToList();
+
+                ViewBag.approveable = approveable;
+                ViewBag.raceable = raceable;
+                ViewBag.finished = finished;
 
                 return View(model);
             }
@@ -75,7 +82,7 @@ namespace RegattaManager.Controllers
                 }
 
                 var allMembers = _context.Members.Include(e => e.Club).ToList();
-                var vStartboats = _context.Startboats.Include(e => e.Startboatstatus).Where(e => e.RaceId == id).OrderBy(e => e.Startslot).ToList();
+                var vStartboats = _context.Startboats.Include(e => e.Startboatstatus).Include(e => e.Club).Where(e => e.RaceId == id).OrderBy(e => e.Startslot).ToList();
 
                 if(model.RacestatusId == 1002 || model.RacestatusId == 3)
                 {
@@ -1341,7 +1348,7 @@ namespace RegattaManager.Controllers
                     {
                         startboats = _context.Startboats.Where(e => e.RaceId == fr.RaceId).ToList();
                         racedrawrules = _context.RaceDrawRules.Where(e => e.RaceDrawId == fr.RaceDrawId && e.RaceTypId == fr.RaceTypId && e.RaceSequence == fr.Sequence).ToList();
-
+                        i = 1;
                         foreach (var rdr in racedrawrules)
                         {
                             foreach (var sb in startboats)
@@ -1351,7 +1358,10 @@ namespace RegattaManager.Controllers
                                     torace = _context.Races.FirstOrDefault(e => e.ReportedRaceId == race.ReportedRaceId && e.RaceTypId == rdr.ToRaceTypId && e.Sequence == rdr.ToRaceSequence);
                                     if (torace != null)
                                     {
-                                        torace.RacestatusId = 1004;
+                                        if(!(torace.RaceTypId == 4 && _context.Races.Any(e => e.ReportedRaceId == torace.ReportedRaceId && (e.RaceTypId == 2 || e.RaceTypId == 3) && e.RacestatusId != 3))) 
+                                        {
+                                            torace.RacestatusId = 1004;
+                                        }                                        
                                         _context.Races.Update(torace);
                                         _context.Startboats.Add(new Startboat { ClubId = sb.ClubId, RaceId = torace.RaceId, StartboatstatusId = 6, Startslot = i, RegattaId = race.RegattaId, Gender = race.Gender, ReportedStartboatId = sb.ReportedStartboatId });
                                         _context.SaveChanges();

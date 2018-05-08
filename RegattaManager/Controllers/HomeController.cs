@@ -25,19 +25,19 @@ namespace RegattaManager.Controllers
         {
             ViewData["CurrentFilter"] = searchLastName;
 
-            var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderBy(e => e.Starttime).Take(10);
+            var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderBy(e => e.Starttime).Take(10).ToList();
 
-            ViewBag.startboats = _context.Startboats.Include(e => e.Club).OrderBy(e => e.Startslot);
-            ViewBag.startboatmembers = _context.StartboatMembers;
-            ViewBag.members = _context.Members.Include(e => e.Club);
+            ViewBag.startboats = _context.Startboats.Include(e => e.Club).OrderBy(e => e.Startslot).ToList();
+            ViewBag.startboatmembers = _context.StartboatMembers.ToList();
+            ViewBag.members = _context.Members.Include(e => e.Club).ToList();
             ViewBag.ClubId = new SelectList(_context.Clubs.OrderBy(e => e.Name), "ClubId", "Name");
 
             if (!String.IsNullOrEmpty(searchLastName))
             {
-                var sbm = _context.StartboatMembers.Where(e => e.Member.LastName.ToLower().Contains(searchLastName.ToLower()));
+                var sbm = _context.StartboatMembers.Where(e => e.Member.LastName.ToLower().Contains(searchLastName.ToLower())).ToList();
                 var sb = new List<Startboat>();
                 var races = new List<Race>();
-                var allRaces = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderBy(e => e.Starttime);
+                var allRaces = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderBy(e => e.Starttime).ToList();
 
                 foreach (var stbm in sbm)
                 {
@@ -60,7 +60,7 @@ namespace RegattaManager.Controllers
             if (!String.IsNullOrEmpty(All))
             {
                 ViewData["All"] = "1";
-                var races = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderBy(e => e.Starttime);
+                var races = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderBy(e => e.Starttime).ToList();
 
                 return View(races);
             }
@@ -68,26 +68,12 @@ namespace RegattaManager.Controllers
             if (!String.IsNullOrEmpty(ZE))
             {
                 ViewData["ZE"] = "1";
-                var races = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Include(e => e.RaceTyp).Where(e => e.RacestatusId == 1005).OrderBy(e => e.Starttime);
+                var races = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Include(e => e.RaceTyp).Where(e => e.RacestatusId == 1005).OrderBy(e => e.Starttime).ToList();
 
                 return View(races);
             }
 
             return View(model);
-        }
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
         }
 
         public IActionResult Error()

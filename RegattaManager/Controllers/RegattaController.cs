@@ -349,11 +349,11 @@ namespace RegattaManager.Controllers
         public IActionResult CreateProgram(int id)
         {
             var model = _context.Regattas.FirstOrDefault(e => e.RegattaId == id);
-            var reportedRaces = _context.ReportedRaces.Include(e => e.Competition).Where(e => e.RegattaId == id);
-            var reportedStartboats = _context.ReportedStartboats.Where(e => e.RegattaId == id);
-            var reportedStartboatMember = _context.ReportedStartboatMembers;
-            var reportedStartboatStandby = _context.ReportedStartboatStandbys;
-            var raceDraw = _context.RaceDraws;
+            var reportedRaces = _context.ReportedRaces.Include(e => e.Competition).Where(e => e.RegattaId == id).ToList();
+            var reportedStartboats = _context.ReportedStartboats.Where(e => e.RegattaId == id).ToList();;
+            var reportedStartboatMember = _context.ReportedStartboatMembers.ToList();
+            var reportedStartboatStandby = _context.ReportedStartboatStandbys.ToList();
+            var raceDraw = _context.RaceDraws.ToList();
             int sbcount = 0;
             int sbcounter = 0;
             int rrcounter = 0;
@@ -472,6 +472,11 @@ namespace RegattaManager.Controllers
                                     foreach (var rsbm in reportedStartboatMember.Where(e => e.ReportedStartboatId == rsbb.ReportedStartboatId))
                                     {
                                         _context.StartboatMembers.Add(new StartboatMember { StartboatId = newsb.StartboatId, MemberId = rsbm.MemberId, SeatNumber = rsbm.Seatnumber });                                        
+                                    }
+                                    
+                                    foreach (var rsbs in reportedStartboatStandby.Where(e => e.ReportedStartboatId == rsbb.ReportedStartboatId))
+                                    {
+                                        _context.StartboatStandbys.Add(new StartboatStandby { StartboatId = newsb.StartboatId, MemberId = rsbs.MemberId, Standbynumber = rsbs.Standbynumber });                                        
                                     }
                                 }                                                                             
                             }

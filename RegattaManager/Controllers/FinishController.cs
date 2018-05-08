@@ -24,13 +24,14 @@ namespace RegattaManager.Controllers
         {
             var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 2).OrderBy(e => e.Starttime).FirstOrDefault();
 
-            ViewBag.startboats = _context.Startboats.Include(e => e.Club).Include(e => e.Startboatstatus).Where(e => e.StartboatstatusId != 5).OrderBy(e => e.Startslot);
-            ViewBag.startboatmembers = _context.StartboatMembers;
-            ViewBag.members = _context.Members;
+            ViewBag.startboats = _context.Startboats.Include(e => e.Club).Include(e => e.Startboatstatus).Where(e => e.StartboatstatusId != 5).OrderBy(e => e.Startslot).ToList();
+            ViewBag.startboatmembers = _context.StartboatMembers.ToList();
+            ViewBag.members = _context.Members.ToList();
             ViewBag.raceid = id;
             ViewBag.RunningRaces = new SelectList(_context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 2).OrderBy(e => e.Starttime).ToList(), "RaceId", "Starttime");
             ViewBag.RunningRacesCount = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 2).OrderBy(e => e.Starttime).Count();
-            ViewBag.allClicked = true;            
+            ViewBag.allClicked = true;     
+            ViewBag.NextRaces = _context.Races.Include(e => e.Oldclass).Include(e => e.Boatclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Where(e => e.RacestatusId == 1 || e.RacestatusId == 2).OrderBy(e => e.Starttime).Take(10).ToList();       
 
             if (id != null)
             {
@@ -40,7 +41,7 @@ namespace RegattaManager.Controllers
                 {
                     ViewBag.pmmax = model_id.Startboats.Max(e => e.Placement) + 1;
 
-                    ViewBag.NextRaces = _context.Races.Include(e => e.Oldclass).Include(e => e.Boatclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Where(e => e.RaceId != model.RaceId && e.RacestatusId == 1).OrderBy(e => e.Starttime).Take(10).ToList();
+                    ViewBag.NextRaces = _context.Races.Include(e => e.Oldclass).Include(e => e.Boatclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Where(e => e.RaceId != model.RaceId && (e.RacestatusId == 1 || e.RacestatusId == 2)).OrderBy(e => e.Starttime).Take(10).ToList();
                 }
                 else
                 {
@@ -59,7 +60,7 @@ namespace RegattaManager.Controllers
             {
                 ViewBag.pmmax = model.Startboats.Max(e => e.Placement) + 1;
 
-                ViewBag.NextRaces = _context.Races.Include(e => e.Oldclass).Include(e => e.Boatclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Where(e => e.RaceId != model.RaceId && e.RacestatusId == 1).OrderBy(e => e.Starttime).Take(10).ToList();
+                ViewBag.NextRaces = _context.Races.Include(e => e.Oldclass).Include(e => e.Boatclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Where(e => e.RaceId != model.RaceId && (e.RacestatusId == 1 || e.RacestatusId == 2)).OrderBy(e => e.Starttime).Take(10).ToList();
 
                 if (_context.Startboats.Any(e => e.RaceId == model.RaceId && (e.StartboatstatusId == 1 || e.StartboatstatusId == 2 || e.StartboatstatusId == 6)))
                 {

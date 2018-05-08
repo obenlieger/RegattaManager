@@ -21,7 +21,7 @@ namespace RegattaManager.Controllers
             _context = context;
         }
 
-        public IActionResult Index(bool result)
+        public IActionResult Index()
         {
             var rid = 0;
 
@@ -34,17 +34,12 @@ namespace RegattaManager.Controllers
 
             if (rid != 0)
             {
-                var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Include(e => e.RaceTyp).Where(e => e.RacestatusId == 1).Where(e => e.RegattaId == rid).OrderBy(e => e.Spoken).ThenBy(e => e.Starttime);
-                
-                if(result == true)
-                {
-                    model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Include(e => e.RaceTyp).Where(e => e.RacestatusId == 3).Where(e => e.RegattaId == rid).OrderBy(e => e.Spoken).ThenBy(e => e.Starttime);
-                }
+                var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Include(e => e.RaceTyp).Where(e => e.RegattaId == rid && e.RacestatusId != 2 && e.RacestatusId != 1002 && e.RacestatusId != 1004).OrderBy(e => e.Starttime);                
                                 
-                ViewBag.startboats = _context.Startboats.Include(e => e.Club).OrderBy(e => e.Startslot);
-                ViewBag.startboatmembers = _context.StartboatMembers;
-                ViewBag.members = _context.Members.Include(e => e.Club); 
-                ViewBag.result = result;               
+                ViewBag.startboats = _context.Startboats.Include(e => e.Club).OrderBy(e => e.Placement).ThenBy(e => e.Startslot).ToList();
+                ViewBag.startboatmembers = _context.StartboatMembers.ToList();
+                ViewBag.members = _context.Members.Include(e => e.Club).ToList(); 
+                ViewBag.disqsbs = _context.Startboats.Include(e => e.Club).Include(e => e.Startboatstatus).Where(e => e.Placement <= 0).OrderBy(e => e.Startslot).ToList();          
 
                 return View(model.ToList());
             }
@@ -54,7 +49,7 @@ namespace RegattaManager.Controllers
             }          
         }
 
-        public IActionResult SetSpoken(int id, bool result)
+        public IActionResult SetSpoken(int id)
         {
             var model = _context.Races.FirstOrDefault(e => e.RaceId == id);
 
@@ -65,7 +60,7 @@ namespace RegattaManager.Controllers
                 _context.SaveChanges();
             }
 
-            return RedirectToAction("Index", new { id = id, result = result});
+            return Redirect(Url.RouteUrl(new { controller = "Speaker", action = "Index" }) + "#" + id);
         }
     }
 }

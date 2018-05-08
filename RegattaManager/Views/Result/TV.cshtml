@@ -62,6 +62,7 @@
                         <th>
                             Startzeit
                         </th>
+                        <th></th>
                     </tr>
 
                     @foreach (var rrs in ViewBag.raceresults)
@@ -112,21 +113,21 @@
                                 @rrs.Starttime
                             </td>
                             <td bgcolor="#DDDDDD">
-                                @if (rrs.RaceTyp == 4)
+                                @if (rrs.RaceTypId == 4)
                                 {
-                                    <span class="label label-success">Endlauf</span>
+                                    <span class="badge badge-pill badge-danger">Endlauf</span>
                                 }
-                                else if (rrs.RaceTyp == 2)
+                                else if (rrs.RaceTypId == 2)
                                 {
-                                    <span class="label label-primary">Zwischenlauf</span>
+                                    <span class="badge badge-pill badge-warning">Zwischenlauf</span>
                                 }
-                                else if (rrs.RaceTyp == 1)
+                                else if (rrs.RaceTypId == 1)
                                 {
-                                    <span class="label label-default">Vorlauf</span>
+                                    <span class="badge badge-pill badge-success">Vorlauf</span>
                                 }
-                                else if (rrs.RaceTyp == 3)
+                                else if (rrs.RaceTypId == 3)
                                 {
-                                    <span class="label label-info">Hoffnungslauf</span>
+                                    <span class="badge badge-pill badge-info">Hoffnungslauf</span>
                                 }
                                 @if (rrs.Comment != "")
                                 {
@@ -308,19 +309,19 @@
                             <td bgcolor="#DDDDDD">
                                 @if (rpd.RaceTypId == 4)
                                 {
-                                    <span class="label label-success">Endlauf</span>
+                                    <span class="badge badge-pill badge-danger">Endlauf</span>
                                 }
                                 else if (rpd.RaceTypId == 2)
                                 {
-                                    <span class="label label-primary">Zwischenlauf</span>
+                                    <span class="badge badge-pill badge-warning">Zwischenlauf</span>
                                 }
                                 else if (rpd.RaceTypId == 1)
                                 {
-                                    <span class="label label-default">Vorlauf</span>
+                                    <span class="badge badge-pill badge-success">Vorlauf</span>
                                 }
                                 else if (rpd.RaceTypId == 3)
                                 {
-                                    <span class="label label-info">Hoffnungslauf</span>
+                                    <span class="badge badge-pill badge-info">Hoffnungslauf</span>
                                 }
                                 @if (rpd.Comment != "")
                                 {
