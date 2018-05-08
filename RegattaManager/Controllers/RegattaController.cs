@@ -486,7 +486,7 @@ namespace RegattaManager.Controllers
             }
             _context.SaveChanges();
 
-            return View();
+            return RedirectToAction("Index", "Race");
         }
 
         public IActionResult SetRaceTimes(int id)

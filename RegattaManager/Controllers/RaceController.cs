@@ -1347,8 +1347,7 @@ namespace RegattaManager.Controllers
                     foreach (var fr in finishedraces)
                     {
                         startboats = _context.Startboats.Where(e => e.RaceId == fr.RaceId).ToList();
-                        racedrawrules = _context.RaceDrawRules.Where(e => e.RaceDrawId == fr.RaceDrawId && e.RaceTypId == fr.RaceTypId && e.RaceSequence == fr.Sequence).ToList();
-                        i = 1;
+                        racedrawrules = _context.RaceDrawRules.Where(e => e.RaceDrawId == fr.RaceDrawId && e.RaceTypId == fr.RaceTypId && e.RaceSequence == fr.Sequence).ToList();                        
                         foreach (var rdr in racedrawrules)
                         {
                             foreach (var sb in startboats)

@@ -16,6 +16,8 @@ namespace RegattaManager.Models
         public virtual string City { get; set; }
         [Display(Name = "Vereinsnummer")]
         public virtual string VNr { get; set; }
+        [Display(Name = "Kurzname")]
+        public virtual string ShortName { get; set; }
         public virtual List<Member> Members { get; set; }
         public virtual List<Startboat> Startboats { get; set; }
         public virtual List<Regatta> Regatten { get; set; }

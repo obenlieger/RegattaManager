@@ -57,7 +57,7 @@ namespace RegattaManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClubId,Name,City,VNr")] Club club)
+        public async Task<IActionResult> Create([Bind("ClubId,Name,City,VNr,ShortName")] Club club)
         {
             if (ModelState.IsValid)
             {
@@ -89,7 +89,7 @@ namespace RegattaManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClubId,Name,City,VNr")] Club club)
+        public async Task<IActionResult> Edit(int id, [Bind("ClubId,Name,City,VNr,ShortName")] Club club)
         {
             if (id != club.ClubId)
             {

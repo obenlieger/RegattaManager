@@ -190,7 +190,7 @@
                                                         @string.Format("{0}, {1}", m.LastName, m.FirstName);
                                                         @if (m.ClubId != sb.ClubId)
                                                         {
-                                                            @string.Format(" ({0})", m.Club.Name);
+                                                            @string.Format(" ({0})", m.Club.ShortName);
                                                         }
                                                         @:<br />
                                                     }
@@ -198,8 +198,8 @@
                                             }
                                         }
                                         </td>
-                                        <td bgcolor=@backcol>@sb.Club.Name</td>
-                                        <td bgcolor=@backcol>@sb.Startboatstatus.Name</td>
+                                        <td bgcolor=@backcol>@sb.Club.ShortName</td>
+                                        <td bgcolor=@backcol></td>
                                     </tr>
                                 }
                             }
@@ -231,7 +231,7 @@
                                                             @string.Format("{0}, {1}", m.LastName, m.FirstName);
                                                             @if (m.ClubId != sb.ClubId)
                                                             {
-                                                                @string.Format(" ({0})", m.Club.Name);
+                                                                @string.Format(" ({0})", m.Club.ShortName);
                                                             }
                                                             <br />
                                                         }
@@ -239,7 +239,7 @@
                                                 }
                                             }
                                         </td>
-                                        <td bgcolor=@backcol>@sb.Club.Name</td>
+                                        <td bgcolor=@backcol>@sb.Club.ShortName</td>
                                         <td bgcolor=@backcol>@sb.Startboatstatus.Name</td>
                                     </tr>
                                 }
@@ -259,6 +259,7 @@
                                     @:<th>
                                         @:Startzeit
                                     @:</th>
+                                    @:<th></th>
                                 @:</tr>
                         }
                         x++;
@@ -275,6 +276,7 @@
                         <th colspan="2">
                             Startzeit
                         </th>
+                        <th></th>
                     </tr>
 
                     @foreach (var rpd in ViewBag.raceplanned)
@@ -363,7 +365,7 @@
                                                 @string.Format("{0}, {1}", m.LastName, m.FirstName);
                                                 @if (m.ClubId != sb.ClubId)
                                                 {
-                                                    @string.Format(" ({0})", m.Club.Name);
+                                                    @string.Format(" ({0})", m.Club.ShortName);
                                                 }
                                                 <br />
                                             }
@@ -371,7 +373,7 @@
                                     }
                                 }
                             </td>
-                            <td colspan="2">@sb.Club.Name</td>
+                            <td colspan="2">@sb.Club.ShortName</td>
                         </tr>
                             }
                         }
