@@ -364,7 +364,7 @@ namespace RegattaManager.Controllers
             foreach(var rr in reportedRaces)
             {
                 sbcount = reportedStartboats.Where(e => e.ReportedRaceId == rr.ReportedRaceId).Count();
-                if (sbcount > 0)
+                if (sbcount >= 3)
                 {
                     foreach(var rd in raceDraw)
                     {
@@ -398,7 +398,11 @@ namespace RegattaManager.Controllers
                             }                            
                         }
                     }                    
-                }                
+                }
+                else
+                {
+                    _context.Races.Add(new Race { BoatclassId = rr.Competition.BoatclassId, Gender = rr.Gender, OldclassId = rr.OldclassId, RaceclassId = rr.Competition.RaceclassId, ReportedRaceId = rr.ReportedRaceId, RaceDrawId = 0, RacestatusId = 1006, RaceTypId = 4, RegattaId = id, Sequence = 1, RaceCode = rr.RaceCode });
+                }
             }
             _context.SaveChanges();
 

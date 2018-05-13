@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<RegattaManager.Models.Race>
 
 @{
-   ViewBag.Title = "Rennen";
+    ViewBag.Title = "Rennen";
 }
-<br/>
+<br />
 <h2>Rennübersicht</h2>
 <a asp-action="Create" asp-controller="Race">Neues Rennen erstellen</a>
-<br/>
+<br />
 @if (ViewBag.regattachosen == 0)
 {
     <h3>Noch keine Regatta ausgewählt!</h3>
@@ -33,52 +33,52 @@ else
                 <th></th>
             </tr>
         </thead>
-    @foreach (var item in ViewBag.approveable)
-    {
-        @if(item.RacestatusId == 3)
+        @foreach (var item in ViewBag.approveable)
         {
-            @:<tr class="table-success">
-        }
-        else if(item.RacestatusId == 4)
-        {
-            @:<tr class="table-danger">
-        }
-        else if(item.RacestatusId == 2)
-        {
-            @:<tr class="table-active">
-        }
-        else if(item.RacestatusId == 1002)
-        {
-            @:<tr class="table-warning">
-        } 
-        else if(item.RacestatusId == 1003)
-        {
-            @:<tr class="table-info">
-        } 
-        else if(item.RacestatusId == 1004)
-        {
-            @:<tr class="table-danger">
-        }
-        else if(item.RacestatusId == 1005)
-        {
-            @:<tr class="table-success">
-        }
-        else
-        {
-            @:<tr>
-        }
-        <td id="@item.RaceId"><i>@item.RaceCode</i></td>
-        <td colspan="2">
+            @if (item.RacestatusId == 3)
+            {
+                @:<tr class="table-success">
+                }
+                else if (item.RacestatusId == 4)
+                {
+                    @:<tr class="table-danger">
+                }
+                else if (item.RacestatusId == 2)
+                {
+                    @: <tr class="table-active">
+                }
+                else if (item.RacestatusId == 1002)
+                {
+                    @:<tr class="table-warning">
+                }
+                else if (item.RacestatusId == 1003)
+                {
+                    @:<tr class="table-info">
+                }
+                else if (item.RacestatusId == 1004)
+                {
+                    @:<tr class="table-danger">
+                }
+                else if (item.RacestatusId == 1005)
+                {
+                    @:<tr class="table-success">
+                }
+                else
+                {
+                    @:<tr>
+                }
+            <td id="@item.RaceId"><i>@item.RaceCode</i></td>
+            <td colspan="2">
                 @if (item.Gender.Equals("M"))
                 {
-                    @if(item.Oldclass.FromAge >=17 && item.Oldclass.ToAge <= 99)
+                    @if (item.Oldclass.FromAge >= 17 && item.Oldclass.ToAge <= 99)
                     {
                         @:Herren
                     }
-                    else if(item.Oldclass.FromAge >= 15 && item.Oldclass.ToAge <= 16)
+                    else if (item.Oldclass.FromAge >= 15 && item.Oldclass.ToAge <= 16)
                     {
-                        @:männliche    
-                    }                            
+                        @:männliche
+                    }
                 }
                 else if (string.Equals(item.Gender, "W"))
                 {
@@ -94,60 +94,59 @@ else
                 else if (string.Equals(item.Gender, "X"))
                 {
                     @:mixed
-                }                
-            @item.Oldclass.Name
-            &nbsp;-&nbsp;
-            @item.Boatclass.Name
-            &nbsp;-&nbsp;
-            @item.Raceclass.Name
-            <br/>
-            @if (item.RaceTypId == 4)
-            {
-                <span class="badge badge-pill badge-danger">Endlauf</span>
-            }
-            else if (item.RaceTypId == 2)
-            {
-                <span class="badge badge-pill badge-warning">Zwischenlauf</span>
-            }
-            else if (item.RaceTypId == 1)
-            {
-                <span class="badge badge-pill badge-success">Vorlauf</span>
-            }
-            else if (item.RaceTypId == 3)
-            {
-                <span class="badge badge-pill badge-info">Hoffnungslauf</span>
-            }
-        </td>        
-        <td>
-            @item.Racestatus.Name
-        </td>
-        <td>
-            @item.Starttime)
-        </td>
-        <td>
-            <a asp-action="Details" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-secondary">Details</a>
-        </td>
-        <td>
-            <a asp-action="Delete" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-danger">L&ouml;schen</a>
-        </td>
-        <td>
-            <a asp-action="Edit" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-primary">&Auml;ndern</a>
-        </td>
-        <td>
-            @if(item.RacestatusId == 1002)
-            {
-                <a asp-action="Approve" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-success">Abnehmen</a>
-            }
-            @if(item.RacestatusId == 1004)
-            {
-                <a asp-action="ApproveDraw" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-info">Auslosung Abnehmen</a>
-            }
-        </td>
-    @:</tr>    
+                }
+                @item.Oldclass.Name
+                &nbsp;-&nbsp;
+                @item.Boatclass.Name
+                &nbsp;-&nbsp;
+                @item.Raceclass.Name
+                <br />
+                @if (item.RaceTypId == 4)
+                {
+                    <span class="badge badge-pill badge-danger">Endlauf</span>
+                }
+                else if (item.RaceTypId == 2)
+                {
+                    <span class="badge badge-pill badge-warning">Zwischenlauf</span>
+                }
+                else if (item.RaceTypId == 1)
+                {
+                    <span class="badge badge-pill badge-success">Vorlauf</span>
+                }
+                else if (item.RaceTypId == 3)
+                {
+                    <span class="badge badge-pill badge-info">Hoffnungslauf</span>
+                }
+            </td>
+            <td>
+                @item.Racestatus.Name
+            </td>
+            <td>
+                @item.Starttime)
+            </td>
+            <td>
+                <a asp-action="Details" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-secondary">Details</a>
+            </td>
+            <td>
+                <a asp-action="Delete" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-danger">L&ouml;schen</a>
+            </td>
+            <td>
+                <a asp-action="Edit" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-primary">&Auml;ndern</a>
+            </td>
+            <td>
+                @if (item.RacestatusId == 1002)
+                {
+                    <a asp-action="Approve" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-success">Abnehmen</a>
+                }
+                @if (item.RacestatusId == 1004)
+                {
+                    <a asp-action="ApproveDraw" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-info">Auslosung Abnehmen</a>
+                }
+            </td>
+        @:</tr>
     }
-    </table>  
-
-    <hr/>
+    </table>
+    <hr />
     <h4>Ausgeloste Rennen</h4>
     <table class="table table-hover">
         <thead>
@@ -168,52 +167,52 @@ else
                 <th></th>
             </tr>
         </thead>
-    @foreach (var item in ViewBag.raceable)
-    {
-        @if(item.RacestatusId == 3)
+        @foreach (var item in ViewBag.raceable)
         {
-            @:<tr class="table-success">
-        }
-        else if(item.RacestatusId == 4)
-        {
-            @:<tr class="table-danger">
-        }
-        else if(item.RacestatusId == 2)
-        {
-            @:<tr class="table-active">
-        }
-        else if(item.RacestatusId == 1002)
-        {
-            @:<tr class="table-warning">
-        } 
-        else if(item.RacestatusId == 1003)
-        {
-            @:<tr class="table-info">
-        } 
-        else if(item.RacestatusId == 1004)
-        {
-            @:<tr class="table-danger">
-        }
-        else if(item.RacestatusId == 1005)
-        {
-            @:<tr class="table-success">
-        }
-        else
-        {
-            @:<tr>
-        }
-        <td id="@item.RaceId"><i>@item.RaceCode</i></td>
-        <td colspan="2">
+            @if (item.RacestatusId == 3)
+            {
+                @:<tr class="table-success">
+                }
+                else if (item.RacestatusId == 4)
+                {
+                    @:<tr class="table-danger">
+                }
+                else if (item.RacestatusId == 2)
+                {
+                    @: <tr class="table-active">
+                }
+                else if (item.RacestatusId == 1002)
+                {
+                    @:<tr class="table-warning">
+                }
+                else if (item.RacestatusId == 1003)
+                {
+                    @: <tr class="table-info">
+                }
+                else if (item.RacestatusId == 1004)
+                {
+                    @:<tr class="table-danger">
+                }
+                else if (item.RacestatusId == 1005)
+                {
+                    @: <tr class="table-success">
+                }
+                else
+                {
+                    @:<tr>
+                }
+            <td id="@item.RaceId"><i>@item.RaceCode</i></td>
+            <td colspan="2">
                 @if (item.Gender.Equals("M"))
                 {
-                    @if(item.Oldclass.FromAge >=17 && item.Oldclass.ToAge <= 99)
+                    @if (item.Oldclass.FromAge >= 17 && item.Oldclass.ToAge <= 99)
                     {
                         @:Herren
                     }
-                    else if(item.Oldclass.FromAge >= 15 && item.Oldclass.ToAge <= 16)
+                    else if (item.Oldclass.FromAge >= 15 && item.Oldclass.ToAge <= 16)
                     {
-                        @:männliche    
-                    }                            
+                        @:männliche
+                    }
                 }
                 else if (string.Equals(item.Gender, "W"))
                 {
@@ -229,60 +228,60 @@ else
                 else if (string.Equals(item.Gender, "X"))
                 {
                     @:mixed
-                }                
-            @item.Oldclass.Name
-            &nbsp;-&nbsp;
-            @item.Boatclass.Name
-            &nbsp;-&nbsp;
-            @item.Raceclass.Name
-            <br/>
-            @if (item.RaceTypId == 4)
-            {
-                <span class="badge badge-pill badge-danger">Endlauf</span>
-            }
-            else if (item.RaceTypId == 2)
-            {
-                <span class="badge badge-pill badge-warning">Zwischenlauf</span>
-            }
-            else if (item.RaceTypId == 1)
-            {
-                <span class="badge badge-pill badge-success">Vorlauf</span>
-            }
-            else if (item.RaceTypId == 3)
-            {
-                <span class="badge badge-pill badge-info">Hoffnungslauf</span>
-            }
-        </td>        
-        <td>
-            @item.Racestatus.Name
-        </td>
-        <td>
-            @item.Starttime
-        </td>
-        <td>
-            <a asp-action="Details" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-secondary">Details</a>
-        </td>
-        <td>
-            <a asp-action="Delete" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-danger">L&ouml;schen</a>
-        </td>
-        <td>
-            <a asp-action="Edit" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-primary">&Auml;ndern</a>
-        </td>
-        <td>
-            @if(item.RacestatusId == 1002)
-            {
-                <a asp-action="Approve" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-success">Abnehmen</a>
-            }
-            @if(item.RacestatusId == 1004)
-            {
-                <a asp-action="ApproveDraw" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-info">Auslosung Abnehmen</a>
-            }
-        </td>
-    @:</tr>    
+                }
+                @item.Oldclass.Name
+                &nbsp;-&nbsp;
+                @item.Boatclass.Name
+                &nbsp;-&nbsp;
+                @item.Raceclass.Name
+                <br />
+                @if (item.RaceTypId == 4)
+                {
+                    <span class="badge badge-pill badge-danger">Endlauf</span>
+                }
+                else if (item.RaceTypId == 2)
+                {
+                    <span class="badge badge-pill badge-warning">Zwischenlauf</span>
+                }
+                else if (item.RaceTypId == 1)
+                {
+                    <span class="badge badge-pill badge-success">Vorlauf</span>
+                }
+                else if (item.RaceTypId == 3)
+                {
+                    <span class="badge badge-pill badge-info">Hoffnungslauf</span>
+                }
+            </td>
+            <td>
+                @item.Racestatus.Name
+            </td>
+            <td>
+                @item.Starttime
+            </td>
+            <td>
+                <a asp-action="Details" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-secondary">Details</a>
+            </td>
+            <td>
+                <a asp-action="Delete" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-danger">L&ouml;schen</a>
+            </td>
+            <td>
+                <a asp-action="Edit" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-primary">&Auml;ndern</a>
+            </td>
+            <td>
+                @if (item.RacestatusId == 1002)
+                {
+                    <a asp-action="Approve" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-success">Abnehmen</a>
+                }
+                @if (item.RacestatusId == 1004)
+                {
+                    <a asp-action="ApproveDraw" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-info">Auslosung Abnehmen</a>
+                }
+            </td>
+        @:</tr>
     }
-    </table>  
+    </table>
 
-    <hr/>
+    <hr />
     <h4>Anstehende Rennen</h4>
     <table class="table table-hover">
         <thead>
@@ -303,52 +302,52 @@ else
                 <th></th>
             </tr>
         </thead>
-    @foreach (var item in Model)
-    {
-        @if(item.RacestatusId == 3)
+        @foreach (var item in Model)
         {
-            @:<tr class="table-success">
-        }
-        else if(item.RacestatusId == 4)
-        {
-            @:<tr class="table-danger">
-        }
-        else if(item.RacestatusId == 2)
-        {
-            @:<tr class="table-active">
-        }
-        else if(item.RacestatusId == 1002)
-        {
-            @:<tr class="table-warning">
-        } 
-        else if(item.RacestatusId == 1003)
-        {
-            @:<tr class="table-info">
-        } 
-        else if(item.RacestatusId == 1004)
-        {
-            @:<tr class="table-danger">
-        }
-        else if(item.RacestatusId == 1005)
-        {
-            @:<tr class="table-success">
-        }
-        else
-        {
-            @:<tr>
-        }
-        <td id="@item.RaceId"><i>@item.RaceCode</i></td>
-        <td colspan="2">
+            @if (item.RacestatusId == 3)
+            {
+                @:<tr class="table-success">
+                }
+                else if (item.RacestatusId == 4)
+                {
+                    @: <tr class="table-danger">
+                }
+                else if (item.RacestatusId == 2)
+                {
+                    @:<tr class="table-active">
+                }
+                else if (item.RacestatusId == 1002)
+                {
+                    @:<tr class="table-warning">
+                }
+                else if (item.RacestatusId == 1003)
+                {
+                    @:<tr class="table-info">
+                }
+                else if (item.RacestatusId == 1004)
+                {
+                    @:<tr class="table-danger">
+                }
+                else if (item.RacestatusId == 1005)
+                {
+                    @:<tr class="table-success">
+                }
+                else
+                {
+                    @:<tr>
+                }
+            <td id="@item.RaceId"><i>@item.RaceCode</i></td>
+            <td colspan="2">
                 @if (item.Gender.Equals("M"))
                 {
-                    @if(item.Oldclass.FromAge >=17 && item.Oldclass.ToAge <= 99)
+                    @if (item.Oldclass.FromAge >= 17 && item.Oldclass.ToAge <= 99)
                     {
                         @:Herren
                     }
-                    else if(item.Oldclass.FromAge >= 15 && item.Oldclass.ToAge <= 16)
+                    else if (item.Oldclass.FromAge >= 15 && item.Oldclass.ToAge <= 16)
                     {
-                        @:männliche    
-                    }                            
+                        @:männliche
+                    }
                 }
                 else if (string.Equals(item.Gender, "W"))
                 {
@@ -364,59 +363,59 @@ else
                 else if (string.Equals(item.Gender, "X"))
                 {
                     @:mixed
-                }                
-            @item.Oldclass.Name
-            &nbsp;-&nbsp;
-            @item.Boatclass.Name
-            &nbsp;-&nbsp;
-            @item.Raceclass.Name
-            <br/>
-            @if (item.RaceTypId == 4)
-            {
-                <span class="badge badge-pill badge-danger">Endlauf</span>
-            }
-            else if (item.RaceTypId == 2)
-            {
-                <span class="badge badge-pill badge-warning">Zwischenlauf</span>
-            }
-            else if (item.RaceTypId == 1)
-            {
-                <span class="badge badge-pill badge-success">Vorlauf</span>
-            }
-            else if (item.RaceTypId == 3)
-            {
-                <span class="badge badge-pill badge-info">Hoffnungslauf</span>
-            }
-        </td>        
-        <td>
-            @item.Racestatus.Name
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Starttime)
-        </td>
-        <td>
-            <a asp-action="Details" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-secondary">Details</a>
-        </td>
-        <td>
-            <a asp-action="Delete" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-danger">L&ouml;schen</a>
-        </td>
-        <td>
-            <a asp-action="Edit" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-primary">&Auml;ndern</a>
-        </td>
-        <td>
-            @if(item.RacestatusId == 1002)
-            {
-                <a asp-action="Approve" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-success">Abnehmen</a>
-            }
-            @if(item.RacestatusId == 1004)
-            {
-                <a asp-action="ApproveDraw" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-info">Auslosung Abnehmen</a>
-            }
-        </td>
-    @:</tr>    
+                }
+                @item.Oldclass.Name
+                &nbsp;-&nbsp;
+                @item.Boatclass.Name
+                &nbsp;-&nbsp;
+                @item.Raceclass.Name
+                <br />
+                @if (item.RaceTypId == 4)
+                {
+                    <span class="badge badge-pill badge-danger">Endlauf</span>
+                }
+                else if (item.RaceTypId == 2)
+                {
+                    <span class="badge badge-pill badge-warning">Zwischenlauf</span>
+                }
+                else if (item.RaceTypId == 1)
+                {
+                    <span class="badge badge-pill badge-success">Vorlauf</span>
+                }
+                else if (item.RaceTypId == 3)
+                {
+                    <span class="badge badge-pill badge-info">Hoffnungslauf</span>
+                }
+            </td>
+            <td>
+                @item.Racestatus.Name
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Starttime)
+            </td>
+            <td>
+                <a asp-action="Details" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-secondary">Details</a>
+            </td>
+            <td>
+                <a asp-action="Delete" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-danger">L&ouml;schen</a>
+            </td>
+            <td>
+                <a asp-action="Edit" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-primary">&Auml;ndern</a>
+            </td>
+            <td>
+                @if (item.RacestatusId == 1002)
+                {
+                    <a asp-action="Approve" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-success">Abnehmen</a>
+                }
+                @if (item.RacestatusId == 1004)
+                {
+                    <a asp-action="ApproveDraw" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-info">Auslosung Abnehmen</a>
+                }
+            </td>
+        @:</tr>
     }
-    </table>    
-    <hr/>
+    </table>
+    <hr />
     <h4>Fertige Rennen</h4>
     <table class="table table-hover">
         <thead>
@@ -437,52 +436,52 @@ else
                 <th></th>
             </tr>
         </thead>
-    @foreach (var item in ViewBag.finished)
-    {
-        @if(item.RacestatusId == 3)
+        @foreach (var item in ViewBag.finished)
         {
-            @:<tr class="table-success">
-        }
-        else if(item.RacestatusId == 4)
-        {
-            @:<tr class="table-danger">
-        }
-        else if(item.RacestatusId == 2)
-        {
-            @:<tr class="table-active">
-        }
-        else if(item.RacestatusId == 1002)
-        {
-            @:<tr class="table-warning">
-        } 
-        else if(item.RacestatusId == 1003)
-        {
-            @:<tr class="table-info">
-        } 
-        else if(item.RacestatusId == 1004)
-        {
-            @:<tr class="table-danger">
-        }
-        else if(item.RacestatusId == 1005)
-        {
-            @:<tr class="table-success">
-        }
-        else
-        {
-            @:<tr>
-        }
-        <td id="@item.RaceId"><i>@item.RaceCode</i></td>
-        <td colspan="2">
+            @if (item.RacestatusId == 3)
+            {
+                @:<tr class="table-success">
+                }
+                else if (item.RacestatusId == 4)
+                {
+                    @:<tr class="table-danger">
+                }
+                else if (item.RacestatusId == 2)
+                {
+                    @:<tr class="table-active">
+                }
+                else if (item.RacestatusId == 1002)
+                {
+                    @:<tr class="table-warning">
+                }
+                else if (item.RacestatusId == 1003)
+                {
+                    @:<tr class="table-info">
+                }
+                else if (item.RacestatusId == 1004)
+                {
+                    @:<tr class="table-danger">
+                }
+                else if (item.RacestatusId == 1005)
+                {
+                    @:<tr class="table-success">
+                }
+                else
+                {
+                    @:<tr>
+                }
+            <td id="@item.RaceId"><i>@item.RaceCode</i></td>
+            <td colspan="2">
                 @if (item.Gender.Equals("M"))
                 {
-                    @if(item.Oldclass.FromAge >=17 && item.Oldclass.ToAge <= 99)
+                    @if (item.Oldclass.FromAge >= 17 && item.Oldclass.ToAge <= 99)
                     {
                         @:Herren
                     }
-                    else if(item.Oldclass.FromAge >= 15 && item.Oldclass.ToAge <= 16)
+                    else if (item.Oldclass.FromAge >= 15 && item.Oldclass.ToAge <= 16)
                     {
-                        @:männliche    
-                    }                            
+                        @:männliche
+                    }
                 }
                 else if (string.Equals(item.Gender, "W"))
                 {
@@ -498,56 +497,190 @@ else
                 else if (string.Equals(item.Gender, "X"))
                 {
                     @:mixed
-                }                
-            @item.Oldclass.Name
-            &nbsp;-&nbsp;
-            @item.Boatclass.Name
-            &nbsp;-&nbsp;
-            @item.Raceclass.Name
-            <br/>
-            @if (item.RaceTypId == 4)
-            {
-                <span class="badge badge-pill badge-danger">Endlauf</span>
-            }
-            else if (item.RaceTypId == 2)
-            {
-                <span class="badge badge-pill badge-warning">Zwischenlauf</span>
-            }
-            else if (item.RaceTypId == 1)
-            {
-                <span class="badge badge-pill badge-success">Vorlauf</span>
-            }
-            else if (item.RaceTypId == 3)
-            {
-                <span class="badge badge-pill badge-info">Hoffnungslauf</span>
-            }
-        </td>        
-        <td>
-            @item.Racestatus.Name
-        </td>
-        <td>
-            @item.Starttime
-        </td>
-        <td>
-            <a asp-action="Details" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-secondary">Details</a>
-        </td>
-        <td>
-            <a asp-action="Delete" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-danger">L&ouml;schen</a>
-        </td>
-        <td>
-            <a asp-action="Edit" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-primary">&Auml;ndern</a>
-        </td>
-        <td>
-            @if(item.RacestatusId == 1002)
-            {
-                <a asp-action="Approve" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-success">Abnehmen</a>
-            }
-            @if(item.RacestatusId == 1004)
-            {
-                <a asp-action="ApproveDraw" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-info">Auslosung Abnehmen</a>
-            }
-        </td>
-    @:</tr>    
+                }
+                @item.Oldclass.Name
+                &nbsp;-&nbsp;
+                @item.Boatclass.Name
+                &nbsp;-&nbsp;
+                @item.Raceclass.Name
+                <br />
+                @if (item.RaceTypId == 4)
+                {
+                    <span class="badge badge-pill badge-danger">Endlauf</span>
+                }
+                else if (item.RaceTypId == 2)
+                {
+                    <span class="badge badge-pill badge-warning">Zwischenlauf</span>
+                }
+                else if (item.RaceTypId == 1)
+                {
+                    <span class="badge badge-pill badge-success">Vorlauf</span>
+                }
+                else if (item.RaceTypId == 3)
+                {
+                    <span class="badge badge-pill badge-info">Hoffnungslauf</span>
+                }
+            </td>
+            <td>
+                @item.Racestatus.Name
+            </td>
+            <td>
+                @item.Starttime
+            </td>
+            <td>
+                <a asp-action="Details" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-secondary">Details</a>
+            </td>
+            <td>
+                <a asp-action="Delete" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-danger">L&ouml;schen</a>
+            </td>
+            <td>
+                <a asp-action="Edit" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-primary">&Auml;ndern</a>
+            </td>
+            <td>
+                @if (item.RacestatusId == 1002)
+                {
+                    <a asp-action="Approve" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-success">Abnehmen</a>
+                }
+                @if (item.RacestatusId == 1004)
+                {
+                    <a asp-action="ApproveDraw" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-info">Auslosung Abnehmen</a>
+                }
+            </td>
+        @:</tr>
     }
     </table>
+    <hr />
+    <h4>Rennen mit zu wenigen Teilnehmern</h4>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Renncode</th>
+                <th colspan="2">
+                    Rennbezeichnung
+                </th>
+                <th>
+                    Rennstatus
+                </th>
+                <th>
+                    Startzeit
+                </th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        @foreach (var item in ViewBag.notenough)
+        {
+            @if (item.RacestatusId == 3)
+            {
+                @:<tr class="table-success">
+            }
+            else if (item.RacestatusId == 4)
+            {
+                @:<tr class="table-danger">
+                }
+                else if (item.RacestatusId == 2)
+                {
+                    @:<tr class="table-active">
+                }
+                else if (item.RacestatusId == 1002)
+                {
+                    @:<tr class="table-warning">
+                }
+                else if (item.RacestatusId == 1003)
+                {
+                    @: <tr class="table-info">
+                }
+                else if (item.RacestatusId == 1004)
+                {
+                    @:<tr class="table-danger">
+                }
+                else if (item.RacestatusId == 1005)
+                {
+                    @: <tr class="table-success">
+                }
+                else
+                {
+                    @:<tr>
+                }
+                <td id="@item.RaceId"><i>@item.RaceCode</i></td>
+                <td colspan="2">
+                @if (item.Gender.Equals("M"))
+                {
+                    @if (item.Oldclass.FromAge >= 17 && item.Oldclass.ToAge <= 99)
+                    {
+                        @:Herren
+                    }
+                    else if (item.Oldclass.FromAge >= 15 && item.Oldclass.ToAge <= 16)
+                    {
+                        @:männliche
+                    }
+                }
+                else if (string.Equals(item.Gender, "W"))
+                {
+                    @if (item.Oldclass.FromAge >= 17 && item.Oldclass.ToAge <= 99)
+                    {
+                        @:Damen
+                    }
+                    else
+                    {
+                        @:weibliche
+                    }
+                }
+                else if (string.Equals(item.Gender, "X"))
+                {
+                    @:mixed
+                }
+                @item.Oldclass.Name
+                &nbsp;-&nbsp;
+                @item.Boatclass.Name
+                &nbsp;-&nbsp;
+                @item.Raceclass.Name
+                <br />
+                @if (item.RaceTypId == 4)
+                {
+                    <span class="badge badge-pill badge-danger">Endlauf</span>
+                }
+                else if (item.RaceTypId == 2)
+                {
+                    <span class="badge badge-pill badge-warning">Zwischenlauf</span>
+                }
+                else if (item.RaceTypId == 1)
+                {
+                    <span class="badge badge-pill badge-success">Vorlauf</span>
+                }
+                else if (item.RaceTypId == 3)
+                {
+                    <span class="badge badge-pill badge-info">Hoffnungslauf</span>
+                }
+            </td>
+            <td>
+                @item.Racestatus.Name
+            </td>
+            <td>
+                @item.Starttime
+            </td>
+            <td>
+                <a asp-action="Details" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-secondary">Details</a>
+            </td>
+            <td>
+                <a asp-action="Delete" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-danger">L&ouml;schen</a>
+            </td>
+            <td>
+                <a asp-action="Edit" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-primary">&Auml;ndern</a>
+            </td>
+            <td>
+                @if (item.RacestatusId == 1002)
+                {
+                    <a asp-action="Approve" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-success">Abnehmen</a>
+                }
+                @if (item.RacestatusId == 1004)
+                {
+                    <a asp-action="ApproveDraw" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-info">Auslosung Abnehmen</a>
+                }
+            </td>
+        @:</tr>
+        }
+        </table>
 }
