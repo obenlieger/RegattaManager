@@ -34,7 +34,7 @@ namespace RegattaManager.Controllers
 
             if (rid != 0)
             {
-                var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Include(e => e.RaceTyp).Where(e => e.RegattaId == rid && e.RacestatusId != 2 && e.RacestatusId != 1002 && e.RacestatusId != 1004).OrderBy(e => e.Starttime);                
+                var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Include(e => e.RaceTyp).Where(e => e.RegattaId == rid && e.RacestatusId != 2 && e.RacestatusId != 1002 && e.RacestatusId != 1004 && e.RacestatusId != 1006).OrderBy(e => e.Starttime);                
                                 
                 ViewBag.startboats = _context.Startboats.Include(e => e.Club).OrderBy(e => e.Placement).ThenBy(e => e.Startslot).ToList();
                 ViewBag.startboatmembers = _context.StartboatMembers.ToList();

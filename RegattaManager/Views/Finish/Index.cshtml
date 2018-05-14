@@ -5,14 +5,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <br />
-<h2>Ziel</h2>
-@if (ViewBag.RunningRacesCount > 1)
-{
-    <form asp-action="Index" asp-controller="Finish">
-        <select class="form-control" name="id" id="id" asp-items="ViewBag.RunningRaces"></select>
-        <input type="submit" class="btn btn-primary" value="Auswählen" />
-    </form>
-}
 @if (@Model != null)
 {
     <table class="table table-hover">
@@ -224,6 +216,15 @@
         </tr>
     </table>
 }    
+@if (ViewBag.RunningRacesCount > 1)
+{
+    <div class="col-md-4">
+        <form asp-action="Index" asp-controller="Finish">
+            <select class="form-control" name="id" id="id" asp-items="ViewBag.RunningRaces"></select>
+            <input type="submit" class="btn btn-primary" value="Auswählen" />
+        </form>
+    </div>
+}
     <hr />
     <h3>Die n&auml;chsten 10 Rennen</h3>
     <table class="table table-hover">

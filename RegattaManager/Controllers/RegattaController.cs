@@ -500,7 +500,7 @@ namespace RegattaManager.Controllers
             if(regatta != null)
             {
                 DateTime timestamp = regatta.FromDate;
-                var races = _context.Races.Where(e => e.RegattaId == id).OrderBy(e => e.RaceTypId).ThenBy(e => e.RaceclassId).ThenBy(e => e.OldclassId);
+                var races = _context.Races.Where(e => e.RegattaId == id && e.RacestatusId != 1006).OrderBy(e => e.RaceTypId).ThenBy(e => e.RaceclassId).ThenBy(e => e.OldclassId);
 
                 foreach(var r in races)
                 {
