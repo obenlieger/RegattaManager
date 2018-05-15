@@ -1,0 +1,94 @@
+﻿@model IEnumerable<RegattaManager.Models.Club>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{var sbcount = 0;}
+@{float sbfee = 0;}
+@{var fromoc = 0;}
+@{var tooc = 0;}
+
+<h2>Startgeb&uuml;hren</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.City)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.VNr)
+                </th>
+                <th>
+                    Startboote
+                </th>
+                <th>
+                    Startgeb&uuml;hr
+                </th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        sbcount = 0;
+        sbfee = 0;
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VNr)
+            </td>
+            <td>
+                @foreach(var sb in ViewBag.reportedStartboats)
+                {
+                    if(sb.ClubId == item.ClubId && sb.RegattaId == ViewBag.rid)
+                    {
+                        sbcount++;
+                    }
+                }
+                @sbcount
+            </td>
+            <td>
+                @foreach(var sf in ViewBag.startingFees)
+                {
+                    foreach(var foc in ViewBag.oldclasses)
+                    {
+                        if(sf.FromOldclassId == foc.OldclassId)
+                        {
+                            fromoc = foc.FromAge;
+                        }
+                        if(sf.ToOldclassId == foc.OldclassId)
+                        {
+                            tooc = foc.ToAge;
+                        }
+                    }
+                    foreach(var sbf in ViewBag.reportedStartboats)
+                    {
+                        if(sbf.ReportedRace.Competition.BoatclassId == sf.BoatclassId)
+                        {
+                            foreach(var oc in ViewBag.oldclasses)
+                            {
+                                if(sbf.ReportedRace.OldclassId == oc.OldclassId)
+                                {
+                                    if(oc.FromAge >= fromoc && oc.ToAge <= tooc && sbf.ClubId == item.ClubId && sbf.RegattaId == ViewBag.rid)
+                                    {
+                                        sbfee = sbfee + sf.Amount;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                @string.Format("{0:C}",sbfee)
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

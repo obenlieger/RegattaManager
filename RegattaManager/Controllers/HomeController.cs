@@ -65,27 +65,14 @@ namespace RegattaManager.Controllers
                 }
                 
                 
-                var races = new List<Race>();
-                var allRaces = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderByDescending(e => e.Starttime).ToList();                
+                var races = new List<Race>();                
 
                 if(String.IsNullOrEmpty(searchLastName) && filterClubId != null && filterClubId > 0)
                 {
                     sb = _context.Startboats.Include(e => e.StartboatMembers).Where(e => e.ClubId == filterClubId).ToList();
-                }                
-                
-                if(sb != null)
-                {
-                    foreach (var sbsgl in sb)
-                    {
-                        foreach (var r in allRaces)
-                        {
-                            if (r.RaceId == sbsgl.RaceId)
-                            {
-                                races.Add(r);
-                            }
-                        }
-                    }
-                }                
+                }
+
+                races = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => sb.Select(i => i.RaceId).Contains(e.RaceId) && (e.RacestatusId == 1 || e.RacestatusId == 1003 || e.RacestatusId == 1005)).Distinct().ToList();                              
 
                 if(filterClubId != null && filterClubId > 0)
                 {

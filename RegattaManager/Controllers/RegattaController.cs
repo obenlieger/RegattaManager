@@ -565,7 +565,7 @@ namespace RegattaManager.Controllers
 
             rvm.Oldclasses = _context.Oldclasses.ToList();
             rvm.CampingFees = _context.CampingFees.ToList();
-            rvm.StartingFees = _context.StartingFees.Include(e => e.Boatclasses).Include(e => e.Oldclasses).ToList();
+            rvm.StartingFees = _context.StartingFees.Include(e => e.Boatclasses).ToList();
             rvm.Raceclasses = _context.Raceclasses.ToList();
             rvm.Competitions = _context.Competitions.Include(e => e.Boatclasses).Include(e => e.Raceclasses).ToList();
 

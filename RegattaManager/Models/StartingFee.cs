@@ -12,19 +12,14 @@ namespace RegattaManager.Models
         public virtual int StartingFeeId { get; set; }
         [Display(Name = "Gebühr")]
         public virtual float Amount { get; set; }
+        [Display(Name = "Bootsklasse")]
         public virtual int BoatclassId { get; set; }
         [Display(Name ="Bootsklasse")]
         public virtual Boatclass Boatclasses { get; set; }
-        public virtual int OldclassId { get; set; }
-        [Display(Name ="Altersklasse")]
-        public virtual Oldclass Oldclasses { get; set; }
-        public virtual string Name
-        {
-            get
-            {
-                return string.Format("{0} {1} = {2} EUR", Boatclasses.Name, Oldclasses.Name, Amount);
-            }
-        }
+        [Display(Name = "Von Altersklasse")]
+        public virtual int FromOldclassId { get; set; }
+        [Display(Name = "Bis Altersklasse")]
+        public virtual int ToOldclassId { get; set; }
         public virtual List<RegattaStartingFee> RegattaStartingFees { get; set; }
     }
 }

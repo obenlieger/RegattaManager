@@ -24,7 +24,8 @@ namespace RegattaManager.Controllers
         // GET: StartingFee
         public ActionResult Index()
         {
-            var model = _context.StartingFees.Include(e => e.Boatclasses).Include(e => e.Oldclasses).ToList();
+            ViewBag.oldclasses = _context.Oldclasses.ToList();
+            var model = _context.StartingFees.Include(e => e.Boatclasses).ToList();
             return View(model);
         }
 

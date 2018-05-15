@@ -13,14 +13,17 @@
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Amount)
-                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Boatclasses)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Oldclasses)
+                @Html.DisplayNameFor(model => model.FromOldclassId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ToOldclassId)
             </th>
             <th></th>
         </tr>
@@ -35,7 +38,22 @@
                 @Html.DisplayFor(modelItem => item.Boatclasses.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Oldclasses.Name)
+                @foreach(var oc in ViewBag.oldclasses)
+                {
+                    if(oc.OldclassId == item.FromOldclassId)
+                    {
+                        @:@oc.Name
+                    }
+                }                
+            </td>
+            <td>
+                @foreach (var oc in ViewBag.oldclasses)
+                {
+                    if (oc.OldclassId == item.ToOldclassId)
+                    {
+                        @:@oc.Name
+                    }
+                }
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.StartingFeeId">Bearbeiten</a> |
