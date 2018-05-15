@@ -11,22 +11,25 @@
             <li class="nav-item"><a asp-area="" asp-controller="Finish" asp-action="Index" class="nav-link">Ziel</a></li>
             <li class="nav-item"><a asp-area="" asp-controller="Speaker" asp-action="Index" class="nav-link">Sprecher</a></li>            
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="Basiswerte">Basiswerte<span class="caret"></span></a>
-                <div class="dropdown-menu" aria-labelledby="Basiswerte">
-                    <a class="dropdown-item" asp-controller="Race" asp-action="Index">Rennen</a>
-                    <a  class="dropdown-item" asp-controller="Regatta" asp-action="Index">Regatta</a>
-                    <a class="dropdown-item" asp-controller="Club" asp-action="Index">Verein</a>
-                    <a class="dropdown-item" asp-controller="Raceclass" asp-action="Index">Rennklassen</a>
-                    <a class="dropdown-item" asp-controller="Boatclass" asp-action="Index">Bootsklassen</a>
-                    <a class="dropdown-item" asp-controller="Oldclass" asp-action="Index">Altersklassen</a>
-                    <a class="dropdown-item" asp-controller="Racestatus" asp-action="Index">Rennstati</a>
-                    <a class="dropdown-item" asp-controller="Startboatstatus" asp-action="Index">Startbootstati</a>
-                    <a class="dropdown-item" asp-controller="Water" asp-action="Index">Gew&auml;sser</a>
-                    <a class="dropdown-item" asp-controller="CampingFee" asp-action="Index">Zeltplatzgeb&uuml;hren</a>
-                    <a class="dropdown-item" asp-controller="Competition" asp-action="Index">Wettk&auml;mpfe</a>
-                    <a class="dropdown-item" asp-controller="StartingFee" asp-action="Index">Startgeb&uuml;hren</a>
-                    <a class="dropdown-item" asp-controller="RaceTyp" asp-action="Index">Renntypen</a>
-                    <a class="dropdown-item" asp-controller="RaceDraw" asp-action="Index">Auslosungsregeln</a>
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="Verwaltung">Verwaltung<span class="caret"></span></a>
+                <div class="dropdown-menu" aria-labelledby="Verwaltung">
+                    <a class="dropdown-item" asp-controller="Race" asp-action="Index">Rennen</a>                                                       
+                    <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#" id="Basiswerte">Basiswerte<span class="caret"></span></a>
+                    <div class="dropdown-menu" aria-labelledby="Basiswerte">
+                        <a  class="dropdown-item" asp-controller="Regatta" asp-action="Index">Regatta</a>     
+                        <a class="dropdown-item" asp-controller="Club" asp-action="Index">Verein</a>
+                        <a class="dropdown-item" asp-controller="Raceclass" asp-action="Index">Rennklassen</a>
+                        <a class="dropdown-item" asp-controller="Boatclass" asp-action="Index">Bootsklassen</a>
+                        <a class="dropdown-item" asp-controller="Oldclass" asp-action="Index">Altersklassen</a>
+                        <a class="dropdown-item" asp-controller="Racestatus" asp-action="Index">Rennstati</a>
+                        <a class="dropdown-item" asp-controller="Startboatstatus" asp-action="Index">Startbootstati</a>
+                        <a class="dropdown-item" asp-controller="Water" asp-action="Index">Gew&auml;sser</a>
+                        <a class="dropdown-item" asp-controller="CampingFee" asp-action="Index">Zeltplatzgeb&uuml;hren</a>
+                        <a class="dropdown-item" asp-controller="Competition" asp-action="Index">Wettk&auml;mpfe</a>
+                        <a class="dropdown-item" asp-controller="StartingFee" asp-action="Index">Startgeb&uuml;hren</a>
+                        <a class="dropdown-item" asp-controller="RaceTyp" asp-action="Index">Renntypen</a>
+                        <a class="dropdown-item" asp-controller="RaceDraw" asp-action="Index">Auslosungsregeln</a>
+                    </div>                
                 </div>
             </li>
             <li class="nav-item">

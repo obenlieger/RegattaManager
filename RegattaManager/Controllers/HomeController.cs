@@ -21,9 +21,19 @@ namespace RegattaManager.Controllers
             _context.Database.EnsureCreated();
         }
 
-        public IActionResult Index(string searchLastName, string All, string ZE, int ClubId)
+        public IActionResult Index(string searchLastName, string All, string ZE, int? filterClubId)
         {
+            var rid = 0;
+
+            if(_context.Regattas.Where(e => e.Choosen == true).Any())
+            { 
+                rid = _context.Regattas.Where(e => e.Choosen == true).FirstOrDefault().RegattaId;
+            }
+
+            var regattaClubs = _context.RegattaClubs.Where(e => e.RegattaId == rid);
+
             ViewData["CurrentFilter"] = searchLastName;
+            ViewData["filterClub"] = new SelectList(_context.Clubs.Where(e => regattaClubs.Select(i => i.ClubId).Contains(e.ClubId)),"ClubId","Name");
 
             var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderBy(e => e.Starttime).Take(10).ToList();
 
@@ -32,26 +42,54 @@ namespace RegattaManager.Controllers
             ViewBag.members = _context.Members.Include(e => e.Club).ToList();
             ViewBag.ClubId = new SelectList(_context.Clubs.OrderBy(e => e.Name), "ClubId", "Name");
 
-            if (!String.IsNullOrEmpty(searchLastName))
+            if (!String.IsNullOrEmpty(searchLastName) || filterClubId != null)
             {
-                var sbm = _context.StartboatMembers.Where(e => e.Member.LastName.ToLower().Contains(searchLastName.ToLower())).ToList();
+                var sbm = _context.StartboatMembers.ToList();
                 var sb = new List<Startboat>();
-                var races = new List<Race>();
-                var allRaces = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderBy(e => e.Starttime).ToList();
 
-                foreach (var stbm in sbm)
+                if(!String.IsNullOrEmpty(searchLastName))
                 {
-                    sb.Add(_context.Startboats.Include(e => e.StartboatMembers).Where(e => e.StartboatId == stbm.StartboatId).Single());
-                }
-                foreach (var sbsgl in sb)
-                {
-                    foreach (var r in allRaces)
+                    sbm = _context.StartboatMembers.Where(e => e.Member.LastName.ToLower().Contains(searchLastName.ToLower())).ToList(); 
+
+                    foreach (var stbm in sbm)
                     {
-                        if (r.RaceId == sbsgl.RaceId)
+                        if(filterClubId != null && filterClubId > 0)
                         {
-                            races.Add(r);
+                            sb.Add(_context.Startboats.Include(e => e.StartboatMembers).FirstOrDefault(e => e.StartboatId == stbm.StartboatId && e.ClubId == filterClubId));    
+                        }
+                        else
+                        {
+                            sb.Add(_context.Startboats.Include(e => e.StartboatMembers).FirstOrDefault(e => e.StartboatId == stbm.StartboatId));
+                        }                        
+                    }                   
+                }
+                
+                
+                var races = new List<Race>();
+                var allRaces = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderByDescending(e => e.Starttime).ToList();                
+
+                if(String.IsNullOrEmpty(searchLastName) && filterClubId != null && filterClubId > 0)
+                {
+                    sb = _context.Startboats.Include(e => e.StartboatMembers).Where(e => e.ClubId == filterClubId).ToList();
+                }                
+                
+                if(sb != null)
+                {
+                    foreach (var sbsgl in sb)
+                    {
+                        foreach (var r in allRaces)
+                        {
+                            if (r.RaceId == sbsgl.RaceId)
+                            {
+                                races.Add(r);
+                            }
                         }
                     }
+                }                
+
+                if(filterClubId != null && filterClubId > 0)
+                {
+                    ViewData["filterClub"] = new SelectList(_context.Clubs.Where(e => regattaClubs.Select(i => i.ClubId).Contains(e.ClubId)),"ClubId","Name",filterClubId);
                 }
 
                 return View(races);

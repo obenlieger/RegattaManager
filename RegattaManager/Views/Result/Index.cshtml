@@ -13,16 +13,17 @@ else
     <h2>Aktuellste 10 Ergebnisse</h2>
 }
 
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Meine Ergebnisse (Nachname): <input class="form-control" type="text" name="SearchLastName" value="@ViewData["CurrentFilter"]" />
+<form asp-action="Index">
+    <div class="col-md-4">
+            <label class="control-label">Nachname:</label> 
+            <input class="form-control" type="text" name="SearchLastName" value="@ViewData["CurrentFilter"]" />
+            <label class="control-label">Verein:</label> 
+            <select class="form-control" name="filterClubId" asp-items="@ViewBag.filterClub"><option value="0">---Verein ausw&auml;hlen</option></select>
             <input type="submit" value="Suchen" class="btn btn-secondary" /> |
             <a asp-action="Index">Zurück</a>
-        </p>
     </div>
 </form>
-<form asp-action="Index" method="get">
+<form asp-action="Index">
     <p>
         <div class="form-actions no-color">
             <input type="hidden" name="All" value="1">

@@ -120,7 +120,9 @@ namespace RegattaManager.Controllers
                     ViewBag.laststartbahn = _context.Startboats.OrderBy(e => e.Startslot).Last(e => e.RaceId == id).Startslot;
                 }
 
-                IEnumerable<Club> allClubs = _context.Clubs.OrderBy(e => e.Name);
+                var regattaClubs = _context.RegattaClubs.Where(e => e.RegattaId == rid);
+
+                IEnumerable<Club> allClubs = _context.Clubs.Where(e => regattaClubs.Select(i => i.ClubId).Contains(e.ClubId)).OrderBy(e => e.Name);
 
                 ViewBag.startboats = vStartboats;
                 ViewBag.startboatmembers = _context.StartboatMembers;
