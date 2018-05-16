@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Rennen";
 }
+@{ var x = 0;}
 <br />
 <h2>Rennübersicht</h2>
 <a asp-action="Create" asp-controller="Race">Neues Rennen erstellen</a>
@@ -168,7 +169,7 @@ else
             </tr>
         </thead>
         @foreach (var item in ViewBag.raceable)
-        {
+        {            
             @if (item.RacestatusId == 3)
             {
                 @:<tr class="table-success">
@@ -296,6 +297,9 @@ else
                 <th>
                     Startzeit
                 </th>
+                <th>
+                    Anzahl SB
+                </th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -304,6 +308,7 @@ else
         </thead>
         @foreach (var item in Model)
         {
+            x = 0;
             @if (item.RacestatusId == 3)
             {
                 @:<tr class="table-success">
@@ -392,6 +397,16 @@ else
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Starttime)
+            </td>
+            <td>
+                @foreach(var sb in ViewBag.startboats)
+                {
+                    if(sb.RaceId == item.RaceId)
+                    {
+                        x++;
+                    }
+                }
+                @x
             </td>
             <td>
                 <a asp-action="Details" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-secondary">Details</a>
@@ -564,6 +579,9 @@ else
                 <th>
                     Startzeit
                 </th>
+                <th>
+                    Anzahl SB
+                </th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -572,6 +590,7 @@ else
         </thead>
         @foreach (var item in ViewBag.notenough)
         {
+            x = 0;
             @if (item.RacestatusId == 3)
             {
                 @:<tr class="table-success">
@@ -603,9 +622,9 @@ else
                 else
                 {
                     @:<tr>
-                }
-                <td id="@item.RaceId"><i>@item.RaceCode</i></td>
-                <td colspan="2">
+}
+            <td id="@item.RaceId"><i>@item.RaceCode</i></td>
+            <td colspan="2">
                 @if (item.Gender.Equals("M"))
                 {
                     @if (item.Oldclass.FromAge >= 17 && item.Oldclass.ToAge <= 99)
@@ -660,6 +679,16 @@ else
             </td>
             <td>
                 @item.Starttime
+            </td>
+            <td>
+                @foreach (var sb in ViewBag.startboats)
+                {
+                    if (sb.RaceId == item.RaceId)
+                    {
+                        x++;
+                    }
+                }
+                @x
             </td>
             <td>
                 <a asp-action="Details" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-secondary">Details</a>

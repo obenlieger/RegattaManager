@@ -39,11 +39,13 @@ namespace RegattaManager.Controllers
                 var raceable = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId == 1004).OrderBy(e => e.Starttime).ToList();
                 var finished = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId == 3).OrderBy(e => e.Starttime).ToList();
                 var notenough = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId == 1006).OrderBy(e => e.Starttime).ToList();
+                var startboats = _context.Startboats.ToList();
 
                 ViewBag.approveable = approveable;
                 ViewBag.raceable = raceable;
                 ViewBag.finished = finished;
                 ViewBag.notenough = notenough;
+                ViewBag.startboats = startboats;
 
                 return View(model);
             }

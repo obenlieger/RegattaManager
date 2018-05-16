@@ -11,17 +11,11 @@
 
 <h2>Startgeb&uuml;hren</h2>
 
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.City)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.VNr)
                 </th>
                 <th>
                     Startboote
@@ -29,6 +23,13 @@
                 <th>
                     Startgeb&uuml;hr
                 </th>
+                <th>
+                    Campingplatzgeb&uuml;hr
+                </th>
+                <th>
+                    Teilnahmegeb&uuml;hr
+                </th>
+                <th></th>
         </tr>
     </thead>
     <tbody>
@@ -38,12 +39,6 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.City)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VNr)
             </td>
             <td>
                 @foreach(var sb in ViewBag.reportedStartboats)
@@ -87,6 +82,15 @@
                     }
                 }
                 @string.Format("{0:C}",sbfee)
+            </td>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.ClubId" class="btn btn-secondary">Details</a>
             </td>
         </tr>
     }
