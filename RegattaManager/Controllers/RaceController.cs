@@ -1363,21 +1363,23 @@ namespace RegattaManager.Controllers
                                     torace = _context.Races.FirstOrDefault(e => e.ReportedRaceId == race.ReportedRaceId && e.RaceTypId == rdr.ToRaceTypId && e.Sequence == rdr.ToRaceSequence);
                                     if (torace != null)
                                     {
+                                        i = _context.Startboats.Where(e => e.RaceId == torace.RaceId).Count();
+
                                         if(!(torace.RaceTypId == 4 && _context.Races.Any(e => e.ReportedRaceId == torace.ReportedRaceId && (e.RaceTypId == 2 || e.RaceTypId == 3) && e.RacestatusId != 3))) 
                                         {
                                             torace.RacestatusId = 1004;
                                         }                                        
                                         _context.Races.Update(torace);
-                                        _context.Startboats.Add(new Startboat { ClubId = sb.ClubId, RaceId = torace.RaceId, StartboatstatusId = 6, Startslot = i, RegattaId = race.RegattaId, Gender = race.Gender, ReportedStartboatId = sb.ReportedStartboatId });
+
+                                        _context.Startboats.Add(new Startboat { ClubId = sb.ClubId, RaceId = torace.RaceId, StartboatstatusId = 6, Startslot = i+1, RegattaId = race.RegattaId, Gender = race.Gender, ReportedStartboatId = sb.ReportedStartboatId });
                                         _context.SaveChanges();
+
                                         startboatmembers = _context.StartboatMembers.Where(e => e.StartboatId == sb.StartboatId).ToList();
                                         foreach (var sbm in startboatmembers)
                                         {
                                             _context.StartboatMembers.Add(new StartboatMember { MemberId = sbm.MemberId, SeatNumber = sbm.SeatNumber, StartboatId = _context.Startboats.Last().StartboatId });
                                         }
-                                        _context.SaveChanges();
-
-                                        i++;
+                                        _context.SaveChanges();                                        
                                     }
                                 }
                             }
@@ -1385,7 +1387,6 @@ namespace RegattaManager.Controllers
                     }
                 }
             }
-
 
             return true;
         }

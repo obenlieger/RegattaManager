@@ -287,18 +287,32 @@
                         </tr>
                         <tr>
                             <td bgcolor="#DDDDDD" colspan="2">
-                                @if (rpd.Gender == "M")
+                                @if (rpd.Gender.Equals("M"))
                                 {
-                                    @string.Format("männliche");
+                                    @if(rpd.Oldclass.FromAge >=17 && rpd.Oldclass.ToAge <= 99)
+                                    {
+                                        @:Herren
+                                    }
+                                    else if(rpd.Oldclass.FromAge >= 15 && rpd.Oldclass.ToAge <= 16)
+                                    {
+                                        @:männliche    
+                                    }                            
                                 }
-                                else if (rpd.Gender == "W")
+                                else if (string.Equals(rpd.Gender, "W"))
                                 {
-                                    @string.Format("weibliche");
+                                    @if (rpd.Oldclass.FromAge >= 17 && rpd.Oldclass.ToAge <= 99)
+                                    {
+                                        @:Damen
+                                    }
+                                    else
+                                    {
+                                        @:weibliche
+                                    }
                                 }
-                                else
+                                else if (string.Equals(rpd.Gender, "X"))
                                 {
-                                    @string.Format("mixed");
-                                }
+                                    @:mixed
+                                } 
                                 @rpd.Oldclass.Name
                                 &nbsp;-&nbsp;
                                 @rpd.Boatclass.Name

@@ -34,13 +34,13 @@ else
 <table class="table table-hover">
     <thead>
         <tr>
+            <th></th>
             <th colspan="2">
                 Rennbezeichnung
-            </th>
+            </th>            
             <th colspan="2">
                 Startzeit
-            </th>
-            <th></th>
+            </th>            
         </tr>
     </thead>
     @foreach (var item in Model)
@@ -51,8 +51,10 @@ else
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
         </tr>
         <tr class="table-primary">
+            <td><strong>@item.RaceCode</strong></td>
             <td colspan="2">
                 <strong>
                 @if (item.Gender.Equals("M"))
@@ -131,6 +133,7 @@ else
             <td><i>Starter</i></td>
             <td><i>Verein</i></td>
             <td><i>Status</i></td>
+            <td></td>
         </tr>
         @foreach (var sb in ViewBag.startboats)
         {
@@ -162,7 +165,7 @@ else
                         }
                 </td>
                 <td>@sb.Club.Name</td>
-                <td></td>
+                <td colspan="2"></td>
             </tr>
              }
             }
@@ -198,7 +201,7 @@ else
                     }
                 </td>
                 <td>@sb.Club.Name</td>
-                <td>@sb.Startboatstatus.Name</td>
+                <td colspan="2">@sb.Startboatstatus.Name</td>                
             </tr>
              }
             }

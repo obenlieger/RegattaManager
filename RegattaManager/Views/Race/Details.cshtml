@@ -169,7 +169,7 @@
                                     @string.Format("{0}", member.FullName);
                                     @if (member.ClubId != startboat.ClubId && member.isRented == false)
                                     {
-                                        @string.Format(" ({0})", member.Club.Name);
+                                        @string.Format(" ({0})", member.Club.ShortName);
                                     }
                                     @if (member.isRented == true && member.RentedToClubId != startboat.ClubId && member.RentYear == ViewBag.ThisYear)
                                     {
@@ -177,13 +177,13 @@
                                         {
                                             if (ac.ClubId == member.RentedToClubId)
                                             {
-                                                @: (@ac.Name)
+                                                @: (@ac.ShortName)
                                             }
                                         }
                                     }
                                     @if (member.isRented == true && member.RentedToClubId == startboat.ClubId && member.RentYear == ViewBag.ThisYear)
                                     {
-                                        @: (@member.Club.Name)
+                                        @: (@member.Club.ShortName)
                                     }
                                     @:<br />
                                 }

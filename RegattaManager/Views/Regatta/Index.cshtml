@@ -44,13 +44,13 @@
                 @Html.DisplayFor(modelItem => item.Club.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.RegattaId">Bearbeiten</a> <br/>                             
-                <a asp-action="Delete" asp-route-id="@item.RegattaId">L&ouml;schen</a> <br/>
-                <a asp-action="CreateProgram" asp-route-id="@item.RegattaId">Rennen auslosen</a> <br/>
-                <a asp-action="SetRaceTimes" asp-route-id="@item.RegattaId">Zeitplan erstellen</a> <br/>
+                <a asp-action="Edit" asp-route-id="@item.RegattaId" class="btn btn-secondary">Bearbeiten</a> <br/>                             
+                <a asp-action="Delete" asp-route-id="@item.RegattaId" class="btn btn-danger">L&ouml;schen</a> <br/>
+                <a asp-action="CreateProgram" asp-route-id="@item.RegattaId" class="btn btn-primary">Rennen auslosen</a> <br/>
+                <a asp-action="SetRaceTimes" asp-route-id="@item.RegattaId" class="btn btn-success">Zeitplan erstellen</a> <br/>
                 @if (!item.Choosen)
                 {
-                    <a asp-action="Choose" asp-route-id="@item.RegattaId">Auswählen</a>
+                    <a asp-action="Choose" asp-route-id="@item.RegattaId" class="btn btn-secondary">Auswählen</a>
                 }
                 else
                 {

@@ -408,13 +408,12 @@ namespace RegattaManager.Controllers
 
             foreach (var rrrr in reportedRaces)
             {
-                rrcounter = _context.Races.Where(e => e.RegattaId == id && e.RaceTypId == 1).Count();
-
-                foreach (var newrace in _context.Races.Where(e => e.RegattaId == id && (e.RaceTypId == 4 || e.RaceTypId == 1)).OrderBy(e => e.RaceTypId).ThenBy(e => e.RaceCode))
-                {
-                    sbcount = reportedStartboats.Where(e => e.ReportedRaceId == rrrr.ReportedRaceId).Count();
-                    sbcounter = sbcount;                    
-
+                rrcounter = _context.Races.Where(e => e.ReportedRaceId == rrrr.ReportedRaceId && e.RaceTypId == 1).Count();
+                sbcount = reportedStartboats.Where(e => e.ReportedRaceId == rrrr.ReportedRaceId).Count();
+                sbcounter = sbcount;
+                
+                foreach (var newrace in _context.Races.Where(e => e.ReportedRaceId == rrrr.ReportedRaceId).OrderBy(e => e.RaceCode))
+                {                                                            
                     if (sbcount <= model.Startslots)
                     {
                         if(newrace.ReportedRaceId == rrrr.ReportedRaceId && newrace.RaceTypId == 4)
@@ -435,8 +434,8 @@ namespace RegattaManager.Controllers
                     else
                     {
                         if (newrace.ReportedRaceId == rrrr.ReportedRaceId && newrace.RaceTypId == 1)
-                        {
-                            repsbtemp = reportedStartboats.Where(e => e.ReportedRaceId == rrrr.ReportedRaceId).ToList();
+                        {                            
+                            repsbtemp = reportedStartboats.Where(e => e.ReportedRaceId == rrrr.ReportedRaceId).OrderBy(e => Guid.NewGuid()).ToList();                            
                             startbahn = 1;
                             foreach (var tempsb in repsbtemp)
                             {
@@ -447,7 +446,7 @@ namespace RegattaManager.Controllers
                                     startbahn++;
                                     sbcounter--;
                                 }    
-                                else if(!rsb.Contains(tempsb.ReportedStartboatId) && startbahn <= model.Startslots && rrcounter == 1 && sbcounter <= 4)
+                                else if(!rsb.Contains(tempsb.ReportedStartboatId) && startbahn <= model.Startslots && rrcounter == 1)
                                 {
                                     _context.Startboats.Add(new Startboat { RaceId = newrace.RaceId, RegattaId = id, ClubId = tempsb.ClubId, ReportedStartboatId = tempsb.ReportedStartboatId, StartboatstatusId = 6, Startslot = startbahn, Gender = tempsb.Gender });
                                     rsb.Add(tempsb.ReportedStartboatId);
@@ -500,8 +499,8 @@ namespace RegattaManager.Controllers
 
             if(regatta != null)
             {
-                DateTime timestamp = regatta.FromDate;
-                var races = _context.Races.Where(e => e.RegattaId == id && e.RacestatusId != 1006).OrderBy(e => e.RaceTypId).ThenBy(e => e.RaceCode).ThenBy(e => e.Gender).ThenBy(e => e.RaceclassId).ThenBy(e => e.OldclassId).ToList();
+                DateTime timestamp = regatta.FromDate.AddDays(1);
+                var races = _context.Races.Where(e => e.RegattaId == id && e.RacestatusId != 1006).OrderBy(e => e.RaceTypId).ThenByDescending(e => e.Raceclass.Length).ThenBy(e => e.RaceCode).ThenBy(e => e.Gender).ThenBy(e => e.RaceclassId).ThenBy(e => e.OldclassId).ToList();
 
                 foreach(var r in races)
                 {
