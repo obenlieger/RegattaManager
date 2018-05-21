@@ -107,13 +107,17 @@
                     <td>
                         @foreach (var sbm in ViewBag.startboatmembers)
                         {
-                            if (sbm.StartboatId == sb.StartboatId)
+                            @if (sbm.StartboatId == sb.StartboatId)
                             {
-                                foreach (var m in ViewBag.members)
+                                @foreach (var m in ViewBag.members)
                                 {
-                                    if (m.MemberId == sbm.MemberId)
+                                    @if (m.MemberId == sbm.MemberId)
                                     {
                                         @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                        @if (m.ClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                        {
+                                            @string.Format(" ({0})", m.Club.ShortName);
+                                        }
                                         <br />
                                     }
                                 }

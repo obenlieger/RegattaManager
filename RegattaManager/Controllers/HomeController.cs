@@ -21,7 +21,7 @@ namespace RegattaManager.Controllers
             _context.Database.EnsureCreated();
         }
 
-        public IActionResult Index(string searchLastName, string All, string ZE, int? filterClubId)
+        public IActionResult Index(string searchLastName, string All, string ZE, int? filterClubId, string orderby)
         {
             var rid = 0;
 
@@ -35,12 +35,13 @@ namespace RegattaManager.Controllers
             ViewData["CurrentFilter"] = searchLastName;
             ViewData["filterClub"] = new SelectList(_context.Clubs.Where(e => regattaClubs.Select(i => i.ClubId).Contains(e.ClubId)),"ClubId","Name");
 
-            var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderBy(e => e.Starttime).Take(10).ToList();
+            var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderBy(e => e.Starttime).Take(10).ToList();            
 
             ViewBag.startboats = _context.Startboats.Include(e => e.Club).OrderBy(e => e.Startslot).ToList();
             ViewBag.startboatmembers = _context.StartboatMembers.ToList();
             ViewBag.members = _context.Members.Include(e => e.Club).ToList();
             ViewBag.ClubId = new SelectList(_context.Clubs.OrderBy(e => e.Name), "ClubId", "Name");
+            ViewBag.ThisYear = DateTime.Now.Year;
 
             if (!String.IsNullOrEmpty(searchLastName) || filterClubId != null)
             {
@@ -85,7 +86,13 @@ namespace RegattaManager.Controllers
             if (!String.IsNullOrEmpty(All))
             {
                 ViewData["All"] = "1";
+
                 var races = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderBy(e => e.Starttime).ToList();
+
+                if (orderby == "RaceCode")
+                {
+                    races = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).OrderBy(e => e.RaceCode).ToList();
+                }                
 
                 return View(races);
             }

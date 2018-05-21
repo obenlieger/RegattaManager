@@ -4,11 +4,11 @@
     ViewBag.Title = "Rennübersicht";
 }
 
-@if (ViewData["All"] == "1")
+@if (ViewBag.All == "1")
 {
     <h2>Alle geplanten Rennen</h2>
 }
-else if (ViewData["ZE"] == "1")
+else if (ViewBag.ZE == "1")
 {
     <h2>Zwischen- und Endläufe</h2>
 }
@@ -47,7 +47,16 @@ else
 <table class="table table-hover">
     <thead>
         <tr>
-            <th>Renncode</th>
+            <th>
+                @if (ViewBag.All == "1")
+                {
+                    <a href="/?All=1&orderby=RaceCode">Renncode</a>
+                }
+                else
+                {
+                    @:Renncode
+                }
+            </th>
             <th>
                 Rennbezeichnung
             </th>
@@ -65,8 +74,8 @@ else
         <td></td>
     </tr>
         <tr class="table-primary">
-            <td>@item.RaceCode</td>
-            <td>
+            <th>@item.RaceCode</th>
+            <th>
                 @if (item.Gender.Equals("M"))
                 {
                     @if(item.Oldclass.FromAge >=17 && item.Oldclass.ToAge <= 99)
@@ -98,11 +107,11 @@ else
                 @Html.DisplayFor(modelItem => item.Boatclass.Name)
                 &nbsp;-&nbsp;
                 @Html.DisplayFor(modelItem => item.Raceclass.Name)
-            </td>
-            <td>
+            </th>
+            <th>
                 @Html.DisplayFor(modelItem => item.Starttime)
-            </td>
-            <td>
+            </th>
+            <th>
                 @if (item.RaceTypId == 4)
                 {
                     <span class="badge badge-pill badge-danger">Endlauf</span>
@@ -133,7 +142,7 @@ else
                         @:&nbsp;<img src="/images/prosecco.png" height="15" />
                 }
                 }
-            </td>
+            </th>
         </tr>
         <tr class="table-secondary">
             <td><i>Startbahn</i></td>
@@ -157,12 +166,12 @@ else
                                     @if (m.MemberId == sbm.MemberId)
                                     {
                                         @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                        @if (m.ClubId != sb.ClubId)
+                                        @if (m.ClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
                                         {
                                             @string.Format(" ({0})", m.Club.ShortName);
                                         }
                                         <br />
-                                }
+                                    }
                                 }
                             }
                         }

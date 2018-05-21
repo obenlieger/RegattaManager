@@ -37,7 +37,8 @@ namespace RegattaManager.Controllers
             ViewBag.startboats = _context.Startboats.Include(e => e.Club).Include(e => e.Startboatstatus).OrderBy(e => e.RaceId).ThenBy(e => e.Placement).ToList();
             ViewBag.disqsbs = _context.Startboats.Include(e => e.Club).Include(e => e.Startboatstatus).Where(e => e.Placement <= 0).OrderBy(e => e.Startslot).ToList();
             ViewBag.startboatmembers = _context.StartboatMembers.ToList();
-            ViewBag.members = _context.Members.Include(e => e.Club).ToList();            
+            ViewBag.members = _context.Members.Include(e => e.Club).ToList();
+            ViewBag.ThisYear = DateTime.Now.Year;
 
             if (!String.IsNullOrEmpty(searchLastName) || filterClubId != null)
             {

@@ -10,6 +10,9 @@ namespace RegattaManager.Models
     {
         [Key]
         public int ReportedRaceId { get; set; }
+        public DateTime modifiedDate { get; set; }
+        public bool isCreated { get; set; }
+        public int StartboatCount { get; set; }
         [Display(Name = "Altersklasse")]
         public int OldclassId { get; set; }
         [Display(Name = "Altersklasse")]

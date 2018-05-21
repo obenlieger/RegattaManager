@@ -21,7 +21,7 @@ namespace RegattaManager.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string orderby)
         {
             var rid = 0;
 
@@ -40,6 +40,19 @@ namespace RegattaManager.Controllers
                 var finished = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId == 3).OrderBy(e => e.Starttime).ToList();
                 var notenough = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId == 1006).OrderBy(e => e.Starttime).ToList();
                 var startboats = _context.Startboats.ToList();
+
+                if(orderby == "RaceCode")
+                {
+                    model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId != 1002 && e.RacestatusId != 1004 && e.RacestatusId != 3 && e.RacestatusId != 1006).OrderBy(e => e.RaceCode);
+                }
+                else if(orderby == "Racestatus")
+                {
+                    model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId != 1002 && e.RacestatusId != 1004 && e.RacestatusId != 3 && e.RacestatusId != 1006).OrderBy(e => e.RacestatusId);
+                }
+                else if(orderby == "Starttime")
+                {
+                    model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId != 1002 && e.RacestatusId != 1004 && e.RacestatusId != 3 && e.RacestatusId != 1006).OrderBy(e => e.Starttime);
+                }
 
                 ViewBag.approveable = approveable;
                 ViewBag.raceable = raceable;

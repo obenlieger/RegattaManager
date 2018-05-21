@@ -573,6 +573,12 @@ namespace RegattaManager.Migrations
 
                     b.Property<int>("RegattaId");
 
+                    b.Property<int>("StartboatCount");
+
+                    b.Property<bool>("isCreated");
+
+                    b.Property<DateTime>("modifiedDate");
+
                     b.HasKey("ReportedRaceId");
 
                     b.HasIndex("CompetitionId");
