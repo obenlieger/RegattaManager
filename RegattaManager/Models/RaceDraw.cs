@@ -10,6 +10,7 @@ namespace RegattaManager.Models
     {
         [Key]
         public virtual int RaceDrawId { get; set; }
+        public virtual bool isAbteilungslauf { get; set; }
         [Display(Name = "Von Anzahl Startbooten")]
         public virtual int ReportedSBCountFrom { get; set; }
         [Display(Name = "Bis Anzahl Startbooten")]

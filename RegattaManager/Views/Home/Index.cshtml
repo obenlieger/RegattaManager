@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Rennübersicht";
 }
-
+<br/>
 @if (ViewBag.All == "1")
 {
     <h2>Alle geplanten Rennen</h2>
@@ -23,26 +23,15 @@ else
             <input class="form-control" type="text" name="SearchLastName" value="@ViewData["CurrentFilter"]" />
             <label class="control-label">Verein:</label> 
             <select class="form-control" name="filterClubId" asp-items="@ViewBag.filterClub"><option value="0">---Verein ausw&auml;hlen</option></select>
+            <br/>
             <input type="submit" value="Suchen" class="btn btn-secondary" /> |
             <a asp-action="Index">Zurück</a>
     </div>
 </form>
-<p>
-    <form asp-action="Index">
-        <div class="form-actions no-color">
-            <input type="hidden" name="All" value="1">
-            <input type="submit" value="Alle Rennen anzeigen" class="btn btn-secondary" />
-        </div>
-    </form>
-</p>
-<p>
-    <form asp-action="Index">
-        <div class="form-actions no-color">
-            <input type="hidden" name="ZE" value="1">
-            <input type="submit" value="Zwischen- und Endläufe" class="btn btn-secondary" />
-        </div>
-    </form>
-</p>
+<br/>
+<div>
+    <a href="/?All=1" class="btn btn-secondary">Alle Rennen</a> | <a href="/?ZE=1" class="btn btn-secondary">Ausgeloste Rennen</a>
+</div>
 
 <table class="table table-hover">
     <thead>

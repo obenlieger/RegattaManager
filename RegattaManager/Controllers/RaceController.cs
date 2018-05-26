@@ -136,6 +136,7 @@ namespace RegattaManager.Controllers
                 }
 
                 var regattaClubs = _context.RegattaClubs.Where(e => e.RegattaId == rid);
+                var otherRaces = _context.Races.Where(e => e.ReportedRaceId == model.ReportedRaceId && e.RaceId != model.RaceId).OrderBy(e => e.RaceCode).ToList();
 
                 IEnumerable<Club> allClubs = _context.Clubs.Where(e => regattaClubs.Select(i => i.ClubId).Contains(e.ClubId)).OrderBy(e => e.Name);
 
@@ -148,6 +149,7 @@ namespace RegattaManager.Controllers
                 ViewBag.doppelt = doppelt;
                 ViewBag.allAvailable = allAvailable;
                 ViewBag.filterclub = filterclub;
+                ViewBag.otherRaces = new SelectList(otherRaces, "RaceId", "RaceCode");
 
                 if(filterclub != null)
                 {
@@ -245,6 +247,59 @@ namespace RegattaManager.Controllers
                 _context.SaveChanges();
             }
             return RedirectToAction("Index");
+        }
+
+        public IActionResult PrintView()
+        {
+            var rid = 0;
+
+            if (_context.Regattas.Where(e => e.Choosen == true).Any())
+            {
+                rid = _context.Regattas.Where(e => e.Choosen == true).FirstOrDefault().RegattaId;
+            }
+
+            if(rid != 0)
+            {
+                var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId != 1006).OrderBy(e => e.Starttime).ToList();
+
+                ViewBag.startboats = _context.Startboats.Include(e => e.Club).OrderBy(e => e.Startslot).ToList();
+                ViewBag.startboatmembers = _context.StartboatMembers.ToList();
+                ViewBag.members = _context.Members.Include(e => e.Club).ToList();                
+                ViewBag.ThisYear = DateTime.Now.Year;
+
+                return View(model);
+            }
+
+            return NotFound();
+        }
+
+        public IActionResult MoveStartboatToRace(int id, int toRaceId)
+        {
+            var startboat = _context.Startboats.FirstOrDefault(e => e.StartboatId == id);
+            var oldraceid = startboat.RaceId;
+
+            if(startboat != null)
+            {
+                var torace = _context.Races.FirstOrDefault(e => e.RaceId == toRaceId);
+
+                if(torace != null)
+                {
+                    int startslot = 1;
+
+                    if(_context.Startboats.Where(e => e.RaceId == toRaceId).Any())
+                    {
+                        startslot = _context.Startboats.Where(e => e.RaceId == toRaceId).OrderBy(e => e.Startslot).Select(e => e.Startslot).Last() + 1;
+                    }
+                    
+                    startboat.RaceId = toRaceId;
+                    startboat.Startslot = startslot;
+
+                    _context.Startboats.Update(startboat);
+                    _context.SaveChanges();
+                }
+            }
+
+            return RedirectToAction("Details", "Race", new { id = oldraceid });
         }
 
         public IActionResult AddStartboat(int id, int seat1, int seat2, int seat3, int seat4, int seat5, int seat6, int seat7, int seat8,
@@ -1007,7 +1062,7 @@ namespace RegattaManager.Controllers
                 if (MemberFromAge == 19)
                 {
                     ageFrom = yearnow - 17;
-                    ageTo = yearnow - 39;
+                    ageTo = yearnow - 49;
                 }
                 else if (MemberFromAge == 32)
                 {

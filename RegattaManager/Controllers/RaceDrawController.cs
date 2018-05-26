@@ -64,7 +64,7 @@ namespace RegattaManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("RaceDrawId,ReportedSBCountFrom,ReportedSBCountTo,VorlaufCount,HoffnungslaufCount,ZwischenlaufCount,EndlaufCount")] RaceDraw raceDraw)
+        public async Task<IActionResult> Create([Bind("RaceDrawId,ReportedSBCountFrom,ReportedSBCountTo,VorlaufCount,HoffnungslaufCount,ZwischenlaufCount,EndlaufCount,isAbteilungslauf")] RaceDraw raceDraw)
         {
             if (ModelState.IsValid)
             {
@@ -96,7 +96,7 @@ namespace RegattaManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("RaceDrawId,ReportedSBCountFrom,ReportedSBCountTo,VorlaufCount,HoffnungslaufCount,ZwischenlaufCount,EndlaufCount")] RaceDraw raceDraw)
+        public async Task<IActionResult> Edit(int id, [Bind("RaceDrawId,ReportedSBCountFrom,ReportedSBCountTo,VorlaufCount,HoffnungslaufCount,ZwischenlaufCount,EndlaufCount,isAbteilungslauf")] RaceDraw raceDraw)
         {
             if (id != raceDraw.RaceDrawId)
             {

@@ -11,6 +11,7 @@ namespace RegattaManager.Models
         [Key]
         public virtual int RaceId { get; set; }
         [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}")]
         public virtual DateTime Starttime { get; set; }
         [DataType(DataType.DateTime)]
         public virtual DateTime Realstarttime { get; set; }
@@ -25,6 +26,7 @@ namespace RegattaManager.Models
         public virtual int OldclassId { get; set; }
         public virtual int BoatclassId { get; set; }
         public virtual int RacestatusId { get; set; }
+        public virtual bool isAbteilungslauf { get; set; }
         public virtual int RaceTypId { get; set; }
         public virtual RaceTyp RaceTyp { get; set; }
         public virtual Regatta Regatta { get; set; }

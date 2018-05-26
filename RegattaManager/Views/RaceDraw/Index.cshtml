@@ -31,6 +31,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.EndlaufCount)
                 </th>
+            <th>
+                    @Html.DisplayNameFor(model => model.isAbteilungslauf)
+                </th>
             <th></th>
         </tr>
     </thead>
@@ -54,6 +57,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EndlaufCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isAbteilungslauf)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.RaceDrawId">Edit</a> |

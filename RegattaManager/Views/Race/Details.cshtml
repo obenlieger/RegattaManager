@@ -140,10 +140,21 @@
             </th>
             <th>
                 Status
+            </th>            
+            <th></th>
+            <th colspan="2">
+                @if (Model.RacestatusId == 1 || Model.RacestatusId == 1004)
+                {
+                    @:Startbahn
+                }
+                @if (Model.RacestatusId == 1002)
+                {
+                    @:Platzierung
+                }
+                </th>            
+            <th>
+                Verschieben
             </th>
-            <th></th>
-            <th></th>
-            <th></th>
         </tr>
     </thead>
     @foreach (var startboat in ViewBag.startboats)
@@ -227,7 +238,7 @@
                 <td>
                     @startboat.Startboatstatus.Name
                 </td>
-                @if (Model.RacestatusId == 1 || Model.RacestatusId == 1004)
+                @if (Model.RacestatusId == 1 || Model.RacestatusId == 1004 || Model.RacestatusId == 1006)
                 {
                     <td>
                         <a href="/Race/DeleteStartboat/@startboat.StartboatId" class="btn btn-danger">L&ouml;schen</a> | <a href="/Race/EditStartboat/@startboat.StartboatId" class="btn btn-secondary">Bearbeiten</a>
@@ -254,6 +265,12 @@
                         <a href="/Race/PlacementDown/@startboat.StartboatId" class="btn btn-outline-primary">runter</a>
                     </td>
                 }
+                    <td>
+                        <form asp-action="MoveStartboatToRace" asp-controller="Race" asp-route-id="@startboat.StartboatId">
+                            <select name="toRaceId" id="toRaceId" asp-items="@ViewBag.otherRaces" class="form-control"></select>
+                            <input type="submit" class="btn btn-info" value="Verschieben" />
+                        </form>
+                    </td>
             </tr>
         }
     }
