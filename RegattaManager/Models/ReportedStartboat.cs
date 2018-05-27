@@ -10,7 +10,9 @@ namespace RegattaManager.Models
     {
         [Key]
         public int ReportedStartboatId { get; set; }
-        public string Gender { get; set; }        
+        public string Gender { get; set; }     
+        public DateTime modifiedDate { get; set; }
+        public bool isLate { get; set; }
         public int ClubId { get; set; }
         public Club Club { get; set; }
         public int RegattaId { get; set; }

@@ -1067,12 +1067,12 @@ namespace RegattaManager.Controllers
                 else if (MemberFromAge == 32)
                 {
                     ageFrom = yearnow - MemberFromAge;
-                    ageTo = yearnow - 59;
+                    ageTo = yearnow - 99;
                 }
                 else if (MemberFromAge == 40)
                 {
                     ageFrom = yearnow - MemberFromAge;
-                    ageTo = yearnow - 59;
+                    ageTo = yearnow - 99;
                 }
                 else if (MemberFromAge == 50)
                 {
