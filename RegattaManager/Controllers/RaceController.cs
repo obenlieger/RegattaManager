@@ -315,7 +315,7 @@ namespace RegattaManager.Controllers
             if(result == 0)
             {
                 var reportedstartboatid = _context.ReportedStartboats.Last().ReportedStartboatId;
-                _context.Races.Include(e => e.Startboats).FirstOrDefault(e => e.RaceId == id).Startboats.Add(new Startboat { Startslot = startbahn, ClubId = ClubId, StartboatstatusId = StartboatstatusId, ReportedStartboatId = reportedstartboatid });
+                _context.Races.Include(e => e.Startboats).FirstOrDefault(e => e.RaceId == id).Startboats.Add(new Startboat { Startslot = startbahn, ClubId = ClubId, StartboatstatusId = StartboatstatusId, ReportedStartboatId = reportedstartboatid, RegattaId = race.RegattaId });
                 _context.SaveChanges();
 
                 if (seatnumber == 1)
