@@ -1,0 +1,91 @@
+﻿@model IEnumerable<RegattaManager.Models.ReportedStartboat>
+
+@{
+    ViewData["Title"] = "Nachmeldungen";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Nachmeldungen</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Gender)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.modifiedDate)
+                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Club)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Regatta)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportedRace)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @if(item.Gender == "M")
+                {
+                    @:männlich
+                }
+                else if(item.Gender == "W")
+                {
+                    @:weiblich
+                }
+                else
+                {
+                    @:mixed
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.modifiedDate)
+            </td>                        
+            <td>
+                @Html.DisplayFor(modelItem => item.Club.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Regatta.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReportedRace.RaceCode)
+            </td>
+        </tr>
+        <tr>
+        @foreach(var sbm in ViewBag.rsbm)
+        {
+            if(sbm.ReportedStartboatId == item.ReportedStartboatId)
+            {                
+                <td>
+                    @sbm.Seatnumber
+                </td>
+                <td>
+                    @sbm.Member.LastName, @sbm.Member.FirstName
+                </td>                
+            }
+        }
+        @foreach(var sbs in ViewBag.rsbs)
+        {
+            if(sbs.ReportedStartboatId == item.ReportedStartboatId)
+            { 
+                <td>
+                    @sbs.Standbynumber
+                </td>
+                <td>
+                    @sbs.Member.LastName, @sbs.Member.FirstName
+                </td> 
+            }
+        }
+        </tr>
+}
+    </tbody>
+</table>

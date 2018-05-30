@@ -532,7 +532,7 @@ namespace RegattaManager.Controllers
                 {                    
                     foreach(var nrsb in newReportedStartboats)
                     {
-                        if(nrsb.ReportedRaceId == r.ReportedRaceId && !rsb.Contains(nrsb.ReportedStartboatId))
+                        if(nrsb.ReportedRaceId == r.ReportedRaceId && !rsb.Contains(nrsb.ReportedStartboatId) && nrsb.NoStartslot == false)
                         {                            
                             if (startslots != null)
                             {
@@ -556,30 +556,30 @@ namespace RegattaManager.Controllers
             var newStartboats = _context.Startboats.Where(e => newReportedStartboats.Select(i => i.ReportedStartboatId).Contains(e.ReportedStartboatId)).ToList();
             var newReportedSBM = _context.ReportedStartboatMembers.Where(e => newReportedStartboats.Select(i => i.ReportedStartboatId).Contains(e.ReportedStartboatId)).ToList();
             var newReportedSBS = _context.ReportedStartboatStandbys.Where(e => newReportedStartboats.Select(i => i.ReportedStartboatId).Contains(e.ReportedStartboatId)).ToList();
-            List<int> addedSBM = new List<int>();
-            List<int> addedSBS = new List<int>();
+            List<ReportedStartboatMember> addedSBM = new List<ReportedStartboatMember>();
+            List<ReportedStartboatStandby> addedSBS = new List<ReportedStartboatStandby>();
 
             foreach (var nsb in newStartboats)
             {
                 foreach(var nrsbm in newReportedSBM)
                 {
-                    if(nrsbm.ReportedStartboatId == nsb.ReportedStartboatId && !addedSBM.Contains(nrsbm.ReportedStartboatId))
+                    if(nrsbm.ReportedStartboatId == nsb.ReportedStartboatId && !addedSBM.Contains(nrsbm))
                     {
                         _context.StartboatMembers.Add(new StartboatMember { MemberId = nrsbm.MemberId, StartboatId = nsb.StartboatId, SeatNumber = nrsbm.Seatnumber });
-                        addedSBM.Add(nrsbm.ReportedStartboatId);
+                        addedSBM.Add(nrsbm);
                     }
                 }
                 foreach(var nrsbs in newReportedSBS)
                 {
-                    if(nrsbs.ReportedStartboatId == nsb.ReportedStartboatId && !addedSBS.Contains(nrsbs.ReportedStartboatId))
+                    if(nrsbs.ReportedStartboatId == nsb.ReportedStartboatId && !addedSBS.Contains(nrsbs))
                     {
                         _context.StartboatStandbys.Add(new StartboatStandby { MemberId = nrsbs.MemberId, StartboatId = nsb.StartboatId, Standbynumber = nrsbs.Standbynumber });
-                        addedSBS.Add(nrsbs.ReportedStartboatId);
+                        addedSBS.Add(nrsbs);
                     }
                 }
             }
             _context.SaveChanges();
-
+            
             return RedirectToAction("Index", "Race");
         }
 

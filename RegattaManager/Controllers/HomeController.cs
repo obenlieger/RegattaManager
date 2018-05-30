@@ -33,7 +33,7 @@ namespace RegattaManager.Controllers
             var regattaClubs = _context.RegattaClubs.Where(e => e.RegattaId == rid);
 
             ViewData["CurrentFilter"] = searchLastName;
-            ViewData["filterClub"] = new SelectList(_context.Clubs.Where(e => regattaClubs.Select(i => i.ClubId).Contains(e.ClubId)),"ClubId","Name");
+            ViewData["filterClub"] = new SelectList(_context.Clubs.Where(e => regattaClubs.Select(i => i.ClubId).Contains(e.ClubId)).OrderBy(e => e.Name),"ClubId","Name");
 
             var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderBy(e => e.Starttime).Take(10).ToList();            
 
@@ -78,7 +78,7 @@ namespace RegattaManager.Controllers
                 
                 if(sb.Count > 0)
                 {
-                    races = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => sb.Select(i => i.RaceId).Contains(e.RaceId) && (e.RacestatusId == 1 || e.RacestatusId == 1003 || e.RacestatusId == 1005)).Distinct().ToList();
+                    races = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => sb.Select(i => i.RaceId).Contains(e.RaceId) && (e.RacestatusId == 1 || e.RacestatusId == 1003 || e.RacestatusId == 1005)).OrderBy(e => e.Starttime).Distinct().ToList();
                 }                
 
                 if(filterClubId != null && filterClubId > 0)

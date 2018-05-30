@@ -71,5 +71,17 @@ namespace RegattaManager.Controllers
 
             return View();
         }
+
+        public IActionResult Nachmeldungen()
+        {
+            var model = _context.ReportedStartboats.Include(e => e.Club).Include(e => e.Regatta).Include(e => e.ReportedRace).Where(e => e.isLate == true).ToList();
+            var reportedsbm = _context.ReportedStartboatMembers.Include(e => e.Member).ToList();
+            var reportedsbs = _context.ReportedStartboatStandbys.Include(e => e.Member).ToList();
+
+            ViewBag.rsbm = reportedsbm;
+            ViewBag.rsbs = reportedsbs;
+
+            return View(model);
+        }
     }
 }

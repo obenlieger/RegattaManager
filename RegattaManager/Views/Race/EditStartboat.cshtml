@@ -14,14 +14,14 @@
 @if (ViewBag.allAvailable == true)
 {
     <div align="right">
-        <a href="/Race/EditStartboat/@Model.RaceId/" class="btn btn-outline-primary">Nur Sportler der Altersklasse anzeigen</a>
+        <a href="/Race/EditStartboat/@ViewBag.StartboatId/" class="btn btn-outline-primary">Nur Sportler der Altersklasse anzeigen</a>
     </div>
     <br />
 }
 else
 {
     <div align="right">
-        <a href="/Race/EditStartboat/@Model.RaceId/?allAvailable=true" class="btn btn-outline-primary">Alle verf&uuml;gbaren Sportler anzeigen</a>
+        <a href="/Race/EditStartboat/@ViewBag.StartboatId/?allAvailable=true" class="btn btn-outline-primary">Alle verf&uuml;gbaren Sportler anzeigen</a>
     </div>
     <br />
 }
