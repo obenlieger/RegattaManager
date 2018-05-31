@@ -36,6 +36,7 @@ namespace RegattaManager.Controllers
                 var clubs = _context.Clubs.Where(e => regattaclubs.Select(i => i.ClubId).Contains(e.ClubId)).OrderBy(e => e.Name).ToList();
                 var reportedStartboats = _context.ReportedStartboats.Include(e => e.ReportedRace).ThenInclude(e => e.Competition).ToList();
                 var startingFees = _context.StartingFees.ToList();
+                var campingFees = _context.CampingFees.ToList();
                 var oldclasses = _context.Oldclasses.ToList();
 
                 ViewBag.reportedStartboats = reportedStartboats;
@@ -74,12 +75,15 @@ namespace RegattaManager.Controllers
 
         public IActionResult Nachmeldungen()
         {
-            var model = _context.ReportedStartboats.Include(e => e.Club).Include(e => e.Regatta).Include(e => e.ReportedRace).Where(e => e.isLate == true).ToList();
+            var startboats = _context.Startboats.ToList();
+            var model = _context.ReportedStartboats.Include(e => e.Club).Include(e => e.Regatta).Include(e => e.ReportedRace).Include(e => e.ReportedRace.Oldclass).Include(e => e.ReportedRace.Competition.Boatclasses).Include(e => e.ReportedRace.Competition.Raceclasses).Where(e => e.isLate == true && !startboats.Select(i => i.ReportedStartboatId).Contains(e.ReportedStartboatId)).OrderByDescending(e => e.NoStartslot).ThenBy(e => e.modifiedDate).ToList();
+            var addedstartboats = _context.ReportedStartboats.Include(e => e.Club).Include(e => e.Regatta).Include(e => e.ReportedRace).Include(e => e.ReportedRace.Oldclass).Include(e => e.ReportedRace.Competition.Boatclasses).Include(e => e.ReportedRace.Competition.Raceclasses).Where(e => e.isLate == true && startboats.Select(i => i.ReportedStartboatId).Contains(e.ReportedStartboatId)).OrderByDescending(e => e.NoStartslot).ThenBy(e => e.modifiedDate).ToList();
             var reportedsbm = _context.ReportedStartboatMembers.Include(e => e.Member).ToList();
             var reportedsbs = _context.ReportedStartboatStandbys.Include(e => e.Member).ToList();
 
             ViewBag.rsbm = reportedsbm;
             ViewBag.rsbs = reportedsbs;
+            ViewBag.addedstartboats = addedstartboats;
 
             return View(model);
         }

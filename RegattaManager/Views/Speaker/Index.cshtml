@@ -38,7 +38,7 @@ else
             <td></td>
             <td></td>
         </tr>
-        @if(item.Spoken == true)
+        @if(item.Spoken == true && (item.RacestatusId == 1 || item.RacestatusId == 2))
         {
             @:<tr class="table-dark">
         }
@@ -116,7 +116,7 @@ else
                 @if (item.Comment != "")
                 {
                     @:&nbsp;
-                    @:<span class="label label-warning">@item.Comment</span>
+                    @:<span class="badge badge-primary">@item.Comment</span>
                     @if (@item.Comment == "Bier Cup")
                     {
                         @:&nbsp;<img src="/images/beer-512.png" height="15" />
@@ -128,17 +128,21 @@ else
                 }
             </td>
             <td>
-                @if(item.Spoken == false)
+                @if (item.Spoken == false && (item.RacestatusId == 1 || item.RacestatusId == 1005))
                 {
                     <a href="/Speaker/SetSpoken/@item.RaceId/?result=@ViewBag.result" class="btn btn-success">Besprochen</a>
                 }
-                else
+                else if (item.Spoken == true && (item.RacestatusId == 1 || item.RacestatusId == 1005))
                 {
                     <a href="#" class="btn btn-success disabled">Besprochen</a>
                 }
+                else if (item.RacestatusId == 3)
+                {
+                    <a href="/Speaker/SetResultSpoken/@item.RaceId/?result=@ViewBag.result" class="btn btn-success">Ergebnis besprochen</a>
+                }
             </td>
         @:</tr>        
-        @if(item.Spoken == true)
+        @if(item.Spoken == true && (item.RacestatusId == 1 || item.RacestatusId == 2))
         {
             @:<tr class="table-dark">
         }
@@ -158,7 +162,7 @@ else
             {
                 if (sb.Placement != 0 && sb.Placement != -1)
                 {
-                    if(item.Spoken == true)
+                    if(item.Spoken == true && (item.RacestatusId == 1 || item.RacestatusId == 2))
                     {
                        @: <tr class="table-dark">
                     }            
@@ -180,7 +184,7 @@ else
                                         @string.Format("{0}, {1}", m.LastName, m.FirstName);
                                         @if (m.ClubId != sb.ClubId)
                                         {
-                                            @string.Format(" ({0})", m.Club.Name);
+                                            @string.Format(" ({0})", m.Club.ShortName);
                                         }
                                         <br />
                                 }
@@ -188,7 +192,7 @@ else
                             }
                         }
                 </td>
-                <td>@sb.Club.Name</td>
+                <td>@sb.Club.ShortName</td>
                 <td></td>
             @:</tr>
             }
@@ -198,7 +202,7 @@ else
         {
             if (sb.RaceId == item.RaceId)
             {
-                if(item.Spoken == true)
+                if(item.Spoken == true && (item.RacestatusId == 1 || item.RacestatusId == 2))
                 {
                     @:<tr class="table-dark">
                         @:<td></td>
@@ -230,7 +234,7 @@ else
                                 @string.Format("{0}, {1}", m.LastName, m.FirstName);
                                 @if (m.ClubId != sb.ClubId)
                                 {
-                                    @string.Format(" ({0})", m.Club.Name);
+                                    @string.Format(" ({0})", m.Club.ShortName);
                                 }
                                 @:<br />
                             }
@@ -238,7 +242,7 @@ else
                     }
                 }                 
                 @:</td>
-                @:<td>@sb.Club.Name</td>
+                @:<td>@sb.Club.ShortName</td>
                 @:<td>@sb.Startboatstatus.Name</td>
             @:</tr>
             }

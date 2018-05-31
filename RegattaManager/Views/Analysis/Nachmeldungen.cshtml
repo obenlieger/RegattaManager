@@ -7,18 +7,16 @@
 
 <h2>Nachmeldungen</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<h4>Noch offen</h4>
 <table class="table table-hover">
     <thead>
         <tr>
-                <th>
-                    Geschlecht
-                </th>
-                <th>
-                    Besatzung
-                </th>
+            <th>
+                Geschlecht
+            </th>
+            <th>
+                Besatzung
+            </th>
             <th>
                 Ersatz
             </th>
@@ -34,28 +32,48 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-    @if(item.NoStartslot == true)
-    {
-        @:<tr class="table-warning">
-    }
-    else
-    {
-        @:<tr>
-    }        
-            <td>
-                @if (item.Gender == "M")
-                {
-                    @:männlich
-                }
-                else if (item.Gender == "W")
-                {
-                    @:weiblich
+        @foreach (var item in Model)
+        {
+            @if (item.NoStartslot == true)
+            {
+                @:<tr class="table-warning">
                 }
                 else
                 {
+                    @:<tr>
+                }
+            <td>
+                @if (item.Gender.Equals("M"))
+                {
+                    @if (item.ReportedRace.Oldclass.FromAge >= 17 && item.ReportedRace.Oldclass.ToAge <= 99)
+                    {
+                        @:Herren
+                    }
+                    else if (item.ReportedRace.Oldclass.FromAge >= 15 && item.ReportedRace.Oldclass.ToAge <= 16)
+                    {
+                        @:männliche
+                    }
+                }
+                else if (string.Equals(item.Gender, "W"))
+                {
+                    @if (item.ReportedRace.Oldclass.FromAge >= 17 && item.ReportedRace.Oldclass.ToAge <= 99)
+                    {
+                        @:Damen
+                    }
+                    else
+                    {
+                        @:weibliche
+                    }
+                }
+                else if (string.Equals(item.Gender, "X"))
+                {
                     @:mixed
                 }
+                @Html.DisplayFor(modelItem => item.ReportedRace.Oldclass.Name)
+                &nbsp;-&nbsp;
+                @Html.DisplayFor(modelItem => item.ReportedRace.Competition.Boatclasses.Name)
+                &nbsp;-&nbsp;
+                @Html.DisplayFor(modelItem => item.ReportedRace.Competition.Raceclasses.Name)
             </td>
             <td>
                 @foreach (var sbm in ViewBag.rsbm)
@@ -86,6 +104,108 @@
                 @Html.DisplayFor(modelItem => item.ReportedRace.RaceCode)
             </td>
         @:</tr>
-}
+        }
+    </tbody>
+</table>
+
+<hr />
+<h4>Schon hinzugefügte</h4>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                Geschlecht
+            </th>
+            <th>
+                Besatzung
+            </th>
+            <th>
+                Ersatz
+            </th>
+            <th>
+                &Auml;nderungsdatum
+            </th>
+            <th>
+                Verein
+            </th>
+            <th>
+                Renncode
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var asb in ViewBag.addedstartboats)
+        {
+            @if (asb.NoStartslot == true)
+            {
+                @:<tr class="table-warning">
+                }
+                else
+                {
+                    @:<tr>
+                }
+            <td>
+                @if (asb.Gender.Equals("M"))
+                {
+                    @if (asb.ReportedRace.Oldclass.FromAge >= 17 && asb.ReportedRace.Oldclass.ToAge <= 99)
+                    {
+                        @:Herren
+                    }
+                    else if (asb.ReportedRace.Oldclass.FromAge >= 15 && asb.ReportedRace.Oldclass.ToAge <= 16)
+                    {
+                        @:männliche
+                    }
+                }
+                else if (string.Equals(asb.Gender, "W"))
+                {
+                    @if (asb.ReportedRace.Oldclass.FromAge >= 17 && asb.ReportedRace.Oldclass.ToAge <= 99)
+                    {
+                        @:Damen
+                    }
+                    else
+                    {
+                        @:weibliche
+                    }
+                }
+                else if (string.Equals(asb.Gender, "X"))
+                {
+                    @:mixed
+                }
+                @asb.ReportedRace.Oldclass.Name
+                &nbsp;-&nbsp;
+                @asb.ReportedRace.Competition.Boatclasses.Name
+                &nbsp;-&nbsp;
+                @asb.ReportedRace.Competition.Raceclasses.Name
+            </td>
+            <td>
+                @foreach (var sbm in ViewBag.rsbm)
+                {
+                    if (sbm.ReportedStartboatId == asb.ReportedStartboatId)
+                    {
+                        @sbm.Member.FullName
+                        @:<br />
+                    }
+                }
+            </td>
+            <td>
+                @foreach (var sbs in ViewBag.rsbs)
+                {
+                    if (sbs.ReportedStartboatId == asb.ReportedStartboatId)
+                    {
+                        @sbs.Member.FullName
+                    }
+                }
+            </td>
+            <td>
+                @asb.modifiedDate
+            </td>
+            <td>
+                @asb.Club.ShortName
+            </td>
+            <td>
+                @asb.ReportedRace.RaceCode
+            </td>
+        @:</tr>
+    }
     </tbody>
 </table>
