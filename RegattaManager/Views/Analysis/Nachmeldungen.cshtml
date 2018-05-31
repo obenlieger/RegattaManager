@@ -10,35 +10,45 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Gender)
+                    Geschlecht
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.modifiedDate)
+                    Besatzung
                 </th>
             <th>
-                @Html.DisplayNameFor(model => model.Club)
+                Ersatz
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Regatta)
+                &Auml;nderungsdatum
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReportedRace)
+                Verein
+            </th>
+            <th>
+                Renncode
             </th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+    @if(item.NoStartslot == true)
+    {
+        @:<tr class="table-warning">
+    }
+    else
+    {
+        @:<tr>
+    }        
             <td>
-                @if(item.Gender == "M")
+                @if (item.Gender == "M")
                 {
                     @:männlich
                 }
-                else if(item.Gender == "W")
+                else if (item.Gender == "W")
                 {
                     @:weiblich
                 }
@@ -48,44 +58,34 @@
                 }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.modifiedDate)
-            </td>                        
-            <td>
-                @Html.DisplayFor(modelItem => item.Club.Name)
+                @foreach (var sbm in ViewBag.rsbm)
+                {
+                    if (sbm.ReportedStartboatId == item.ReportedStartboatId)
+                    {
+                        @sbm.Member.FullName
+                        @:<br />
+                    }
+                }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Regatta.Name)
+                @foreach (var sbs in ViewBag.rsbs)
+                {
+                    if (sbs.ReportedStartboatId == item.ReportedStartboatId)
+                    {
+                        @sbs.Member.FullName
+                    }
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.modifiedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Club.ShortName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ReportedRace.RaceCode)
             </td>
-        </tr>
-        <tr>
-        @foreach(var sbm in ViewBag.rsbm)
-        {
-            if(sbm.ReportedStartboatId == item.ReportedStartboatId)
-            {                
-                <td>
-                    @sbm.Seatnumber
-                </td>
-                <td>
-                    @sbm.Member.LastName, @sbm.Member.FirstName
-                </td>                
-            }
-        }
-        @foreach(var sbs in ViewBag.rsbs)
-        {
-            if(sbs.ReportedStartboatId == item.ReportedStartboatId)
-            { 
-                <td>
-                    @sbs.Standbynumber
-                </td>
-                <td>
-                    @sbs.Member.LastName, @sbs.Member.FirstName
-                </td> 
-            }
-        }
-        </tr>
+        @:</tr>
 }
     </tbody>
 </table>

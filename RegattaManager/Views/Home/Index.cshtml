@@ -4,19 +4,9 @@
     ViewBag.Title = "Rennübersicht";
 }
 <br/>
-@if (ViewBag.All == "1")
-{
-    <h2>Alle geplanten Rennen</h2>
-}
-else if (ViewBag.ZE == "1")
-{
-    <h2>Zwischen- und Endläufe</h2>
-}
-else
-{
-    <h2>Kurzübersicht</h2>
-}
-
+<div align="right">
+    <a asp-action="PrintView" target="_blank" class="btn btn-info">Druckansicht</a>
+</div>
 <form asp-action="Index">
     <div class="col-md-4">
             <label class="control-label">Nachname:</label> 
@@ -136,7 +126,8 @@ else
         <tr class="table-secondary">
             <td><i>Startbahn</i></td>
             <td><i>Starter</i></td>
-            <td colspan="2"><i>Verein</i></td>            
+            <td><i>Ersatz</i></td>
+            <td><i>Verein</i></td>            
         </tr>
             @foreach (var sb in ViewBag.startboats)
             {
@@ -163,12 +154,29 @@ else
                                     }
                                 }
                             }
+                        }                
+                        </td>                
+                        <td>
+                        @foreach(var sbs in ViewBag.startboatstandbys)
+                        {
+                            @if (sbs.StartboatId == sb.StartboatId)
+                            {
+                                @foreach (var m in ViewBag.members)
+                                {
+                                    @if (m.MemberId == sbs.MemberId)
+                                    {
+                                        @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                        @if (m.ClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                        {
+                                            @string.Format(" ({0})", m.Club.ShortName);
+                                        }
+                                        <br />
+                                    }
+                                }
+                            }
                         }
-                
-                </td>
-            
-                <td colspan="2">@sb.Club.Name</td>
-            
+                        </td>
+                        <td>@sb.Club.ShortName</td>           
             </tr>
             }
         }

@@ -14,7 +14,7 @@ USE [RMDB]
 SET IDENTITY_INSERT [RMDB].[dbo].[Members] ON
 GO
 INSERT INTO [RMDB].[dbo].[Members] (MemberId, Birthyear, ClubId, FirstName, LastName, Gender, RentYear, RentedToClubId, isRented)
-(SELECT MemberId, Birthyear, ClubId, FirstName, Gender, LastName, RentYear, RentedToClubId, isRented FROM RegattaMeldung.dbo.Members
+(SELECT MemberId, Birthyear, ClubId, FirstName, LastName, Gender, RentYear, RentedToClubId, isRented FROM RegattaMeldung.dbo.Members
 WHERE MemberId NOT IN
 (SELECT MemberId FROM RMDB.dbo.Members))
 GO

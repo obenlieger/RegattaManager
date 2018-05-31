@@ -1,0 +1,192 @@
+﻿@model IEnumerable<RegattaManager.Models.Race>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - RegattaManager</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+    <style type="text/css">
+        table {
+            page-break-inside: avoid
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto
+        }
+
+        th {
+            font-size: 85%;
+        }
+
+        td {
+            font-size: 85%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container body-content">
+        @foreach (var item in Model)
+        {
+            <table class="table table-hover">
+                <thead>
+                    <tr class="table-primary">
+                        <th>@item.RaceCode</th>
+                        <th>
+                            @if (item.Gender.Equals("M"))
+                            {
+                                @if (item.Oldclass.FromAge >= 17 && item.Oldclass.ToAge <= 99)
+                                {
+                                    @:Herren
+                                }
+                                else if (item.Oldclass.FromAge >= 15 && item.Oldclass.ToAge <= 16)
+                                {
+                                    @:männliche
+                                }
+                            }
+                            else if (string.Equals(item.Gender, "W"))
+                            {
+                                @if (item.Oldclass.FromAge >= 17 && item.Oldclass.ToAge <= 99)
+                                {
+                                    @:Damen
+                                }
+                                else
+                                {
+                                    @:weibliche
+                                }
+                            }
+                            else if (string.Equals(item.Gender, "X"))
+                            {
+                                @:mixed
+                            }
+                            @Html.DisplayFor(modelItem => item.Oldclass.Name)
+                            &nbsp;-&nbsp;
+                            @Html.DisplayFor(modelItem => item.Boatclass.Name)
+                            &nbsp;-&nbsp;
+                            @Html.DisplayFor(modelItem => item.Raceclass.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(modelItem => item.Starttime)
+                        </th>
+                        <th>
+                            @if (item.RaceTypId == 4)
+                            {
+                                <span class="badge badge-pill badge-danger">Endlauf</span>
+                            }
+                            else if (item.RaceTypId == 2)
+                            {
+                                <span class="badge badge-pill badge-warning">Zwischenlauf</span>
+                            }
+                            else if (item.RaceTypId == 1)
+                            {
+                                <span class="badge badge-pill badge-success">Vorlauf</span>
+                            }
+                            else if (item.RaceTypId == 3)
+                            {
+                                <span class="badge badge-pill badge-info">Hoffnungslauf</span>
+                            }
+
+                            @if (item.Comment != "")
+                            {
+                                @:&nbsp;
+                                @:<span class="label label-warning">@item.Comment</span>
+                                @if (@item.Comment == "Bier Cup")
+                                {
+                                    @:&nbsp;<img src="/images/beer-512.png" height="15" />
+                                }
+                                @if (@item.Comment == "Prosecco Cup")
+                                {
+                                    @:&nbsp;<img src="/images/prosecco.png" height="15" />
+                                }
+                            }
+                        </th>
+                    </tr>
+                </thead>
+                <tr class="table-secondary">
+                    <td><i>Startbahn</i></td>
+                    <td><i>Starter</i></td>
+                    <td><i>Ersatz</i></td>
+                    <td><i>Verein</i></td>
+                </tr>
+                @foreach (var sb in ViewBag.startboats)
+                {
+                    if (sb.RaceId == item.RaceId)
+                    {
+                        @:&nbsp;
+                        <tr class="table-light">
+                            <td>@sb.Startslot</td>
+                            <td>
+                                @foreach (var sbm in ViewBag.startboatmembers)
+                                {
+                                    @if (sbm.StartboatId == sb.StartboatId)
+                                    {
+                                        @foreach (var m in ViewBag.members)
+                                        {
+                                            @if (m.MemberId == sbm.MemberId)
+                                            {
+                                                @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                                @if (m.ClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                                {
+                                                    @string.Format(" ({0})", m.Club.ShortName);
+                                                }
+                                                <br />
+                                            }
+                                        }
+                                    }
+                                }
+
+                            </td>
+                            <td>
+                                @foreach (var sbs in ViewBag.startboatstandbys)
+                                {
+                                    @if (sbs.StartboatId == sb.StartboatId)
+                                    {
+                                        @foreach (var m in ViewBag.members)
+                                        {
+                                            @if (m.MemberId == sbs.MemberId)
+                                            {
+                                                @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                                @if (m.ClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                                {
+                                                    @string.Format(" ({0})", m.Club.ShortName);
+                                                }
+                                                <br />
+                                            }
+                                        }
+                                    }
+                                }
+                            </td>
+                            <td>@sb.Club.ShortName</td>
+
+                        </tr>
+                    }
+                }
+            </table>
+        }
+    </div>
+    <environment include="Development">
+        <script src="~/js/jquery-3.3.1.slim.min.js"></script>
+        <script src="~/js/popper.min.js"></script>
+        <script src="~/js/bootstrap.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/jquery-3.3.1.slim.min.js"></script>
+        <script src="~/js/popper.min.js"></script>
+        <script src="~/js/bootstrap.min.js"></script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+</body>
+</html>

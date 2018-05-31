@@ -519,7 +519,7 @@ namespace RegattaManager.Controllers
         {
             var Startboats = _context.Startboats.Where(e => e.RegattaId == id).ToList();
             var newReportedStartboats = _context.ReportedStartboats.Where(e => !Startboats.Select(i => i.ReportedStartboatId).Contains(e.ReportedStartboatId)).ToList();
-            var Races = _context.Races.Where(e => newReportedStartboats.Select(i => i.ReportedRaceId).Contains(e.ReportedRaceId) && e.RacestatusId == 1).ToList();
+            var Races = _context.Races.Where(e => e.RacestatusId == 1).ToList();
             List<int> startslots = new List<int>();
             List<int> addedstartslots = new List<int>();
             List<int> rsb = new List<int>();
@@ -528,24 +528,18 @@ namespace RegattaManager.Controllers
             {
                 startslots = getFreeStartslot(r.RaceId);
                 addedstartslots.Clear();
-                if (_context.Startboats.Where(e => e.RaceId == r.RaceId).Count() <= 6)
+                if (startslots != null)
                 {                    
                     foreach(var nrsb in newReportedStartboats)
-                    {
-                        if(nrsb.ReportedRaceId == r.ReportedRaceId && !rsb.Contains(nrsb.ReportedStartboatId) && nrsb.NoStartslot == false)
-                        {                            
-                            if (startslots != null)
+                    {                          
+                        foreach(var sl in startslots)
+                        {
+                            if (nrsb.ReportedRaceId == r.ReportedRaceId && !rsb.Contains(nrsb.ReportedStartboatId) && nrsb.NoStartslot == false && !addedstartslots.Contains(sl))
                             {
-                                foreach(var sl in startslots)
-                                {
-                                    if(!addedstartslots.Contains(sl))
-                                    {
-                                        _context.Startboats.Add(new Startboat { RaceId = r.RaceId, RegattaId = nrsb.RegattaId, ClubId = nrsb.ClubId, ReportedStartboatId = nrsb.ReportedStartboatId, StartboatstatusId = 6, Startslot = sl, Gender = nrsb.Gender });
-                                        rsb.Add(nrsb.ReportedStartboatId);
-                                        addedstartslots.Add(sl);
-                                    }                                    
-                                }                                
-                            }
+                                _context.Startboats.Add(new Startboat { RaceId = r.RaceId, RegattaId = nrsb.RegattaId, ClubId = nrsb.ClubId, ReportedStartboatId = nrsb.ReportedStartboatId, StartboatstatusId = 6, Startslot = sl, Gender = nrsb.Gender });
+                                rsb.Add(nrsb.ReportedStartboatId);
+                                addedstartslots.Add(sl);
+                            }                                
                         }
                     }   
                     
@@ -587,6 +581,11 @@ namespace RegattaManager.Controllers
         {
             int maxStartslot = _context.Startboats.Where(e => e.RaceId == raceid).Select(e => e.Startslot).Max();
             List<int> freeslots = new List<int>();
+
+            if(maxStartslot < 6)
+            {
+                maxStartslot = 6;
+            }
 
             for(var i=1;i<=maxStartslot;i++)
             {
