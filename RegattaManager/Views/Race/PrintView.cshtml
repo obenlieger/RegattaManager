@@ -2,6 +2,7 @@
 @{
     Layout = null;
 }
+@{ var ToRace = ""; }
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,6 +27,7 @@
             page-break-inside: avoid;
             page-break-after: auto
         }
+
         th {
             font-size: 85%;
         }
@@ -37,6 +39,8 @@
 </head>
 <body>
     <div class="container body-content">
+        <h3>@ViewBag.regatta.Name</h3>
+        <h5>Stand: @DateTime.Now.ToString("dd.MM.yyyy HH:mm")</h5>
         @foreach (var item in Model)
         {
             <table class="table table-hover">
@@ -111,12 +115,40 @@
                                 }
                             }
                         </th>
+                        <th>
+                            @foreach (var rdr in ViewBag.racedrawrules)
+                            {
+                                @if (rdr.RaceDrawId == item.RaceDrawId && rdr.RaceSequence == item.Sequence && rdr.RaceTypId == item.RaceTypId && rdr.RaceDraw.isAbteilungslauf == item.isAbteilungslauf)
+                                {
+                                    if (rdr.ToRaceTypId == 1)
+                                    {
+                                        ToRace = "Vorlauf";
+                                    }
+                                    if (rdr.ToRaceTypId == 2)
+                                    {
+                                        ToRace = "Zwischenlauf";
+                                    }
+                                    if (rdr.ToRaceTypId == 3)
+                                    {
+                                        ToRace = "Hoffnungslauf";
+                                    }
+                                    if (rdr.ToRaceTypId == 4)
+                                    {
+                                        ToRace = "Endlauf";
+                                    }
+                                    @string.Format("{0}.-{1}. in {2}", rdr.PlacementFrom, rdr.PlacementTo, ToRace)
+                                    <br />
+                                }
+                            }
+                        </th>
                     </tr>
                 </thead>
                 <tr class="table-secondary">
                     <td><i>Startbahn</i></td>
                     <td><i>Starter</i></td>
-                    <td colspan="2"><i>Verein</i></td>
+                    <td><i>Ersatz</i></td>
+                    <td><i>Verein</i></td>
+                    <td></td>
                 </tr>
                 @foreach (var sb in ViewBag.startboats)
                 {
@@ -146,26 +178,45 @@
                                 }
 
                             </td>
-
-                            <td colspan="2">@sb.Club.Name</td>
-
+                            <td>
+                                @foreach (var sbs in ViewBag.startboatstandbys)
+                                {
+                                    @if (sbs.StartboatId == sb.StartboatId)
+                                    {
+                                        @foreach (var m in ViewBag.members)
+                                        {
+                                            @if (m.MemberId == sbs.MemberId)
+                                            {
+                                                @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                                @if (m.ClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                                {
+                                                    @string.Format(" ({0})", m.Club.ShortName);
+                                                }
+                                                <br />
+                                            }
+                                        }
+                                    }
+                                }
+                            </td>
+                            <td>@sb.Club.ShortName</td>
+                            <td></td>
                         </tr>
                     }
                 }
             </table>
         }
-        </div>
-        <environment include="Development">
-            <script src="~/js/jquery-3.3.1.slim.min.js"></script>
-            <script src="~/js/popper.min.js"></script>
-            <script src="~/js/bootstrap.min.js"></script>
-            <script src="~/js/site.js" asp-append-version="true"></script>
-        </environment>
-        <environment exclude="Development">
-            <script src="~/js/jquery-3.3.1.slim.min.js"></script>
-            <script src="~/js/popper.min.js"></script>
-            <script src="~/js/bootstrap.min.js"></script>
-            <script src="~/js/site.min.js" asp-append-version="true"></script>
-        </environment>
+    </div>
+    <environment include="Development">
+        <script src="~/js/jquery-3.3.1.slim.min.js"></script>
+        <script src="~/js/popper.min.js"></script>
+        <script src="~/js/bootstrap.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/jquery-3.3.1.slim.min.js"></script>
+        <script src="~/js/popper.min.js"></script>
+        <script src="~/js/bootstrap.min.js"></script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
 </body>
 </html>

@@ -11,9 +11,10 @@ using System;
 namespace RegattaManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180531165707_RDDesc")]
+    partial class RDDesc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -223,25 +224,6 @@ namespace RegattaManager.Migrations
                     b.HasKey("ClubId");
 
                     b.ToTable("Clubs");
-                });
-
-            modelBuilder.Entity("RegattaManager.Models.ClubCampingFee", b =>
-                {
-                    b.Property<int>("CampingFeeId");
-
-                    b.Property<int>("ClubId");
-
-                    b.Property<int>("ClubCampingFeeId");
-
-                    b.Property<int>("campingcount");
-
-                    b.HasKey("CampingFeeId", "ClubId");
-
-                    b.HasAlternateKey("ClubCampingFeeId");
-
-                    b.HasIndex("ClubId");
-
-                    b.ToTable("ClubCampingFees");
                 });
 
             modelBuilder.Entity("RegattaManager.Models.Competition", b =>
@@ -838,19 +820,6 @@ namespace RegattaManager.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("RegattaManager.Models.ClubCampingFee", b =>
-                {
-                    b.HasOne("RegattaManager.Models.CampingFee", "campingFee")
-                        .WithMany("ClubCampingFees")
-                        .HasForeignKey("CampingFeeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("RegattaManager.Models.Club", "club")
-                        .WithMany("ClubCampingFees")
-                        .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("RegattaManager.Models.Competition", b =>

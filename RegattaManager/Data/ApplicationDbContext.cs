@@ -88,6 +88,19 @@ namespace RegattaManager.Data
                 .WithMany(cr => cr.RegattaCampingFees)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<ClubCampingFee>()
+                .HasKey(t => new { t.CampingFeeId, t.ClubId });
+
+            builder.Entity<ClubCampingFee>()
+                .HasOne(c => c.campingFee)
+                .WithMany(cc => cc.ClubCampingFees)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ClubCampingFee>()
+                .HasOne(c => c.club)
+                .WithMany(cr => cr.ClubCampingFees)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.Entity<RegattaOldclass>()
                 .HasKey(t => new { t.OldclassId, t.RegattaId });
 
@@ -219,5 +232,7 @@ namespace RegattaManager.Data
         public DbSet<RegattaManager.Models.RegattaClub> RegattaClubs { get; set; }
 
         public DbSet<RegattaManager.Models.StartboatStandby> StartboatStandbys { get; set; }
+
+        public DbSet<RegattaManager.Models.ClubCampingFee> ClubCampingFees { get; set; }
     }
 }

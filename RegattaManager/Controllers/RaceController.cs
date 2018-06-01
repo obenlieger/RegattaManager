@@ -260,11 +260,13 @@ namespace RegattaManager.Controllers
 
             if(rid != 0)
             {
-                var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId != 1006).OrderBy(e => e.Starttime).ToList();
+                var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1005).OrderBy(e => e.Starttime).ToList();
 
                 ViewBag.startboats = _context.Startboats.Include(e => e.Club).OrderBy(e => e.Startslot).ToList();
                 ViewBag.startboatmembers = _context.StartboatMembers.ToList();
-                ViewBag.members = _context.Members.Include(e => e.Club).ToList();                
+                ViewBag.members = _context.Members.Include(e => e.Club).ToList();
+                ViewBag.racedrawrules = _context.RaceDrawRules.Include(e => e.RaceDraw).Include(e => e.RaceTyp).ToList();
+                ViewBag.regatta = _context.Regattas.FirstOrDefault(e => e.RegattaId == rid);
                 ViewBag.ThisYear = DateTime.Now.Year;
 
                 return View(model);

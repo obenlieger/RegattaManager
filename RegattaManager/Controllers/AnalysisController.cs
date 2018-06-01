@@ -8,6 +8,7 @@ using RegattaManager.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
+using RegattaManager.ViewModels;
 
 namespace RegattaManager.Controllers
 {
@@ -79,13 +80,70 @@ namespace RegattaManager.Controllers
             var model = _context.ReportedStartboats.Include(e => e.Club).Include(e => e.Regatta).Include(e => e.ReportedRace).Include(e => e.ReportedRace.Oldclass).Include(e => e.ReportedRace.Competition.Boatclasses).Include(e => e.ReportedRace.Competition.Raceclasses).Where(e => e.isLate == true && !startboats.Select(i => i.ReportedStartboatId).Contains(e.ReportedStartboatId)).OrderByDescending(e => e.NoStartslot).ThenBy(e => e.modifiedDate).ToList();
             var addedstartboats = _context.ReportedStartboats.Include(e => e.Club).Include(e => e.Regatta).Include(e => e.ReportedRace).Include(e => e.ReportedRace.Oldclass).Include(e => e.ReportedRace.Competition.Boatclasses).Include(e => e.ReportedRace.Competition.Raceclasses).Where(e => e.isLate == true && startboats.Select(i => i.ReportedStartboatId).Contains(e.ReportedStartboatId)).OrderByDescending(e => e.NoStartslot).ThenBy(e => e.modifiedDate).ToList();
             var reportedsbm = _context.ReportedStartboatMembers.Include(e => e.Member).ToList();
-            var reportedsbs = _context.ReportedStartboatStandbys.Include(e => e.Member).ToList();
+            var reportedsbs = _context.ReportedStartboatStandbys.Include(e => e.Member).ToList();            
 
             ViewBag.rsbm = reportedsbm;
             ViewBag.rsbs = reportedsbs;
             ViewBag.addedstartboats = addedstartboats;
 
             return View(model);
+        }
+
+        private ClubBill populateClubBill(int? id)
+        {
+            ClubBill clubbill = new ClubBill();
+            var club = _context.Clubs.FirstOrDefault(e => e.ClubId == id);
+            var rsb = _context.ReportedStartboats.Include(e => e.ReportedRace).ThenInclude(e => e.Competition).Where(e => e.ClubId == id).ToList();
+            var members = _context.Members.Where(e => e.ClubId == id).ToList();
+            var repmembers = _context.ReportedStartboatMembers.Where(e => members.Select(i => i.MemberId).Contains(e.MemberId)).ToList();
+            var clubmembers = _context.Members.Where(e => repmembers.Select(i => i.MemberId).Contains(e.MemberId)).ToList();
+            var regatta = _context.Regattas.FirstOrDefault(e => e.RegattaId == rsb.First().RegattaId);
+            var regattastartingfees = _context.RegattaStartingFees.Where(e => e.RegattaId == regatta.RegattaId).ToList();
+            var startingfees = _context.StartingFees.Where(e => regattastartingfees.Select(i => i.StartingFeeId).Contains(e.StartingFeeId)).ToList();
+            var oldclasses = _context.Oldclasses.ToList();
+            int fromoc = 0;
+            int tooc = 0;
+            double sbfee = 0;
+
+            foreach(var sf in startingfees)
+            {
+                foreach (var foc in oldclasses)
+                {
+                    if (sf.FromOldclassId == foc.OldclassId)
+                    {
+                        fromoc = foc.FromAge;
+                    }
+                    if (sf.ToOldclassId == foc.OldclassId)
+                    {
+                        tooc = foc.ToAge;
+                    }
+                }
+                foreach (var sbf in rsb)
+                {
+                    if (sbf.ReportedRace.Competition.BoatclassId == sf.BoatclassId)
+                    {
+                        foreach (var oc in oldclasses)
+                        {
+                            if (sbf.ReportedRace.OldclassId == oc.OldclassId)
+                            {
+                                if (oc.FromAge >= fromoc && oc.ToAge <= tooc && sbf.ClubId == club.ClubId && sbf.RegattaId == ViewBag.rid)
+                                {
+                                    sbfee = sbfee + sf.Amount;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            clubbill.ClubName = club.Name;
+            clubbill.members = clubmembers;
+            clubbill.reportedStartboats = rsb;
+            clubbill.StartboatCount = rsb.Count;
+            clubbill.SubscriberFee = regatta.SubscriberFee * clubmembers.Count;
+            clubbill.StartingFee = sbfee;
+
+            return clubbill;
         }
     }
 }

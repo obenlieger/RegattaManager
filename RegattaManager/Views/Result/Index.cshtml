@@ -154,9 +154,9 @@ else
                                     @if (m.MemberId == sbm.MemberId)
                                     {
                                         @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                        @if (m.ClubId != sb.ClubId)
+                                        @if (m.ClubId != sb.ClubId && m.RentedToClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
                                         {
-                                            @string.Format(" ({0})", m.Club.Name);
+                                            @string.Format(" ({0})", m.Club.ShortName);
                                         }
                                         <br />
                                 }
@@ -187,15 +187,15 @@ else
                         {
                             foreach (var m in ViewBag.members)
                             {
-                                if (m.MemberId == sbm.MemberId)
-                                {
-                                    @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                    @if (m.ClubId != sb.ClubId)
+                                @if (m.MemberId == sbm.MemberId)
                                     {
-                                        @string.Format(" ({0})", m.Club.Name);
+                                        @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                        @if (m.ClubId != sb.ClubId && m.RentedToClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                        {
+                                            @string.Format(" ({0})", m.Club.ShortName);
+                                        }
+                                        <br />
                                     }
-                                    <br />
-                            }
                             }
                         }
                     }

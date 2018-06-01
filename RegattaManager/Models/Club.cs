@@ -23,5 +23,6 @@ namespace RegattaManager.Models
         public virtual List<Regatta> Regatten { get; set; }
         public virtual List<ReportedStartboat> ReportedStartboats { get; set; }
         public virtual List<RegattaClub> RegattaClubs { get; set; }
+        public virtual List<ClubCampingFee> ClubCampingFees { get; set; }
     }
 }

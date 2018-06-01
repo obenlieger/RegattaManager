@@ -131,7 +131,9 @@ namespace RegattaManager.Controllers
                 ViewBag.startboats = _context.Startboats.Include(e => e.Club).OrderBy(e => e.Startslot).ToList();
                 ViewBag.startboatmembers = _context.StartboatMembers.ToList();
                 ViewBag.startboatstandbys = _context.StartboatStandbys.ToList();
-                ViewBag.members = _context.Members.Include(e => e.Club).ToList();
+                ViewBag.members = _context.Members.Include(e => e.Club).ToList();                
+                ViewBag.racedrawrules = _context.RaceDrawRules.Include(e => e.RaceDraw).Include(e => e.RaceTyp).ToList();
+                ViewBag.regatta = _context.Regattas.FirstOrDefault(e => e.RegattaId == rid);
                 ViewBag.ThisYear = DateTime.Now.Year;
 
                 return View(model);

@@ -23,6 +23,7 @@ namespace RegattaManager.Models
         public virtual int ZwischenlaufCount { get; set; }
         [Display(Name = "Anzahl Endläufe")]
         public virtual int EndlaufCount { get; set; }
+        public virtual string Description { get; set; }
         public virtual string Name
         {
             get

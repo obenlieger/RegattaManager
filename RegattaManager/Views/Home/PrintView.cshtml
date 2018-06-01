@@ -2,6 +2,7 @@
 @{
     Layout = null;
 }
+@{ var ToRace = ""; }
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,6 +39,8 @@
 </head>
 <body>
     <div class="container body-content">
+        <h3>@ViewBag.regatta.Name</h3>
+        <h5>Stand: @DateTime.Now.ToString("dd.MM.yyyy HH:mm")</h5>
         @foreach (var item in Model)
         {
             <table class="table table-hover">
@@ -101,7 +104,7 @@
                             @if (item.Comment != "")
                             {
                                 @:&nbsp;
-                                @:<span class="label label-warning">@item.Comment</span>
+                                @:<span class="badge badge-primary">@item.Comment</span>
                                 @if (@item.Comment == "Bier Cup")
                                 {
                                     @:&nbsp;<img src="/images/beer-512.png" height="15" />
@@ -112,6 +115,32 @@
                                 }
                             }
                         </th>
+                        <th>
+                            @foreach (var rdr in ViewBag.racedrawrules)
+                            {
+                                @if (rdr.RaceDrawId == item.RaceDrawId && rdr.RaceSequence == item.Sequence && rdr.RaceTypId == item.RaceTypId && rdr.RaceDraw.isAbteilungslauf == item.isAbteilungslauf)
+                                {
+                                    if (rdr.ToRaceTypId == 1)
+                                    {
+                                        ToRace = "Vorlauf";
+                                    }
+                                    if (rdr.ToRaceTypId == 2)
+                                    {
+                                        ToRace = "Zwischenlauf";
+                                    }
+                                    if (rdr.ToRaceTypId == 3)
+                                    {
+                                        ToRace = "Hoffnungslauf";
+                                    }
+                                    if (rdr.ToRaceTypId == 4)
+                                    {
+                                        ToRace = "Endlauf";
+                                    }
+                                    @string.Format("{0}.-{1}. in {2}", rdr.PlacementFrom, rdr.PlacementTo, ToRace)
+                                    <br />
+                                }
+                            }
+                        </th>
                     </tr>
                 </thead>
                 <tr class="table-secondary">
@@ -119,6 +148,7 @@
                     <td><i>Starter</i></td>
                     <td><i>Ersatz</i></td>
                     <td><i>Verein</i></td>
+                    <td></td>
                 </tr>
                 @foreach (var sb in ViewBag.startboats)
                 {
@@ -169,7 +199,7 @@
                                 }
                             </td>
                             <td>@sb.Club.ShortName</td>
-
+                            <td></td>
                         </tr>
                     }
                 }

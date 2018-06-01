@@ -21,5 +21,6 @@ namespace RegattaManager.Models
             }
         }
         public virtual List<RegattaCampingFee> RegattaCampingFees { get; set; }
+        public virtual List<ClubCampingFee> ClubCampingFees { get; set; }
     }
 }

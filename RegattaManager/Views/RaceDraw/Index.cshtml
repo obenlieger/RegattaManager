@@ -13,27 +13,30 @@
 <table class="table">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.ReportedSBCountFrom)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ReportedSBCountTo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.VorlaufCount)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.HoffnungslaufCount)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ZwischenlaufCount)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.EndlaufCount)
-                </th>
             <th>
-                    @Html.DisplayNameFor(model => model.isAbteilungslauf)
-                </th>
+                @Html.DisplayNameFor(model => model.ReportedSBCountFrom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportedSBCountTo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VorlaufCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HoffnungslaufCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ZwischenlaufCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndlaufCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.isAbteilungslauf)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -60,6 +63,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.isAbteilungslauf)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.RaceDrawId">Edit</a> |

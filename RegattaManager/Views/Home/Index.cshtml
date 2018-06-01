@@ -146,7 +146,7 @@
                                     @if (m.MemberId == sbm.MemberId)
                                     {
                                         @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                        @if (m.ClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                        @if (m.ClubId != sb.ClubId && m.RentedToClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
                                         {
                                             @string.Format(" ({0})", m.Club.ShortName);
                                         }
@@ -166,7 +166,7 @@
                                     @if (m.MemberId == sbs.MemberId)
                                     {
                                         @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                        @if (m.ClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                        @if (m.ClubId != sb.ClubId && m.RentedToClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
                                         {
                                             @string.Format(" ({0})", m.Club.ShortName);
                                         }
