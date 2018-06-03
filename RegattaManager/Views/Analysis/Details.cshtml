@@ -1,12 +1,13 @@
 ﻿@model RegattaManager.Models.Club
-
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@{var sbcount = 0;}
+@{float sbfee = 0;}
+@{var fromoc = 0;}
+@{var tooc = 0;}
 <h2>Details</h2>
-
 <div>
     <h4>Club</h4>
     <hr />
@@ -40,13 +41,79 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-<hr/>
+<hr />
 <table class="table table-hover">
     <thead>
         <tr>
             <th>
-
+                Von Altersklasse
+            </th>
+            <th>
+                Bis Altersklasse
+            </th>
+            <th>
+                Bootsklasse
+            </th>
+            <th>
+                Anzahl Boote
+            </th>
+            <th>
+                Startgebühr
             </th>
         </tr>
     </thead>
+    @foreach (var sf in ViewBag.startingFees)
+    {
+        foreach (var foc in ViewBag.oldclasses)
+        {
+            if (sf.FromOldclassId == foc.OldclassId)
+            {
+                fromoc = foc.FromAge;
+            }
+            if (sf.ToOldclassId == foc.OldclassId)
+            {
+                tooc = foc.ToAge;
+            }
+        }
+        foreach (var oc in ViewBag.oldclasses)
+        {
+            sbfee = 0;
+            sbcount = 0;
+            foreach (var sbf in ViewBag.reportedStartboats)
+            {
+                if (sbf.ReportedRace.Competition.BoatclassId == sf.BoatclassId)
+                {
+                    if (sbf.ReportedRace.OldclassId == oc.OldclassId)
+                    {
+                        if (oc.FromAge >= fromoc && oc.ToAge <= tooc && sbf.ClubId == Model.ClubId && sbf.RegattaId == ViewBag.rid)
+                        {
+                            sbfee = sbfee + sf.Amount;
+                            sbcount++;
+                        }
+                    }
+                }
+            }
+            @if(sbcount > 0)
+            { 
+                <tr>
+                    <td>
+                        @oc.Name
+                    </td>
+                    <td>
+                        @oc.Name
+                    </td>
+                    <td>
+                        @sf.Boatclasses.Name
+                    </td>
+                    <td>
+                        @string.Format("{0}", sbcount)
+                    </td>
+                    <td>
+                        @string.Format("{0:C}", sbfee)
+                    </td>
+                </tr>
+            }
+        }
+    }
+
 </table>

@@ -141,14 +141,16 @@
                                 }
                             }
                         </th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tr class="table-secondary">
+                    <td><i>Platzierung</i></td>
                     <td><i>Startbahn</i></td>
                     <td><i>Starter</i></td>
                     <td><i>Ersatz</i></td>
                     <td><i>Verein</i></td>
-                    <td></td>
+                    <td><i>Status</i></td>
                 </tr>
                 @foreach (var sb in ViewBag.startboats)
                 {
@@ -156,6 +158,9 @@
                     {
                         @:&nbsp;
                         <tr class="table-light">
+                            <td>
+                                @sb.Placement
+                            </td>
                             <td>@sb.Startslot</td>
                             <td>
                                 @foreach (var sbm in ViewBag.startboatmembers)
@@ -219,7 +224,89 @@
                                 }
                             </td>
                             <td>@sb.Club.ShortName</td>
-                            <td></td>
+                            <td>
+                            </td>
+                        </tr>
+                    }
+                }
+                @foreach (var sb in ViewBag.disqstartboats)
+                {
+                    if (sb.RaceId == item.RaceId)
+                    {
+                        @:&nbsp;
+                        <tr class="table-light">
+                            <td>
+                                @sb.Placement
+                            </td>
+                            <td>@sb.Startslot</td>
+                            <td>
+                                @foreach (var sbm in ViewBag.startboatmembers)
+                                {
+                                    @if (sbm.StartboatId == sb.StartboatId)
+                                    {
+                                        @foreach (var m in ViewBag.members)
+                                        {
+                                            @if (m.MemberId == sbm.MemberId)
+                                            {
+                                                @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                                @if (m.ClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                                {
+                                                    @string.Format(" ({0})", m.Club.ShortName);
+                                                }
+                                                @if (m.isRented == true && m.RentYear == ViewBag.ThisYear && sb.ClubId != m.RentedToClubId)
+                                                {
+                                                    @foreach (var rc in ViewBag.clubs)
+                                                    {
+                                                        @if (rc.ClubId == m.RentedToClubId)
+                                                        {
+                                                            @string.Format(" ({0})", rc.ShortName);
+                                                        }
+                                                    }
+                                                }
+                                                <br />
+                                            }
+                                        }
+                                    }
+                                }
+
+                            </td>
+                            <td>
+                                @foreach (var sbs in ViewBag.startboatstandbys)
+                                {
+                                    @if (sbs.StartboatId == sb.StartboatId)
+                                    {
+                                        @foreach (var m in ViewBag.members)
+                                        {
+                                            @if (m.MemberId == sbs.MemberId)
+                                            {
+                                                @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                                @if (m.ClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                                {
+                                                    @string.Format(" ({0})", m.Club.ShortName);
+                                                }
+                                                @if (m.isRented == true && m.RentYear == ViewBag.ThisYear && sb.ClubId != m.RentedToClubId)
+                                                {
+                                                    @foreach (var rc in ViewBag.clubs)
+                                                    {
+                                                        @if (rc.ClubId == m.RentedToClubId)
+                                                        {
+                                                            @string.Format(" ({0})", rc.ShortName);
+                                                        }
+                                                    }
+                                                }
+                                                <br />
+                                            }
+                                        }
+                                    }
+                                }
+                            </td>
+                            <td>@sb.Club.ShortName</td>
+                            <td>
+                                @if(sb.StartboatstatusId != 3)
+                                {
+                                    @sb.Startboatstatus.Name
+                                }
+                            </td>
                         </tr>
                     }
                 }

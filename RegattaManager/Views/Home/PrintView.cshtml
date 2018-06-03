@@ -43,7 +43,7 @@
         <h5>Stand: @DateTime.Now.ToString("dd.MM.yyyy HH:mm")</h5>
         @foreach (var item in Model)
         {
-            <table class="table table-hover">
+            <table class="table table-sm">
                 <thead>
                     <tr class="table-primary">
                         <th>@item.RaceCode</th>
@@ -171,6 +171,16 @@
                                                 {
                                                     @string.Format(" ({0})", m.Club.ShortName);
                                                 }
+                                                @if (m.isRented == true && m.RentYear == ViewBag.ThisYear && sb.ClubId != m.RentedToClubId)
+                                                {
+                                                    @foreach (var rc in ViewBag.clubs)
+                                                    {
+                                                        @if (rc.ClubId == m.RentedToClubId)
+                                                        {
+                                                            @string.Format(" ({0})", rc.ShortName);
+                                                        }
+                                                    }
+                                                }
                                                 <br />
                                             }
                                         }
@@ -191,6 +201,16 @@
                                                 @if (m.ClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
                                                 {
                                                     @string.Format(" ({0})", m.Club.ShortName);
+                                                }
+                                                @if (m.isRented == true && m.RentYear == ViewBag.ThisYear && sb.ClubId != m.RentedToClubId)
+                                                {
+                                                    @foreach (var rc in ViewBag.clubs)
+                                                    {
+                                                        @if (rc.ClubId == m.RentedToClubId)
+                                                        {
+                                                            @string.Format(" ({0})", rc.ShortName);
+                                                        }
+                                                    }
                                                 }
                                                 <br />
                                             }

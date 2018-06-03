@@ -91,6 +91,19 @@
                 {
                     <span class="badge badge-pill badge-info">Hoffnungslauf</span>
                 }
+                @if (Model.Comment != "")
+                {
+                    @:&nbsp;
+                    @:<span class="badge badge-primary">@Model.Comment</span>
+                    @if (@Model.Comment == "Bier Cup")
+                    {
+                        @:&nbsp;<img src="/images/beer-512.png" height="15" />
+                    }
+                    @if (@Model.Comment == "Prosecco Cup")
+                    {
+                        @:&nbsp;<img src="/images/prosecco.png" height="15" />
+                    }
+                }
             </td>
             <td></td>
             <td></td>
@@ -315,6 +328,19 @@
                         {
                             <span class="badge badge-pill badge-info">Hoffnungslauf</span>
                         }
+                        @if (item.Comment != "")
+                        {
+                            @:&nbsp;
+                            @:<span class="badge badge-primary">@item.Comment</span>
+                            @if (@item.Comment == "Bier Cup")
+                            {
+                                @:&nbsp;<img src="/images/beer-512.png" height="15" />
+                        }
+                            @if (@item.Comment == "Prosecco Cup")
+                            {
+                                @:&nbsp;<img src="/images/prosecco.png" height="15" />
+                        }
+                        } 
                     </td>
                     <td>
                         @item.Starttime

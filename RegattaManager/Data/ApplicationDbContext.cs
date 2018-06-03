@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RegattaManager.Models;
+using RegattaManager.ViewModels;
 
 namespace RegattaManager.Data
 {
@@ -234,5 +235,7 @@ namespace RegattaManager.Data
         public DbSet<RegattaManager.Models.StartboatStandby> StartboatStandbys { get; set; }
 
         public DbSet<RegattaManager.Models.ClubCampingFee> ClubCampingFees { get; set; }
+
+        public DbSet<RegattaManager.ViewModels.Mannschaftswertung> Mannschaftswertung { get; set; }
     }
 }

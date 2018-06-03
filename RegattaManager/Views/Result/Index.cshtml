@@ -115,7 +115,7 @@ else
                 @if (item.Comment != "")
                 {
                     @:&nbsp;
-                    @:<span class="label label-warning">@item.Comment</span>
+                    @:<span class="badge badge-primary">@item.Comment</span>
                     @if (@item.Comment == "Bier Cup")
                     {
                         @:&nbsp;<img src="/images/beer-512.png" height="15" />
@@ -145,25 +145,35 @@ else
                         <td>@sb.Placement</td>
                         <td>@sb.Startslot</td>
                         <td>
-                        @foreach (var sbm in ViewBag.startboatmembers)
-                        {                            
-                            @if (sbm.StartboatId == sb.StartboatId)
+                            @foreach (var sbm in ViewBag.startboatmembers)
                             {
-                                @foreach (var m in ViewBag.members)
+                                @if (sbm.StartboatId == sb.StartboatId)
                                 {
-                                    @if (m.MemberId == sbm.MemberId)
+                                    @foreach (var m in ViewBag.members)
                                     {
-                                        @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                        @if (m.ClubId != sb.ClubId && m.RentedToClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                        @if (m.MemberId == sbm.MemberId)
                                         {
-                                            @string.Format(" ({0})", m.Club.ShortName);
+                                            @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                            @if (m.ClubId != sb.ClubId && m.RentedToClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                            {
+                                                @string.Format(" ({0})", m.Club.ShortName);
+                                            }
+                                            @if (m.isRented == true && m.RentYear == ViewBag.ThisYear && sb.ClubId != m.RentedToClubId)
+                                            {
+                                                @foreach (var rc in ViewBag.clubs)
+                                                {
+                                                    @if (rc.ClubId == m.RentedToClubId)
+                                                    {
+                                                        @string.Format(" ({0})", rc.ShortName);
+                                                    }
+                                                }
+                                            }
+                                            <br />
                                         }
-                                        <br />
-                                }
+                                    }
                                 }
                             }
-                        }
-                </td>
+                        </td>
                 <td>@sb.Club.Name</td>
                 <td colspan="2"></td>
             </tr>
@@ -181,25 +191,35 @@ else
                         <td>0</td>
                         <td>@sb.Startslot</td>
                         <td>
-                @foreach (var sbm in ViewBag.startboatmembers)
-                    {
-                        if (sbm.StartboatId == sb.StartboatId)
-                        {
-                            foreach (var m in ViewBag.members)
+                            @foreach (var sbm in ViewBag.startboatmembers)
                             {
-                                @if (m.MemberId == sbm.MemberId)
+                                if (sbm.StartboatId == sb.StartboatId)
+                                {
+                                    foreach (var m in ViewBag.members)
                                     {
-                                        @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                        @if (m.ClubId != sb.ClubId && m.RentedToClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                        @if (m.MemberId == sbm.MemberId)
                                         {
-                                            @string.Format(" ({0})", m.Club.ShortName);
+                                            @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                            @if (m.ClubId != sb.ClubId && m.RentedToClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                            {
+                                                @string.Format(" ({0})", m.Club.ShortName);
+                                            }
+                                            @if (m.isRented == true && m.RentYear == ViewBag.ThisYear && sb.ClubId != m.RentedToClubId)
+                                            {
+                                                @foreach (var rc in ViewBag.clubs)
+                                                {
+                                                    @if (rc.ClubId == m.RentedToClubId)
+                                                    {
+                                                        @string.Format(" ({0})", rc.ShortName);
+                                                    }
+                                                }
+                                            }
+                                            <br />
                                         }
-                                        <br />
                                     }
+                                }
                             }
-                        }
-                    }
-                </td>
+                        </td>
                 <td>@sb.Club.Name</td>
                 <td colspan="2">@sb.Startboatstatus.Name</td>                
             </tr>

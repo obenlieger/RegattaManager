@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Rennübersicht";
 }
+@{ var ToRace = ""; }
 <br/>
 <div align="right">
     <a asp-action="PrintView" target="_blank" class="btn btn-info">Druckansicht</a>
@@ -43,12 +44,14 @@
                 Startzeit
             </th>
             <th></th>
+            <th></th>
         </tr>
     </thead>
     @foreach (var item in Model)
     {
     <tr class="table-active">
         <td colspan="2"></td>
+        <td></td>
         <td></td>
         <td></td>
     </tr>
@@ -120,6 +123,32 @@
                     {
                         @:&nbsp;<img src="/images/prosecco.png" height="15" />
                 }
+                }                
+            </th>
+            <th>
+                @foreach (var rdr in ViewBag.racedrawrules)
+                {
+                    @if (rdr.RaceDrawId == item.RaceDrawId && rdr.RaceSequence == item.Sequence && rdr.RaceTypId == item.RaceTypId && rdr.RaceDraw.isAbteilungslauf == item.isAbteilungslauf)
+                    {
+                        if (rdr.ToRaceTypId == 1)
+                        {
+                            ToRace = "Vorlauf";
+                        }
+                        if (rdr.ToRaceTypId == 2)
+                        {
+                            ToRace = "Zwischenlauf";
+                        }
+                        if (rdr.ToRaceTypId == 3)
+                        {
+                            ToRace = "Hoffnungslauf";
+                        }
+                        if (rdr.ToRaceTypId == 4)
+                        {
+                            ToRace = "Endlauf";
+                        }
+                        @string.Format("{0}.-{1}. in {2}", rdr.PlacementFrom, rdr.PlacementTo, ToRace)
+                        <br />
+                    }
                 }
             </th>
         </tr>
@@ -127,7 +156,8 @@
             <td><i>Startbahn</i></td>
             <td><i>Starter</i></td>
             <td><i>Ersatz</i></td>
-            <td><i>Verein</i></td>            
+            <td><i>Verein</i></td>    
+            <td></td>
         </tr>
             @foreach (var sb in ViewBag.startboats)
             {
@@ -137,46 +167,67 @@
                     <tr class="table-light">                    
                         <td>@sb.Startslot</td>                   
                         <td>
-                        @foreach (var sbm in ViewBag.startboatmembers)
-                        {                            
-                            @if (sbm.StartboatId == sb.StartboatId)
+                            @foreach (var sbm in ViewBag.startboatmembers)
                             {
-                                @foreach (var m in ViewBag.members)
+                                @if (sbm.StartboatId == sb.StartboatId)
                                 {
-                                    @if (m.MemberId == sbm.MemberId)
+                                    @foreach (var m in ViewBag.members)
                                     {
-                                        @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                        @if (m.ClubId != sb.ClubId && m.RentedToClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                        @if (m.MemberId == sbm.MemberId)
                                         {
-                                            @string.Format(" ({0})", m.Club.ShortName);
+                                            @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                            @if (m.ClubId != sb.ClubId && m.RentedToClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                            {
+                                                @string.Format(" ({0})", m.Club.ShortName);
+                                            }
+                                            @if (m.isRented == true && m.RentYear == ViewBag.ThisYear && sb.ClubId != m.RentedToClubId)
+                                            {
+                                                @foreach (var rc in ViewBag.clubs)
+                                                {
+                                                    @if (rc.ClubId == m.RentedToClubId)
+                                                    {
+                                                        @string.Format(" ({0})", rc.ShortName);
+                                                    }
+                                                }
+                                            }
+                                            <br />
                                         }
-                                        <br />
                                     }
                                 }
                             }
-                        }                
                         </td>                
                         <td>
-                        @foreach(var sbs in ViewBag.startboatstandbys)
-                        {
-                            @if (sbs.StartboatId == sb.StartboatId)
+                            @foreach (var sbs in ViewBag.startboatstandbys)
                             {
-                                @foreach (var m in ViewBag.members)
+                                @if (sbs.StartboatId == sb.StartboatId)
                                 {
-                                    @if (m.MemberId == sbs.MemberId)
+                                    @foreach (var m in ViewBag.members)
                                     {
-                                        @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                        @if (m.ClubId != sb.ClubId && m.RentedToClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                        @if (m.MemberId == sbs.MemberId)
                                         {
-                                            @string.Format(" ({0})", m.Club.ShortName);
+                                            @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                            @if (m.ClubId != sb.ClubId && m.RentedToClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                            {
+                                                @string.Format(" ({0})", m.Club.ShortName);
+                                            }
+                                            @if (m.isRented == true && m.RentYear == ViewBag.ThisYear && sb.ClubId != m.RentedToClubId)
+                                            {
+                                                @foreach (var rc in ViewBag.clubs)
+                                                {
+                                                    @if (rc.ClubId == m.RentedToClubId)
+                                                    {
+                                                        @string.Format(" ({0})", rc.ShortName);
+                                                    }
+                                                }
+                                            }
+                                            <br />
                                         }
-                                        <br />
                                     }
                                 }
                             }
-                        }
                         </td>
-                        <td>@sb.Club.ShortName</td>           
+                        <td>@sb.Club.ShortName</td>  
+                        <td></td>
             </tr>
             }
         }

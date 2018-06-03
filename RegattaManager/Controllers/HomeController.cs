@@ -35,12 +35,15 @@ namespace RegattaManager.Controllers
             ViewData["CurrentFilter"] = searchLastName;
             ViewData["filterClub"] = new SelectList(_context.Clubs.Where(e => regattaClubs.Select(i => i.ClubId).Contains(e.ClubId)).OrderBy(e => e.Name),"ClubId","Name");
 
-            var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderBy(e => e.Starttime).Take(10).ToList();            
+            var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1 || e.RacestatusId == 1005).OrderBy(e => e.Starttime).Take(10).ToList();            
 
             ViewBag.startboats = _context.Startboats.Include(e => e.Club).OrderBy(e => e.Startslot).ToList();
             ViewBag.startboatmembers = _context.StartboatMembers.ToList();
             ViewBag.startboatstandbys = _context.StartboatStandbys.ToList();
             ViewBag.members = _context.Members.Include(e => e.Club).ToList();
+            ViewBag.racedrawrules = _context.RaceDrawRules.Include(e => e.RaceDraw).Include(e => e.RaceTyp).ToList();
+            ViewBag.regatta = _context.Regattas.FirstOrDefault(e => e.RegattaId == rid);            
+            ViewBag.clubs = _context.Clubs.Where(e => regattaClubs.Select(i => i.ClubId).Contains(e.ClubId)).ToList();
             ViewBag.ClubId = new SelectList(_context.Clubs.OrderBy(e => e.Name), "ClubId", "Name");
             ViewBag.ThisYear = DateTime.Now.Year;
 
@@ -98,7 +101,7 @@ namespace RegattaManager.Controllers
 
                 if (orderby == "RaceCode")
                 {
-                    races = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).OrderBy(e => e.RaceCode).ToList();
+                    races = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1 || e.RacestatusId == 1003 || e.RacestatusId == 1005).OrderBy(e => e.RaceCode).ToList();
                 }                
 
                 return View(races);
@@ -127,13 +130,15 @@ namespace RegattaManager.Controllers
             if (rid != 0)
             {
                 var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId != 1006).OrderBy(e => e.Starttime).ToList();
+                var regattaClubs = _context.RegattaClubs.Where(e => e.RegattaId == rid);
 
                 ViewBag.startboats = _context.Startboats.Include(e => e.Club).OrderBy(e => e.Startslot).ToList();
                 ViewBag.startboatmembers = _context.StartboatMembers.ToList();
                 ViewBag.startboatstandbys = _context.StartboatStandbys.ToList();
                 ViewBag.members = _context.Members.Include(e => e.Club).ToList();                
                 ViewBag.racedrawrules = _context.RaceDrawRules.Include(e => e.RaceDraw).Include(e => e.RaceTyp).ToList();
-                ViewBag.regatta = _context.Regattas.FirstOrDefault(e => e.RegattaId == rid);
+                ViewBag.regatta = _context.Regattas.FirstOrDefault(e => e.RegattaId == rid);                
+                ViewBag.clubs = _context.Clubs.Where(e => regattaClubs.Select(i => i.ClubId).Contains(e.ClubId)).ToList();
                 ViewBag.ThisYear = DateTime.Now.Year;
 
                 return View(model);

@@ -5,7 +5,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{var sbcount = 0;}
+@{var startercount = 0;}
 @{float sbfee = 0;}
+@{float subfee = 0;}
 @{var fromoc = 0;}
 @{var tooc = 0;}
 
@@ -14,85 +16,96 @@
 <table class="table table-hover">
     <thead>
         <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    Startboote
-                </th>
-                <th>
-                    Startgeb&uuml;hr
-                </th>
-                <th>
-                    Campingplatzgeb&uuml;hr
-                </th>
-                <th>
-                    Teilnahmegeb&uuml;hr
-                </th>
-                <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                Startboote
+            </th>
+            <th>
+                Startgeb&uuml;hr
+            </th>
+            <th>
+                Teilnahmegeb&uuml;hr
+            </th>
+            <th>
+                Starter
+            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model) {
-        sbcount = 0;
-        sbfee = 0;
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @foreach(var sb in ViewBag.reportedStartboats)
-                {
-                    if(sb.ClubId == item.ClubId && sb.RegattaId == ViewBag.rid)
+        @foreach (var item in Model)
+        {
+            sbcount = 0;
+            sbfee = 0;
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @foreach (var sb in ViewBag.reportedStartboats)
                     {
-                        sbcount++;
-                    }
-                }
-                @sbcount
-            </td>
-            <td>
-                @foreach(var sf in ViewBag.startingFees)
-                {
-                    foreach(var foc in ViewBag.oldclasses)
-                    {
-                        if(sf.FromOldclassId == foc.OldclassId)
+                        if (sb.ClubId == item.ClubId && sb.RegattaId == ViewBag.rid)
                         {
-                            fromoc = foc.FromAge;
-                        }
-                        if(sf.ToOldclassId == foc.OldclassId)
-                        {
-                            tooc = foc.ToAge;
+                            sbcount++;
                         }
                     }
-                    foreach(var sbf in ViewBag.reportedStartboats)
+                    @sbcount
+                </td>
+                <td>
+                    @foreach (var sf in ViewBag.startingFees)
                     {
-                        if(sbf.ReportedRace.Competition.BoatclassId == sf.BoatclassId)
+                        foreach (var foc in ViewBag.oldclasses)
                         {
-                            foreach(var oc in ViewBag.oldclasses)
+                            if (sf.FromOldclassId == foc.OldclassId)
                             {
-                                if(sbf.ReportedRace.OldclassId == oc.OldclassId)
-                                {
-                                    if(oc.FromAge >= fromoc && oc.ToAge <= tooc && sbf.ClubId == item.ClubId && sbf.RegattaId == ViewBag.rid)
-                                    {
-                                        sbfee = sbfee + sf.Amount;
-                                    }
-                                }
+                                fromoc = foc.FromAge;
+                            }
+                            if (sf.ToOldclassId == foc.OldclassId)
+                            {
+                                tooc = foc.ToAge;
                             }
                         }
+                        foreach (var sbf in ViewBag.reportedStartboats)
+                        {
+                            if (sbf.ReportedRace.Competition.BoatclassId == sf.BoatclassId)
+                            {
+                                foreach (var oc in ViewBag.oldclasses)
+                                {
+                                    if (sbf.ReportedRace.OldclassId == oc.OldclassId)
+                                    {
+                                        if (oc.FromAge >= fromoc && oc.ToAge <= tooc && sbf.ClubId == item.ClubId && sbf.RegattaId == ViewBag.rid)
+                                        {
+                                            sbfee = sbfee + sf.Amount;
+                                        }
+                                    }
+                                }
+                            }                            
+                        }
                     }
-                }
-                @string.Format("{0:C}",sbfee)
-            </td>
-            <td>
-
-            </td>
-            <td>
-                
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.ClubId" class="btn btn-secondary">Details</a>
-            </td>
-        </tr>
-    }
+                    @string.Format("{0:C}", sbfee)
+                </td>
+                <td>
+                    @{startercount = 0;}
+                    @{subfee = 0;}
+                    @foreach (var rsbm in ViewBag.members)
+                    {
+                        @if (rsbm.ClubId == item.ClubId)
+                        {
+                            subfee = subfee + ViewBag.subscriberfee;
+                            startercount++;
+                        }
+                    }
+                    @string.Format("{0:C}", subfee)
+                </td>
+                <td>
+                    @startercount
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.ClubId" class="btn btn-secondary">Details</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

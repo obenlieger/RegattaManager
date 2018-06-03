@@ -39,6 +39,8 @@ namespace RegattaManager.Controllers
             ViewBag.startboatmembers = _context.StartboatMembers.ToList();
             ViewBag.members = _context.Members.Include(e => e.Club).ToList();
             ViewBag.ThisYear = DateTime.Now.Year;
+            
+            ViewBag.clubs = _context.Clubs.Where(e => regattaClubs.Select(i => i.ClubId).Contains(e.ClubId)).ToList();
 
             if (!String.IsNullOrEmpty(searchLastName) || filterClubId != null)
             {
@@ -69,7 +71,7 @@ namespace RegattaManager.Controllers
                     sb = _context.Startboats.Include(e => e.StartboatMembers).Where(e => e.ClubId == filterClubId).ToList();
                 }
 
-                races = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => sb.Select(i => i.RaceId).Contains(e.RaceId) && e.RacestatusId == 3).Distinct().ToList();
+                races = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => sb.Select(i => i.RaceId).Contains(e.RaceId) && e.RacestatusId == 3).Distinct().OrderByDescending(e => e.Starttime).ToList();
 
                 return View(races);
             }
@@ -87,12 +89,22 @@ namespace RegattaManager.Controllers
 
         public IActionResult TV()
         {
+            var rid = 0;
+
+            if (_context.Regattas.Where(e => e.Choosen == true).Any())
+            {
+                rid = _context.Regattas.Where(e => e.Choosen == true).FirstOrDefault().RegattaId;
+            }
+
             ViewBag.raceresults = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 3).OrderByDescending(e => e.Starttime).Take(6).ToList();
             ViewBag.startboats = _context.Startboats.Include(e => e.Club).Include(e => e.Startboatstatus).OrderBy(e => e.RaceId).ThenBy(e => e.Placement).ThenBy(e => e.Startslot).ToList();
             ViewBag.disqsbs = _context.Startboats.Include(e => e.Club).Include(e => e.Startboatstatus).Where(e => e.Placement <= 0).OrderBy(e => e.Startslot).ToList();
             ViewBag.startboatmembers = _context.StartboatMembers.ToList();
             ViewBag.members = _context.Members.Include(e => e.Club).ToList();
             ViewBag.raceplanned = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1005).OrderBy(e => e.Starttime).Take(6).ToList();
+
+            var regattaClubs = _context.RegattaClubs.Where(e => e.RegattaId == rid);
+            ViewBag.clubs = _context.Clubs.Where(e => regattaClubs.Select(i => i.ClubId).Contains(e.ClubId)).ToList();
 
             return View();
         }

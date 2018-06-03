@@ -54,7 +54,7 @@
         <tr VALIGN=TOP>
             <td></td>
             <td>
-                <table class="table">
+                <table class="table table-sm">
                     <tr>
                         <th colspan="3">
                             Rennbezeichnung
@@ -132,7 +132,7 @@
                                 @if (rrs.Comment != "")
                                 {
                                     @:&nbsp;
-                                    @:<span class="label label-warning">@rrs.Comment</span>
+                                    @:<span class="badge badge-primary">@rrs.Comment</span>
                                     @if (@rrs.Comment == "Bier Cup")
                                     {
                                         @:&nbsp;<img src="/images/beer-512.png" height="15" />
@@ -179,24 +179,34 @@
                                         <td bgcolor=@backcol>@sb.Placement</td>
                                         <td bgcolor=@backcol>@sb.Startslot</td>
                                         <td bgcolor=@backcol>
-                                        @foreach (var sbm in ViewBag.startboatmembers)
-                                        {
-                                            if (sbm.StartboatId == sb.StartboatId)
+                                            @foreach (var sbm in ViewBag.startboatmembers)
                                             {
-                                                foreach (var m in ViewBag.members)
+                                                if (sbm.StartboatId == sb.StartboatId)
                                                 {
-                                                    if (m.MemberId == sbm.MemberId)
+                                                    foreach (var m in ViewBag.members)
                                                     {
-                                                        @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                                        @if (m.ClubId != sb.ClubId)
+                                                        if (m.MemberId == sbm.MemberId)
                                                         {
-                                                            @string.Format(" ({0})", m.Club.ShortName);
+                                                            @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                                            @if (m.ClubId != sb.ClubId)
+                                                            {
+                                                                @string.Format(" ({0})", m.Club.ShortName);
+                                                            }
+                                                            @if (m.isRented == true && m.RentYear == ViewBag.ThisYear && sb.ClubId != m.RentedToClubId)
+                                                            {
+                                                                @foreach (var rc in ViewBag.clubs)
+                                                                {
+                                                                    @if (rc.ClubId == m.RentedToClubId)
+                                                                    {
+                                                                        @string.Format(" ({0})", rc.ShortName);
+                                                                    }
+                                                                }
+                                                            }
+                                                            @:<br />
                                                         }
-                                                        @:<br />
                                                     }
                                                 }
                                             }
-                                        }
                                         </td>
                                         <td bgcolor=@backcol>@sb.Club.ShortName</td>
                                         <td bgcolor=@backcol></td>
@@ -233,6 +243,16 @@
                                                             {
                                                                 @string.Format(" ({0})", m.Club.ShortName);
                                                             }
+                                                            @if (m.isRented == true && m.RentYear == ViewBag.ThisYear && sb.ClubId != m.RentedToClubId)
+                                                            {
+                                                                @foreach (var rc in ViewBag.clubs)
+                                                                {
+                                                                    @if (rc.ClubId == m.RentedToClubId)
+                                                                    {
+                                                                        @string.Format(" ({0})", rc.ShortName);
+                                                                    }
+                                                                }
+                                                            }
                                                             <br />
                                                         }
                                                     }
@@ -251,7 +271,7 @@
                             @:</td>
                             @:<td>&nbsp;</td>
                             @:<td>
-                               @:<table class="table">
+                               @:<table class="table table-sm">
                                 @:<tr>
                                     @:<th colspan="3">
                                         @:Rennbezeichnung
@@ -268,7 +288,7 @@
             </td>
             <td></td>
             <td>
-                <table class="table">
+                <table class="table table-sm">
                     <tr>
                         <th colspan="2">
                             Rennbezeichnung
@@ -342,7 +362,7 @@
                                 @if (rpd.Comment != "")
                                 {
                                     @:&nbsp;
-                                    @:<span class="label label-warning">@rpd.Comment</span>
+                                    @:<span class="badge badge-primary">@rpd.Comment</span>
                                     @if (@rpd.Comment == "Bier Cup")
                                     {
                                         @:&nbsp;<img src="/images/beer-512.png" height="15" />
@@ -368,25 +388,35 @@
                                 <tr>
                                     <td>@sb.Startslot</td>
                                     <td>
-                                @foreach (var sbm in ViewBag.startboatmembers)
-                                {
-                                    @if (sbm.StartboatId == sb.StartboatId)
-                                    {
-                                        @foreach (var m in ViewBag.members)
+                                        @foreach (var sbm in ViewBag.startboatmembers)
                                         {
-                                            @if (m.MemberId == sbm.MemberId)
+                                            @if (sbm.StartboatId == sb.StartboatId)
                                             {
-                                                @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                                @if (m.ClubId != sb.ClubId)
+                                                @foreach (var m in ViewBag.members)
                                                 {
-                                                    @string.Format(" ({0})", m.Club.ShortName);
+                                                    @if (m.MemberId == sbm.MemberId)
+                                                    {
+                                                        @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                                        @if (m.ClubId != sb.ClubId)
+                                                        {
+                                                            @string.Format(" ({0})", m.Club.ShortName);
+                                                        }
+                                                        @if (m.isRented == true && m.RentYear == ViewBag.ThisYear && sb.ClubId != m.RentedToClubId)
+                                                        {
+                                                            @foreach (var rc in ViewBag.clubs)
+                                                            {
+                                                                @if (rc.ClubId == m.RentedToClubId)
+                                                                {
+                                                                    @string.Format(" ({0})", rc.ShortName);
+                                                                }
+                                                            }
+                                                        }
+                                                        <br />
+                                                    }
                                                 }
-                                                <br />
                                             }
                                         }
-                                    }
-                                }
-                            </td>
+                                    </td>
                             <td colspan="2">@sb.Club.ShortName</td>
                         </tr>
                             }
@@ -400,7 +430,7 @@
                     @:<td>&nbsp;</td>
                     @:
                     @:<td>
-                        @:<table class="table">
+                        @:<table class="table table-sm">
                             @:<tr>
                                 @:<th colspan="2">
                                     @:Rennbezeichnung
