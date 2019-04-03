@@ -541,13 +541,34 @@ namespace RegattaManager.Controllers
                     }
                 }
 
-                mw.Add(new Mannschaftswertung { ClubId = c.ClubId, ClubName = c.Name, OldclassName = "Schüler C/B10", Wertung = schuelercb10 });
-                mw.Add(new Mannschaftswertung { ClubId = c.ClubId, ClubName = c.Name, OldclassName = "Schüler B", Wertung = schuelerb });
-                mw.Add(new Mannschaftswertung { ClubId = c.ClubId, ClubName = c.Name, OldclassName = "Schüler A", Wertung = schuelera });
-                mw.Add(new Mannschaftswertung { ClubId = c.ClubId, ClubName = c.Name, OldclassName = "Jugend", Wertung = jugend });
-                mw.Add(new Mannschaftswertung { ClubId = c.ClubId, ClubName = c.Name, OldclassName = "Junioren", Wertung = junioren });
-                mw.Add(new Mannschaftswertung { ClubId = c.ClubId, ClubName = c.Name, OldclassName = "Leistungsklasse", Wertung = leistungsklasse });
-                mw.Add(new Mannschaftswertung { ClubId = c.ClubId, ClubName = c.Name, OldclassName = "Senioren", Wertung = senioren });
+                if(schuelercb10 > 0)
+                {
+                    mw.Add(new Mannschaftswertung { ClubId = c.ClubId, ClubName = c.Name, OldclassName = "Schüler C/B10", Wertung = schuelercb10 });
+                }
+                if(schuelerb > 0)
+                {
+                    mw.Add(new Mannschaftswertung { ClubId = c.ClubId, ClubName = c.Name, OldclassName = "Schüler B", Wertung = schuelerb });
+                }
+                if(schuelera > 0)
+                {
+                    mw.Add(new Mannschaftswertung { ClubId = c.ClubId, ClubName = c.Name, OldclassName = "Schüler A", Wertung = schuelera });
+                }
+                if(jugend > 0)
+                {
+                    mw.Add(new Mannschaftswertung { ClubId = c.ClubId, ClubName = c.Name, OldclassName = "Jugend", Wertung = jugend });
+                }
+                if(junioren > 0)
+                {
+                    mw.Add(new Mannschaftswertung { ClubId = c.ClubId, ClubName = c.Name, OldclassName = "Junioren", Wertung = junioren });
+                }
+                if(leistungsklasse > 0)
+                {
+                    mw.Add(new Mannschaftswertung { ClubId = c.ClubId, ClubName = c.Name, OldclassName = "Leistungsklasse", Wertung = leistungsklasse });
+                }
+                if(senioren > 0)
+                {
+                    mw.Add(new Mannschaftswertung { ClubId = c.ClubId, ClubName = c.Name, OldclassName = "Senioren", Wertung = senioren });
+                }                
             }            
 
             return View(mw);

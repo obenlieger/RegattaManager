@@ -11,9 +11,6 @@
     <thead>
         <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.ClubId)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.ClubName)
                 </th>
                 <th>
@@ -22,15 +19,11 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Wertung)
                 </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClubId)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ClubName)
             </td>
@@ -39,11 +32,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Wertung)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.MWId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MWId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MWId">Delete</a>
             </td>
         </tr>
 }

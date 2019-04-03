@@ -1,13 +1,28 @@
 USE [RMDB]
---delete from StartboatMembers
---delete from StartboatStandbys
---delete from Startboats
---delete from Races
+delete from StartboatMembers
+delete from StartboatStandbys
+delete from Startboats
+delete from Races
 delete from ReportedStartboatMembers
 delete from ReportedStartboatStandbys
---delete from ReportedStartboats
---delete from ReportedRaces
---delete from Members
+delete from ReportedStartboats
+delete from ReportedRaces
+delete from Members
+delete from RegattaOldclasses
+delete from RegattaCompetitions
+delete from RegattaClubs
+delete from Regattas
+GO
+
+USE [RMDB]
+SET IDENTITY_INSERT [RMDB].[dbo].[Regattas] ON
+GO
+INSERT INTO [RMDB].[dbo].[Regattas] ()
+(SELECT MemberId, Birthyear, ClubId, FirstName, LastName, Gender, RentYear, RentedToClubId, isRented FROM RegattaMeldung.dbo.Members
+WHERE MemberId NOT IN
+(SELECT MemberId FROM RMDB.dbo.Regattas))
+GO
+SET IDENTITY_INSERT [RMDB].[dbo].[Regattas] OFF
 GO
 
 USE [RMDB]
