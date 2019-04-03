@@ -53,7 +53,10 @@ namespace RegattaManager.Models
         public virtual string Catering { get; set; }
         public virtual int ClubId { get; set; }
         [Display(Name = "Verein")]
-        public virtual Club Club { get; set; }        
+        public virtual Club Club { get; set; }
+        public virtual string Organizer { get; set; }
+        public virtual int StartersLastYear { get; set; }
+        public virtual string Category { get; set; }
         public virtual List<Startboat> Startboats { get; set; }
         public virtual List<Race> Races { get; set; }        
         public virtual int WaterId { get; set; }        

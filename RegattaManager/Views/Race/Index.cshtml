@@ -441,6 +441,12 @@ else
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Starttime)
+                <input id="TestStarttime" data-time-format="H:i:s" type="text" class="time" />
+                <script>
+                    $(function () {
+                        $('#TestStarttime').timepicker();
+                    });
+                </script>
             </td>
             <td>
                 @foreach(var sb in ViewBag.startboats)

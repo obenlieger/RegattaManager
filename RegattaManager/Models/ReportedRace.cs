@@ -26,6 +26,8 @@ namespace RegattaManager.Models
         public string RaceCode { get; set; }
         [Display(Name = "Wettkampf")]
         public Competition Competition { get; set; }
+        [Display(Name = "Kommentar")]
+        public string Comment { get; set; }
         public int RegattaId { get; set; }
         public Regatta Regatta { get; set; }
         public List<ReportedStartboat> ReportedStartboats { get; set; }        

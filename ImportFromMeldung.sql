@@ -17,12 +17,77 @@ GO
 USE [RMDB]
 SET IDENTITY_INSERT [RMDB].[dbo].[Regattas] ON
 GO
-INSERT INTO [RMDB].[dbo].[Regattas] ()
-(SELECT MemberId, Birthyear, ClubId, FirstName, LastName, Gender, RentYear, RentedToClubId, isRented FROM RegattaMeldung.dbo.Members
-WHERE MemberId NOT IN
-(SELECT MemberId FROM RMDB.dbo.Regattas))
+INSERT INTO [RMDB].[dbo].[Regattas] ([RegattaId]
+      ,[Accomodation]
+      ,[Awards]
+      ,[Catering]
+      ,[ClubId]
+      ,[Comment]
+      ,[FromDate]
+      ,[Judge]
+      ,[Name]
+      ,[ReportAddress]
+      ,[ReportFax]
+      ,[ReportMail]
+      ,[ReportOpening]
+      ,[ReportSchedule]
+      ,[ReportTel]
+      ,[ReportText]
+      ,[ScheduleText]
+      ,[Security]
+      ,[Startslots]
+      ,[SubscriberFee]
+      ,[ToDate]
+      ,[WaterId]
+      ,[Waterdepth]
+      ,[Category]
+      ,[Organizer]
+      ,[StartersLastYear])
+(SELECT [RegattaId]
+      ,[Accomodation]
+      ,[Awards]
+      ,[Catering]
+      ,[ClubId]
+      ,[Comment]
+      ,[FromDate]
+      ,[Judge]
+      ,[Name]
+      ,[ReportAddress]
+      ,[ReportFax]
+      ,[ReportMail]
+      ,[ReportOpening]
+      ,[ReportSchedule]
+      ,[ReportTel]
+      ,[ReportText]
+      ,[ScheduleText]
+      ,[Security]
+      ,[Startslots]
+      ,[SubscriberFee]
+      ,[ToDate]
+      ,[WaterId]
+      ,[Waterdepth]
+      ,[Category]
+      ,[Organizer]
+      ,[StartersLastYear] FROM RegattaMeldung.dbo.Regattas
+WHERE RegattaId NOT IN
+(SELECT RegattaId FROM RMDB.dbo.Regattas))
 GO
 SET IDENTITY_INSERT [RMDB].[dbo].[Regattas] OFF
+GO
+
+USE [RMDB]
+INSERT INTO [RMDB].[dbo].[RegattaClubs] ([ClubId],[RegattaId],[Guid])
+(SELECT [ClubId],[RegattaId],[Guid] FROM RegattaMeldung.dbo.RegattaClubs)
+GO
+
+USE [RMDB]
+INSERT INTO [RMDB].[dbo].[RegattaCompetitions] ([CompetitionId],[RegattaId])
+(SELECT [CompetitionId],[RegattaId] FROM RegattaMeldung.dbo.RegattaCompetitions)
+GO
+
+USE [RMDB]
+INSERT INTO [RMDB].[dbo].[RegattaOldclasses] ([OldclassId],[RegattaId])
+(SELECT [OldclassId],[RegattaId] FROM RegattaMeldung.dbo.RegattaOldclasses)
 GO
 
 USE [RMDB]
@@ -34,6 +99,30 @@ WHERE MemberId NOT IN
 (SELECT MemberId FROM RMDB.dbo.Members))
 GO
 SET IDENTITY_INSERT [RMDB].[dbo].[Members] OFF
+GO
+
+USE [RMDB]
+SET IDENTITY_INSERT [RMDB].[dbo].[ReportedRaces] ON
+GO
+INSERT INTO [RMDB].[dbo].[ReportedRaces] ([ReportedRaceId]
+      ,[CompetitionId]
+      ,[OldclassId]
+      ,[Gender]
+      ,[RaceCode]
+      ,[RegattaId]
+      ,[Comment])
+(SELECT [ReportedRaceId]
+      ,[CompetitionId]
+      ,[OldclassId]
+      ,[Gender]
+      ,[RaceCode]
+      ,[RegattaId]
+      ,[Comment]
+FROM [RegattaMeldung].[dbo].[ReportedRaces]
+WHERE [ReportedRaceId] NOT IN
+(SELECT [ReportedRaceId] FROM RMDB.dbo.ReportedRaces))
+GO
+SET IDENTITY_INSERT [RMDB].[dbo].[ReportedRaces] OFF
 GO
 
 USE [RMDB]
