@@ -372,7 +372,7 @@ namespace RegattaManager.Controllers
                         newrr.Add(rr.ReportedRaceId);
                         foreach (var rd in raceDraw)
                         {
-                            if (sbcount >= rd.ReportedSBCountFrom && sbcount <= rd.ReportedSBCountTo)
+                            if (sbcount >= rd.ReportedSBCountFrom && sbcount <= rd.ReportedSBCountTo && rr.isAbteilungslauf == rd.isAbteilungslauf)
                             {
                                 for (var vl = 0; vl < rd.VorlaufCount; vl++)
                                 {
@@ -602,7 +602,7 @@ namespace RegattaManager.Controllers
         {
             var regatta = _context.Regattas.FirstOrDefault(e => e.RegattaId == id);
 
-            if(regatta != null)
+            if(regatta != null && regatta.Name.Contains("Sprintpokal"))
             {
                 DateTime globaltimestamp = regatta.FromDate.AddDays(2);
                 globaltimestamp = globaltimestamp.AddHours(2);
@@ -835,6 +835,8 @@ namespace RegattaManager.Controllers
                 globaltimestamp = SetTimes(nr118, globaltimestamp);
                 globaltimestamp = SetTimes(nr119, globaltimestamp);                
             }
+
+
             return RedirectToAction("Index","Race");
         }
 

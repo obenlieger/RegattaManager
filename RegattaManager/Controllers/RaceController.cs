@@ -34,7 +34,7 @@ namespace RegattaManager.Controllers
 
             if (rid != 0)
             {
-                IEnumerable<Race> model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId != 1002 && e.RacestatusId != 1004 && e.RacestatusId != 3 && e.RacestatusId != 1006).OrderBy(e => e.Starttime);       
+                IEnumerable<Race> model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId != 1002 && e.RacestatusId != 1004 && e.RacestatusId != 3 && e.RacestatusId != 1006).OrderBy(e => e.Starttime).ToList();       
                 var approveable = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId == 1002).OrderBy(e => e.Starttime).ToList();
                 var raceable = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId == 1004).OrderBy(e => e.Starttime).ToList();
                 var finished = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId == 3).OrderBy(e => e.Starttime).ToList();
