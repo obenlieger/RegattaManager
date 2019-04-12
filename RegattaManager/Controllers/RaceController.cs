@@ -59,6 +59,7 @@ namespace RegattaManager.Controllers
                 ViewBag.finished = finished;
                 ViewBag.notenough = notenough;
                 ViewBag.startboats = startboats;
+                ViewBag.rid = rid;
 
                 var regattaClubs = _context.RegattaClubs.Where(e => e.RegattaId == rid);
                 ViewBag.clubs = _context.Clubs.Where(e => regattaClubs.Select(i => i.ClubId).Contains(e.ClubId)).ToList();
@@ -980,6 +981,15 @@ namespace RegattaManager.Controllers
             }
 
             return RedirectToAction("Details", "Race", new { id = startboat.RaceId });
+        }
+
+        public IActionResult TimeUp(int id)
+        {
+            var race = _context.Races.FirstOrDefault(e => e.RaceId == id);
+
+            //var racebefore = _context.Races.FirstOrDefault(e => e.Starttime )
+
+            return RedirectToAction("Index", "Race");
         }
 
         private void EditSeat(int seatnumber, int seatmemberid, bool standbycheck, int standbynumber, int standbymemberid, int oldmemberid, int oldstandbyid

@@ -835,6 +835,14 @@ namespace RegattaManager.Controllers
                 globaltimestamp = SetTimes(nr118, globaltimestamp);
                 globaltimestamp = SetTimes(nr119, globaltimestamp);                
             }
+            else
+            {
+                DateTime globaltimestamp = regatta.FromDate;
+
+                var races = _context.Races.Where(e => e.RacestatusId == 1).ToList();
+
+                SetTimes(races, globaltimestamp);
+            }
 
 
             return RedirectToAction("Index","Race");
