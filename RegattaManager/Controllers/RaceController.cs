@@ -987,7 +987,50 @@ namespace RegattaManager.Controllers
         {
             var race = _context.Races.FirstOrDefault(e => e.RaceId == id);
 
-            //var racebefore = _context.Races.FirstOrDefault(e => e.Starttime )
+            List<Race> racebefore = _context.Races.Where(e => e.Starttime < race.Starttime).OrderBy(e => e.Starttime).ToList();
+
+            DateTime beforetime = racebefore.Last().Starttime;
+            DateTime origtime = race.Starttime;
+            int beforeraceid = racebefore.Last().RaceId;
+
+            race.Starttime = beforetime;
+
+            var beforerace = _context.Races.FirstOrDefault(e => e.RaceId == beforeraceid);
+
+            beforerace.Starttime = origtime;
+
+            if(race != null && beforerace != null)
+            {
+                _context.Update(race);
+                _context.Update(beforerace);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Index", "Race");
+        }
+
+        public IActionResult TimeDown(int id)
+        {
+            var race = _context.Races.FirstOrDefault(e => e.RaceId == id);
+
+            List<Race> raceafter = _context.Races.Where(e => e.Starttime > race.Starttime).OrderByDescending(e => e.Starttime).ToList();
+
+            DateTime aftertime = raceafter.Last().Starttime;
+            DateTime origtime = race.Starttime;
+            int afterraceid = raceafter.Last().RaceId;
+
+            race.Starttime = aftertime;
+
+            var afterrace = _context.Races.FirstOrDefault(e => e.RaceId == afterraceid);
+
+            afterrace.Starttime = origtime;
+
+            if(race != null && afterrace != null)
+            {
+                _context.Update(race);
+                _context.Update(afterrace);
+                _context.SaveChanges();
+            }
 
             return RedirectToAction("Index", "Race");
         }

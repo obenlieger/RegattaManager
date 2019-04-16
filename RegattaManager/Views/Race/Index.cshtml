@@ -442,7 +442,9 @@ else
                 @item.Racestatus.Name
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Starttime) | <a asp-action="TimeUp" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-secondary btn-sm">U</a> | <a asp-action="TimeDown" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-secondary btn-sm">D</a>
+                @Html.DisplayFor(modelItem => item.Starttime) <br/> 
+                <a asp-action="TimeUp" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-secondary btn-sm">hoch</a> |
+                <a asp-action="TimeDown" asp-controller="Race" asp-route-id="@item.RaceId" class="btn btn-secondary btn-sm">runter</a>
             </td>
             <td>
                 @foreach (var sb in ViewBag.startboats)
