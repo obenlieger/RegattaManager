@@ -15,6 +15,8 @@ namespace RegattaManager.Models
         [Display(Name ="Stadt")]
         public virtual string City { get; set; }
         [Display(Name = "Vereinsnummer")]
+        [EmailAddress]
+        public string EMail { get; set; }
         public virtual string VNr { get; set; }
         [Display(Name = "Kurzname")]
         public virtual string ShortName { get; set; }
