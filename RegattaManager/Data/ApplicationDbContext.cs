@@ -519,6 +519,22 @@ namespace RegattaManager.Data
             //builder.Entity<Member>().HasData(new Member { MemberId = 2, Birthyear = 2000, ClubId = 294, FirstName = "WIRD", Gender = "M", LastName = "GESUCHT", RentedToClubId = 0, isRented = false });
             //builder.Entity<Member>().HasData(new Member { MemberId = 3, Birthyear = 2000, ClubId = 294, FirstName = "WIRD", Gender = "M", LastName = "GESUCHT", RentedToClubId = 0, isRented = false });
             //builder.Entity<Member>().HasData(new Member { MemberId = 4, Birthyear = 2000, ClubId = 294, FirstName = "WIRD", Gender = "M", LastName = "GESUCHT", RentedToClubId = 0, isRented = false });                
+
+            builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 1, EndlaufCount = 1, HoffnungslaufCount = 0, ReportedSBCountFrom = 1, ReportedSBCountTo = 6, VorlaufCount = 0, ZwischenlaufCount = 0, isAbteilungslauf = false});
+            builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 2, EndlaufCount = 1, HoffnungslaufCount = 0, ReportedSBCountFrom = 7, ReportedSBCountTo = 12, VorlaufCount = 2, ZwischenlaufCount = 0, Description = "1.-3. in E", isAbteilungslauf = false});
+            builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 3, EndlaufCount = 1, HoffnungslaufCount = 0, ReportedSBCountFrom = 13, ReportedSBCountTo = 18, VorlaufCount = 3, ZwischenlaufCount = 1, isAbteilungslauf = false});
+            builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 4, EndlaufCount = 1, HoffnungslaufCount = 0, ReportedSBCountFrom = 19, ReportedSBCountTo = 24, VorlaufCount = 4, ZwischenlaufCount = 2, isAbteilungslauf = false});
+            builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 5, EndlaufCount = 1, HoffnungslaufCount = 1, ReportedSBCountFrom = 25, ReportedSBCountTo = 30, VorlaufCount = 5, ZwischenlaufCount = 2, isAbteilungslauf = false});
+            builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 6, EndlaufCount = 1, HoffnungslaufCount = 2, ReportedSBCountFrom = 31, ReportedSBCountTo = 36, VorlaufCount = 6, ZwischenlaufCount = 2, isAbteilungslauf = false});
+            builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 7, EndlaufCount = 1, HoffnungslaufCount = 2, ReportedSBCountFrom = 37, ReportedSBCountTo = 42, VorlaufCount = 7, ZwischenlaufCount = 3, isAbteilungslauf = false});
+            builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 8, EndlaufCount = 1, HoffnungslaufCount = 4, ReportedSBCountFrom = 43, ReportedSBCountTo = 48, VorlaufCount = 8, ZwischenlaufCount = 2, isAbteilungslauf = false});
+            builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 16, EndlaufCount = 1, HoffnungslaufCount = 3, ReportedSBCountFrom = 49, ReportedSBCountTo = 54, VorlaufCount = 9, ZwischenlaufCount = 3, isAbteilungslauf = false});
+            builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 9, EndlaufCount = 1, HoffnungslaufCount = 0, ReportedSBCountFrom = 1, ReportedSBCountTo = 6, VorlaufCount = 0, ZwischenlaufCount = 0, isAbteilungslauf = true});
+            builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 10, EndlaufCount = 1, HoffnungslaufCount = 0, ReportedSBCountFrom = 7, ReportedSBCountTo = 12, VorlaufCount = 2, ZwischenlaufCount = 0, isAbteilungslauf = true});
+            builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 11, EndlaufCount = 1, HoffnungslaufCount = 0, ReportedSBCountFrom = 13, ReportedSBCountTo = 18, VorlaufCount = 3, ZwischenlaufCount = 0, isAbteilungslauf = true});
+            builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 12, EndlaufCount = 1, HoffnungslaufCount = 0, ReportedSBCountFrom = 19, ReportedSBCountTo = 24, VorlaufCount = 4, ZwischenlaufCount = 0, isAbteilungslauf = true});
+            builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 13, EndlaufCount = 1, HoffnungslaufCount = 0, ReportedSBCountFrom = 25, ReportedSBCountTo = 30, VorlaufCount = 5, ZwischenlaufCount = 0, isAbteilungslauf = true});
+            builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 14, EndlaufCount = 1, HoffnungslaufCount = 0, ReportedSBCountFrom = 31, ReportedSBCountTo = 36, VorlaufCount = 6, ZwischenlaufCount = 0, isAbteilungslauf = true});
         }
 
         public DbSet<RegattaManager.Models.Boatclass> Boatclasses { get; set; }

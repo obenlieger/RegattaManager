@@ -37,6 +37,7 @@ namespace RegattaManager
                 .AddDefaultTokenProviders()
                 .AddDefaultUI();
             
+            services.AddTransient<IEmailSender, EmailSender>(); 
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

@@ -1,4 +1,12 @@
 USE [RMDB]
+SET IDENTITY_INSERT [RMDB].[dbo].[Waters] ON
+GO
+INSERT INTO [RMDB].[dbo].[Waters] ([WaterId], [Name])
+(SELECT [WaterId], [Name] FROM RegattaMeldung.dbo.Waters)
+SET IDENTITY_INSERT [RMDB].[dbo].[Waters] OFF
+GO
+
+USE [RMDB]
 delete from StartboatMembers
 delete from StartboatStandbys
 delete from Startboats
@@ -17,7 +25,7 @@ GO
 USE [RMDB]
 SET IDENTITY_INSERT [RMDB].[dbo].[Regattas] ON
 GO
-INSERT INTO [RMDB].[dbo].[Regattas] ([RegattaId]
+INSERT INTO [RMDB].[dbo].[Regattas] (Choosen, [RegattaId]
       ,[Accomodation]
       ,[Awards]
       ,[Catering]
@@ -43,7 +51,8 @@ INSERT INTO [RMDB].[dbo].[Regattas] ([RegattaId]
       ,[Category]
       ,[Organizer]
       ,[StartersLastYear])
-(SELECT [RegattaId]
+(SELECT Choosen = 1 
+      ,[RegattaId]
       ,[Accomodation]
       ,[Awards]
       ,[Catering]
@@ -81,8 +90,31 @@ INSERT INTO [RMDB].[dbo].[RegattaClubs] ([ClubId],[RegattaId],[Guid])
 GO
 
 USE [RMDB]
+SET IDENTITY_INSERT [RMDB].[dbo].[Raceclasses] ON
+INSERT INTO [RMDB].[dbo].[Raceclasses] ([RaceclassId], [Length], [Name])
+(SELECT [RaceclassId], [Length], [Name] FROM RegattaMeldung.dbo.Raceclasses
+WHERE RaceclassId NOT IN (SELECT RaceclassId FROM RMDB.dbo.Raceclasses))
+SET IDENTITY_INSERT [RMDB].[dbo].[Raceclasses] OFF
+GO
+
+USE [RMDB]
+SET IDENTITY_INSERT [RMDB].[dbo].[Competitions] ON
+INSERT INTO [RMDB].[dbo].[Competitions] ([CompetitionId], [BoatclassId],[RaceclassId])
+(SELECT [CompetitionId], [BoatclassId],[RaceclassId] FROM RegattaMeldung.dbo.Competitions)
+SET IDENTITY_INSERT [RMDB].[dbo].[Competitions] OFF
+GO
+
+USE [RMDB]
 INSERT INTO [RMDB].[dbo].[RegattaCompetitions] ([CompetitionId],[RegattaId])
 (SELECT [CompetitionId],[RegattaId] FROM RegattaMeldung.dbo.RegattaCompetitions)
+GO
+
+USE [RMDB]
+SET IDENTITY_INSERT [RMDB].[dbo].[Oldclasses] ON
+INSERT INTO [RMDB].[dbo].[Oldclasses] ([OldclassId], [FromAge], [ToAge], [Name])
+(SELECT [OldclassId], [FromAge], [ToAge], [Name] FROM RegattaMeldung.dbo.Oldclasses
+WHERE OldclassId NOT IN (SELECT OldclassId FROM RMDB.dbo.Oldclasses))
+SET IDENTITY_INSERT [RMDB].[dbo].[Oldclasses] OFF
 GO
 
 USE [RMDB]
@@ -94,7 +126,7 @@ USE [RMDB]
 SET IDENTITY_INSERT [RMDB].[dbo].[Members] ON
 GO
 INSERT INTO [RMDB].[dbo].[Members] (MemberId, Birthyear, ClubId, FirstName, LastName, Gender, RentYear, RentedToClubId, isRented)
-(SELECT MemberId, Birthyear, ClubId, FirstName, LastName, Gender, RentYear, RentedToClubId, isRented FROM RegattaMeldung.dbo.Members
+(SELECT MemberId, Birthyear, ClubId, FirstName, LastName, Gender, RentYear = 2000, RentedToClubId, isRented FROM RegattaMeldung.dbo.Members
 WHERE MemberId NOT IN
 (SELECT MemberId FROM RMDB.dbo.Members))
 GO
@@ -106,18 +138,26 @@ SET IDENTITY_INSERT [RMDB].[dbo].[ReportedRaces] ON
 GO
 INSERT INTO [RMDB].[dbo].[ReportedRaces] ([ReportedRaceId]
       ,[CompetitionId]
-      ,[OldclassId]
-      ,[Gender]
-      ,[RaceCode]
-      ,[RegattaId]
-      ,[Comment])
-(SELECT [ReportedRaceId]
-      ,[CompetitionId]
+      ,[modifiedDate]
       ,[OldclassId]
       ,[Gender]
       ,[RaceCode]
       ,[RegattaId]
       ,[Comment]
+      ,[isCreated]
+      ,[StartboatCount]
+      ,[isAbteilungslauf])
+(SELECT [ReportedRaceId]
+      ,[CompetitionId]
+      ,[modifiedDate] = '2020-08-19 00:00:00'
+      ,[OldclassId]
+      ,[Gender]
+      ,[RaceCode]
+      ,[RegattaId]
+      ,[Comment]
+      ,[isCreated] = 0
+      ,[StartboatCount] = 0
+      ,[isAbteilungslauf] = 0
 FROM [RegattaMeldung].[dbo].[ReportedRaces]
 WHERE [ReportedRaceId] NOT IN
 (SELECT [ReportedRaceId] FROM RMDB.dbo.ReportedRaces))
@@ -138,14 +178,12 @@ SET IDENTITY_INSERT [RMDB].[dbo].[ReportedStartboats] OFF
 GO
 
 USE [RMDB]
-
 INSERT INTO [RMDB].[dbo].[ReportedStartboatMembers] (ReportedStartboatId,MemberId,Seatnumber)
 SELECT ReportedStartboatId,MemberId,Seatnumber
 FROM [RegattaMeldung].[dbo].[ReportedStartboatMembers]
 GO
 
 USE [RMDB]
-
 INSERT INTO [RMDB].[dbo].[ReportedStartboatStandbys] (ReportedStartboatId,MemberId,Standbynumber)
 SELECT ReportedStartboatId,MemberId,Standbynumber
 FROM [RegattaMeldung].[dbo].[ReportedStartboatStandbys]
