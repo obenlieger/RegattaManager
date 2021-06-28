@@ -535,6 +535,11 @@ namespace RegattaManager.Data
             builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 12, EndlaufCount = 1, HoffnungslaufCount = 0, ReportedSBCountFrom = 19, ReportedSBCountTo = 24, VorlaufCount = 4, ZwischenlaufCount = 0, isAbteilungslauf = true});
             builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 13, EndlaufCount = 1, HoffnungslaufCount = 0, ReportedSBCountFrom = 25, ReportedSBCountTo = 30, VorlaufCount = 5, ZwischenlaufCount = 0, isAbteilungslauf = true});
             builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 14, EndlaufCount = 1, HoffnungslaufCount = 0, ReportedSBCountFrom = 31, ReportedSBCountTo = 36, VorlaufCount = 6, ZwischenlaufCount = 0, isAbteilungslauf = true});
+
+            builder.Entity<RaceTyp>().HasData(new RaceTyp { RaceTypId = 1, Name= "Vorlauf", isFinal = false});
+            builder.Entity<RaceTyp>().HasData(new RaceTyp { RaceTypId = 2, Name= "Zwischenlauf", isFinal = false});
+            builder.Entity<RaceTyp>().HasData(new RaceTyp { RaceTypId = 3, Name= "Hoffnungslauf", isFinal = false});
+            builder.Entity<RaceTyp>().HasData(new RaceTyp { RaceTypId = 4, Name= "Endlauf", isFinal = true});
         }
 
         public DbSet<RegattaManager.Models.Boatclass> Boatclasses { get; set; }
