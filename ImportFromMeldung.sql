@@ -51,7 +51,7 @@ INSERT INTO [RMDB].[dbo].[Regattas] (Choosen, [RegattaId]
       ,[Category]
       ,[Organizer]
       ,[StartersLastYear])
-(SELECT Choosen = 1 
+(SELECT Choosen = 0 
       ,[RegattaId]
       ,[Accomodation]
       ,[Awards]

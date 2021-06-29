@@ -551,6 +551,15 @@ namespace RegattaManager.Data
             builder.Entity<Racestatus>().HasData(new Racestatus { RacestatusId = 1004, Name = "ist ausgelost"});
             builder.Entity<Racestatus>().HasData(new Racestatus { RacestatusId = 1005, Name = "Auslosung bestätigt"});
             builder.Entity<Racestatus>().HasData(new Racestatus { RacestatusId = 1006, Name = "zu wenig Teilnehmer"});
+
+            builder.Entity<Startboatstatus>().HasData(new Startboatstatus { StartboatstatusId = 1, Name = "Am Start"});
+            builder.Entity<Startboatstatus>().HasData(new Startboatstatus { StartboatstatusId = 2, Name = "Im Rennen"});
+            builder.Entity<Startboatstatus>().HasData(new Startboatstatus { StartboatstatusId = 3, Name = "Im Ziel"});
+            builder.Entity<Startboatstatus>().HasData(new Startboatstatus { StartboatstatusId = 4, Name = "gekentert"});
+            builder.Entity<Startboatstatus>().HasData(new Startboatstatus { StartboatstatusId = 5, Name = "Nicht am Start"});
+            builder.Entity<Startboatstatus>().HasData(new Startboatstatus { StartboatstatusId = 6, Name = "Gemeldet"});
+            builder.Entity<Startboatstatus>().HasData(new Startboatstatus { StartboatstatusId = 7, Name = "falsch eingefahren"});
+            builder.Entity<Startboatstatus>().HasData(new Startboatstatus { StartboatstatusId = 8, Name = "disqualifiziert"});
         }
 
         public DbSet<RegattaManager.Models.Boatclass> Boatclasses { get; set; }
