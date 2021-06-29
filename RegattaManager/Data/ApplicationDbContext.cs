@@ -483,6 +483,7 @@ namespace RegattaManager.Data
             builder.Entity<Boatclass>().HasData(new Boatclass { BoatclassId = 8, Name = "S2", Seats = 2 });
             builder.Entity<Boatclass>().HasData(new Boatclass { BoatclassId = 9, Name = "S6", Seats = 6 });
             builder.Entity<Boatclass>().HasData(new Boatclass { BoatclassId = 10, Name = "S8", Seats = 8 });
+            builder.Entity<Boatclass>().HasData(new Boatclass { BoatclassId = 12, Name = "S3", Seats = 3 });
 
             builder.Entity<Oldclass>().HasData(new Oldclass { OldclassId = 1, FromAge = 0, Name = "Schüler D", ToAge = 6 });
             builder.Entity<Oldclass>().HasData(new Oldclass { OldclassId = 2, FromAge = 7, Name = "Schüler C", ToAge = 9 });
@@ -540,6 +541,16 @@ namespace RegattaManager.Data
             builder.Entity<RaceTyp>().HasData(new RaceTyp { RaceTypId = 2, Name= "Zwischenlauf", isFinal = false});
             builder.Entity<RaceTyp>().HasData(new RaceTyp { RaceTypId = 3, Name= "Hoffnungslauf", isFinal = false});
             builder.Entity<RaceTyp>().HasData(new RaceTyp { RaceTypId = 4, Name= "Endlauf", isFinal = true});
+
+            builder.Entity<Racestatus>().HasData(new Racestatus { RacestatusId = 1, Name = "geplant"});
+            builder.Entity<Racestatus>().HasData(new Racestatus { RacestatusId = 2, Name = "gestartet"});
+            builder.Entity<Racestatus>().HasData(new Racestatus { RacestatusId = 3, Name = "abgenommen"});
+            builder.Entity<Racestatus>().HasData(new Racestatus { RacestatusId = 4, Name = "abgebrochen"});
+            builder.Entity<Racestatus>().HasData(new Racestatus { RacestatusId = 1002, Name = "beendet"});
+            builder.Entity<Racestatus>().HasData(new Racestatus { RacestatusId = 1003, Name = "wird ausgelost"});
+            builder.Entity<Racestatus>().HasData(new Racestatus { RacestatusId = 1004, Name = "ist ausgelost"});
+            builder.Entity<Racestatus>().HasData(new Racestatus { RacestatusId = 1005, Name = "Auslosung bestätigt"});
+            builder.Entity<Racestatus>().HasData(new Racestatus { RacestatusId = 1006, Name = "zu wenig Teilnehmer"});
         }
 
         public DbSet<RegattaManager.Models.Boatclass> Boatclasses { get; set; }
