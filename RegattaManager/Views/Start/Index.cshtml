@@ -134,6 +134,7 @@
                     <td>
                         <form asp-action="VerifyStartboat" asp-controller="Start" asp-route-id="@sb.StartboatId">
                             <input type="hidden" name="statusid" id="statusid" value="1" />
+                            <input type="hidden" name="raceid" id="raceid" value=@Model.RaceId />
                             @if (@sb.StartboatstatusId == 1)
                             {
                                 <a href="#" class="btn btn-success disabled">Am Start</a>
@@ -147,6 +148,7 @@
                     <td>
                         <form asp-action="VerifyStartboat" asp-controller="Start" asp-route-id="@sb.StartboatId">
                             <input type="hidden" name="statusid" id="statusid" value="5" />
+                            <input type="hidden" name="raceid" id="raceid" value=@Model.RaceId />
                             @if (@sb.StartboatstatusId == 5)
                             {
                                 <button type="submit" class="btn btn-danger disabled">Nicht Am Start</button>

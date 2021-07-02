@@ -69,7 +69,7 @@ namespace RegattaManager.Controllers
         }
 
         [HttpPost]
-        public IActionResult VerifyStartboat(int id, int statusid)
+        public IActionResult VerifyStartboat(int id, int statusid, int raceid)
         {
             var startboat = _context.Startboats.FirstOrDefault(e => e.StartboatId == id);
             startboat.StartboatstatusId = statusid;
@@ -79,7 +79,7 @@ namespace RegattaManager.Controllers
                 _context.SaveChanges();
             }
                         
-            return Redirect(Url.RouteUrl(new { controller = "Start", action = "Index" }) + "#" + id);
+            return Redirect(Url.RouteUrl(new { controller = "Start", action = "Index" }) + "?id=" + raceid + "#" + id);
         }
 
         [HttpGet]
