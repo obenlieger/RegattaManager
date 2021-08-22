@@ -326,6 +326,7 @@ namespace RegattaManager.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var regatta = await _context.Regattas.SingleOrDefaultAsync(m => m.RegattaId == id);
+
             _context.Regattas.Remove(regatta);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
