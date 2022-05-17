@@ -6,7 +6,7 @@
 @{ var x = 0;}
 <br />
 <h2>Rennübersicht</h2>
-<a asp-action="Create" asp-controller="Race">Neues Rennen erstellen</a>
+<a asp-action="Create" asp-controller="Race" class="btn btn-success">Neues Rennen erstellen</a>
 <br />
 <a asp-action="PrintView" asp-controller="Race" target="_blank" class="btn btn-info">Ausgeloste Rennen drucken</a>
 <br />
@@ -314,7 +314,8 @@ else
 
     <hr />
     <h4>Anstehende Rennen</h4>
-    <a asp-action="SetRaceTimes" asp-controller="Regatta" asp-route-id="@ViewBag.rid" class="btn btn-primary">Startzeiten generieren</a>
+    <a asp-action="CreateStarttimes" asp-controller="Regatta" class="btn btn-secondary">Startzeiten Vorläufe erstellen</a>
+    <a asp-action="SetRaceTimes" asp-controller="Regatta" asp-route-id="@ViewBag.rid" class="btn btn-primary">Startzeiten Endläufe generieren</a>
     <table class="table table-hover">
         <thead>
             <tr>

@@ -506,6 +506,7 @@ namespace RegattaManager.Data
             builder.Entity<Oldclass>().HasData(new Oldclass { OldclassId = 8, FromAge = 32, Name = "Senioren A", ToAge = 39 });
             builder.Entity<Oldclass>().HasData(new Oldclass { OldclassId = 9, FromAge = 40, Name = "Senioren B", ToAge = 49 });
             builder.Entity<Oldclass>().HasData(new Oldclass { OldclassId = 10, FromAge = 50, Name = "Senioren C", ToAge = 59 });
+            builder.Entity<Oldclass>().HasData(new Oldclass { OldclassId = 12, FromAge = 32, Name = "Senioren", ToAge = 99 });
 
             builder.Entity<Raceclass>().HasData(new Raceclass { RaceclassId = 1, Length = 200, Name = "200m" });
             builder.Entity<Raceclass>().HasData(new Raceclass { RaceclassId = 2, Length = 500, Name = "500m" });
@@ -517,9 +518,13 @@ namespace RegattaManager.Data
             builder.Entity<Raceclass>().HasData(new Raceclass { RaceclassId = 1006, Length = 250, Name = "250m" });
 
             builder.Entity<Member>().HasData(new Member { MemberId = 1, Birthyear = 2000, ClubId = 294, FirstName = "WIRD", Gender = "M", LastName = "GESUCHT", RentedToClubId = 0, isRented = false });
-            //builder.Entity<Member>().HasData(new Member { MemberId = 2, Birthyear = 2000, ClubId = 294, FirstName = "WIRD", Gender = "M", LastName = "GESUCHT", RentedToClubId = 0, isRented = false });
-            //builder.Entity<Member>().HasData(new Member { MemberId = 3, Birthyear = 2000, ClubId = 294, FirstName = "WIRD", Gender = "M", LastName = "GESUCHT", RentedToClubId = 0, isRented = false });
-            //builder.Entity<Member>().HasData(new Member { MemberId = 4, Birthyear = 2000, ClubId = 294, FirstName = "WIRD", Gender = "M", LastName = "GESUCHT", RentedToClubId = 0, isRented = false });                
+            builder.Entity<Member>().HasData(new Member { MemberId = 2, Birthyear = 2000, ClubId = 294, FirstName = "WIRD", Gender = "M", LastName = "GESUCHT", RentedToClubId = 0, isRented = false });
+            builder.Entity<Member>().HasData(new Member { MemberId = 3, Birthyear = 2000, ClubId = 294, FirstName = "WIRD", Gender = "M", LastName = "GESUCHT", RentedToClubId = 0, isRented = false });
+            builder.Entity<Member>().HasData(new Member { MemberId = 4, Birthyear = 2000, ClubId = 294, FirstName = "WIRD", Gender = "M", LastName = "GESUCHT", RentedToClubId = 0, isRented = false });
+            builder.Entity<Member>().HasData(new Member { MemberId = 5, Birthyear = 2000, ClubId = 294, FirstName = "WIRD", Gender = "M", LastName = "GESUCHT", RentedToClubId = 0, isRented = false });
+            builder.Entity<Member>().HasData(new Member { MemberId = 6, Birthyear = 2000, ClubId = 294, FirstName = "WIRD", Gender = "M", LastName = "GESUCHT", RentedToClubId = 0, isRented = false });
+            builder.Entity<Member>().HasData(new Member { MemberId = 7, Birthyear = 2000, ClubId = 294, FirstName = "WIRD", Gender = "M", LastName = "GESUCHT", RentedToClubId = 0, isRented = false });
+            builder.Entity<Member>().HasData(new Member { MemberId = 8, Birthyear = 2000, ClubId = 294, FirstName = "WIRD", Gender = "M", LastName = "GESUCHT", RentedToClubId = 0, isRented = false });
 
             builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 1, EndlaufCount = 1, HoffnungslaufCount = 0, ReportedSBCountFrom = 1, ReportedSBCountTo = 6, VorlaufCount = 0, ZwischenlaufCount = 0, isAbteilungslauf = false});
             builder.Entity<RaceDraw>().HasData(new RaceDraw { RaceDrawId = 2, EndlaufCount = 1, HoffnungslaufCount = 0, ReportedSBCountFrom = 7, ReportedSBCountTo = 12, VorlaufCount = 2, ZwischenlaufCount = 0, Description = "1.-3. in E", isAbteilungslauf = false});
