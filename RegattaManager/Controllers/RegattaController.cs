@@ -600,6 +600,51 @@ namespace RegattaManager.Controllers
         }
 
         [HttpGet]
+        public IActionResult CreateStarttimesEndlauf()
+        {
+            var d1 = new DateTime(0001, 1, 1, 0, 0, 0);
+            var races = _context.Races.Include(e => e.Oldclass).Include(e => e.Racestatus).Include(e => e.Raceclass).Include(e => e.Boatclass).Where(e => e.Racestatus.Name != "zu wenig Teilnehmer" && e.Starttime == d1 && e.RaceTyp.Name == "Endlauf").OrderBy(e => e.Oldclass.ToAge).ToList();
+
+            ViewBag.configuredRaces = _context.Races.Include(e => e.Oldclass).Include(e => e.Racestatus).Include(e => e.Raceclass).Include(e => e.Boatclass).Where(e => e.Racestatus.Name != "zu wenig Teilnehmer" && e.Starttime > d1 && e.RaceTyp.Name == "Endlauf").OrderBy(e => e.Starttime).ToList();
+
+            ViewBag.starttime = _context.Races.OrderByDescending(e => e.Starttime).First().Starttime;
+            ViewBag.minutestep = 3;
+
+            return View(races);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ConfigureRaceEndlauf(int raceId, DateTime starttime, int minutestep)
+        {
+            var race = _context.Races.SingleOrDefault(e => e.RaceId == raceId);
+
+            starttime = starttime.AddMinutes(minutestep);
+
+            race.Starttime = starttime;
+
+            _context.Entry(race).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return RedirectToAction("CreateStarttimesEndlauf", "Regatta");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UnconfigureRaceEndlauf(int raceId)
+        {
+            var race = _context.Races.SingleOrDefault(e => e.RaceId == raceId);
+            var starttime = new DateTime(0001, 1, 1, 0, 0, 0);
+
+            race.Starttime = starttime;
+
+            _context.Entry(race).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return RedirectToAction("CreateStarttimesEndlauf", "Regatta");
+        }
+
+        [HttpGet]
         public IActionResult CreateStarttimes()
         {
             var d1 = new DateTime(0001, 1, 1, 0, 0, 0);
@@ -669,8 +714,8 @@ namespace RegattaManager.Controllers
 
                 var baseraces = _context.Races.Include(x => x.Oldclass).Include(x => x.RaceTyp).Include(x => x.Racestatus).Where(e => e.RaceTyp.Name == "Endlauf" && e.Racestatus.Name != "zu wenig Teilnehmer").ToList();
 
-                var nr1 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Schüler B11" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr2 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Schüler B12" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
+                //var nr1 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Schüler B11" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
+                //var nr2 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Schüler B12" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
                 var nr3 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Schüler B" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
                 var nr4 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Jugend" && e.Gender == "X" && e.Raceclass.Length == 200).ToList();
                 var nr5 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Leistungsklasse" && e.Gender == "X" && e.Raceclass.Length == 200).ToList();
@@ -783,8 +828,8 @@ namespace RegattaManager.Controllers
                 var nr118 = baseraces.Where(e => e.Boatclass.Name == "S4" && e.Oldclass.Name == "Leistungsklasse" && e.Gender == "W" && e.Raceclass.Length == 100).ToList();
                 var nr119 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Leistungsklasse" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
 
-                globaltimestamp = SetTimes(nr1, globaltimestamp);
-                globaltimestamp = SetTimes(nr2, globaltimestamp);
+                //globaltimestamp = SetTimes(nr1, globaltimestamp);
+                //globaltimestamp = SetTimes(nr2, globaltimestamp);
                 globaltimestamp = SetTimes(nr3, globaltimestamp);
                 globaltimestamp = SetTimes(nr4, globaltimestamp);
                 globaltimestamp = SetTimes(nr5, globaltimestamp);

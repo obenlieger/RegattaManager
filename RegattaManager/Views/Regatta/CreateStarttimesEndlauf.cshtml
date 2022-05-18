@@ -122,7 +122,7 @@ Schritte zwischen Rennen: @ViewBag.minutestep
                     <td>@race.Boatclass.Name @race.Raceclass.Name</td>
                     <td>@race.Starttime</td>
                     <td>
-                        <form asp-action="ConfigureRace" asp-controller="Regatta">
+                        <form asp-action="ConfigureRaceEndlauf" asp-controller="Regatta">
                             <input type="hidden" name="raceId" value="@race.RaceId"/>
                             <input type="hidden" name="starttime" value="@ViewBag.starttime" />
                             <input type="hidden" name="minutestep" value="@ViewBag.minutestep" />
@@ -148,7 +148,7 @@ Schritte zwischen Rennen: @ViewBag.minutestep
                 {
                 <tr>
                     <td>
-                        <form asp-action="UnconfigureRace" asp-controller="Regatta">
+                        <form asp-action="UnconfigureRaceEndlauf" asp-controller="Regatta">
                             <input type="hidden" name="raceId" value="@cr.RaceId"/>
                             <input type="submit" value="&lt;" class="btn btn-warning btn-sm" />
                         </form>
