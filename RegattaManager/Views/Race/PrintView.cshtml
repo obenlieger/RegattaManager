@@ -30,10 +30,12 @@
 
         th {
             font-size: 85%;
+            color: black;
         }
 
         td {
             font-size: 85%;
+            color: black;
         }
     </style>
 </head>
@@ -43,11 +45,11 @@
         <h5>Stand: @DateTime.Now.ToString("dd.MM.yyyy HH:mm")</h5>
         @foreach (var item in Model)
         {
-            <table class="table table-sm">
+            <table class="table table-sm" width="100%">
                 <thead>
                     <tr class="table-primary">
-                        <th>@item.RaceCode</th>
-                        <th>
+                        <th width="15%">@item.RaceCode</th>
+                        <th width="30%">
                             @if (item.Gender.Equals("M"))
                             {
                                 @if (item.Oldclass.FromAge >= 17 && item.Oldclass.ToAge <= 99)
@@ -80,10 +82,10 @@
                             &nbsp;-&nbsp;
                             @Html.DisplayFor(modelItem => item.Raceclass.Name)
                         </th>
-                        <th>
+                        <th width="20%">
                             @Html.DisplayFor(modelItem => item.Starttime)
                         </th>
-                        <th>
+                        <th width="20%">
                             @if (item.RaceTypId == 4)
                             {
                                 <span class="badge badge-pill badge-danger">Endlauf</span>
@@ -115,7 +117,7 @@
                                 }
                             }
                         </th>
-                        <th>
+                        <th width="5%">
                             @foreach (var rdr in ViewBag.racedrawrules)
                             {
                                 @if (rdr.RaceDrawId == item.RaceDrawId && rdr.RaceSequence == item.Sequence && rdr.RaceTypId == item.RaceTypId && rdr.RaceDraw.isAbteilungslauf == item.isAbteilungslauf)

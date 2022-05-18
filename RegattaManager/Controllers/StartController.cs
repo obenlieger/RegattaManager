@@ -82,6 +82,27 @@ namespace RegattaManager.Controllers
             return Redirect(Url.RouteUrl(new { controller = "Start", action = "Index" }) + "?id=" + raceid + "#" + id);
         }
 
+        [HttpPost]
+        public IActionResult VerifyAllStartboats(int id, int statusid)
+        {
+            var race = _context.Races.FirstOrDefault(e => e.RaceId == id);
+            var startboats = _context.Startboats.Where(e => e.RaceId == id).ToList();
+
+            foreach(var sb in startboats)
+            {
+                sb.StartboatstatusId = statusid;
+
+                if (ModelState.IsValid)
+                {
+                    _context.Entry(sb).State = EntityState.Modified;                    
+                }
+            }
+
+            _context.SaveChanges();
+
+            return Redirect(Url.RouteUrl(new { controller = "Start", action = "Index" }) + "?id=" + id);
+        }
+
         [HttpGet]
         public IActionResult StartRace(int id)
         {

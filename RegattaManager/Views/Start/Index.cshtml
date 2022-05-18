@@ -24,7 +24,28 @@
                 <th>
                     Startzeit
                 </th>
-                <th></th>
+                <th align="center">
+                  <h4>
+                    <div id="txt"></div>
+                    <script>
+                    function startTime() {
+                      const today = new Date();
+                      let h = today.getHours();
+                      let m = today.getMinutes();
+                      let s = today.getSeconds();
+                      m = checkTime(m);
+                      s = checkTime(s);
+                      document.getElementById('txt').innerHTML =  h + ":" + m + ":" + s;
+                      setTimeout(startTime, 1000);
+                    }
+
+                    function checkTime(i) {
+                      if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+                      return i;
+                    }
+                    </script>
+                </h4>
+                </th>
             </tr>
         </thead>
         <tr class="table-success">
@@ -116,8 +137,14 @@
                 &nbsp;-&nbsp;
                 @Model.Raceclass.Name
             </td>
-            <td colspan="2">
+            <td>
                 <b>@Model.Starttime.TimeOfDay</b>
+            </td>
+            <td>
+                <form asp-action="VerifyAllStartboats" asp-controller="Start" asp-route-id="@Model.RaceId">
+                    <input type="hidden" name="statusid" id="statusid" value="1" />
+                    <button type="submit" class="btn btn-info">Alle am Start</button>
+                </form>
             </td>
         </tr>
         <tr class="table-secondary">
@@ -219,26 +246,7 @@
 
         <tr>
             <td colspan="3">
-                <h3>
-                    <div id="txt"></div>
-                    <script>
-                    function startTime() {
-                      const today = new Date();
-                      let h = today.getHours();
-                      let m = today.getMinutes();
-                      let s = today.getSeconds();
-                      m = checkTime(m);
-                      s = checkTime(s);
-                      document.getElementById('txt').innerHTML =  h + ":" + m + ":" + s;
-                      setTimeout(startTime, 1000);
-                    }
-
-                    function checkTime(i) {
-                      if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
-                      return i;
-                    }
-                    </script>
-                </h3>
+                
             </td>
             <td></td>
             <td></td>
