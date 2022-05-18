@@ -644,6 +644,20 @@ namespace RegattaManager.Controllers
             return RedirectToAction("CreateStarttimesEndlauf", "Regatta");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateRaceStarttimeEndlauf(int raceId, DateTime starttime)
+        {
+            var race = _context.Races.SingleOrDefault(e => e.RaceId == raceId);
+
+            race.Starttime = starttime;
+
+            _context.Entry(race).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return RedirectToAction("CreateStarttimesEndlauf", "Regatta");
+        }
+
         [HttpGet]
         public IActionResult CreateStarttimes()
         {

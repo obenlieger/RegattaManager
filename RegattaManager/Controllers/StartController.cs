@@ -33,14 +33,14 @@ namespace RegattaManager.Controllers
 
             if(readyracescount > 1)
             {
-                ViewBag.ReadyRaces = new SelectList(_context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => (e.RacestatusId == 1 || e.RacestatusId == 1005) && e.RaceId != model.RaceId).OrderBy(e => e.Starttime).Take(10).ToList(), "RaceId", "Starttime");            
+                ViewBag.ReadyRaces = new SelectList(_context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => (e.RacestatusId == 1 || e.RacestatusId == 1005) && e.RaceId != model.RaceId).OrderBy(e => e.Starttime).Take(10).ToList(), "RaceId", "Starttime.TimeOfDay");            
             }
 
             ViewBag.NextRaces = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1 || e.RacestatusId == 1005).OrderBy(e => e.Starttime).Take(5).ToList();
 
             if(id != null)
             {
-                model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1).OrderBy(e => e.Starttime).FirstOrDefault(e => e.RaceId == id);
+                model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 1 || e.RacestatusId == 1005).OrderBy(e => e.Starttime).FirstOrDefault(e => e.RaceId == id);
 
                 ViewBag.allClicked = true;
                 ViewBag.NextRaces = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => (e.RacestatusId == 1 || e.RacestatusId == 1005) && e.RaceId != model.RaceId).OrderBy(e => e.Starttime).Take(5).ToList();

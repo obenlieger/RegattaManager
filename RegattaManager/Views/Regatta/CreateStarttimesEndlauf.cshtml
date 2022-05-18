@@ -9,8 +9,8 @@
 
 <hr/>
 
-Nächste Startzeit: @(ViewBag.starttime.AddMinutes(ViewBag.minutestep))<br/>
-Schritte zwischen Rennen: @ViewBag.minutestep
+Nächste Startzeit: <b>@(ViewBag.starttime.AddMinutes(ViewBag.minutestep))</b><br/>
+Schritte zwischen Rennen: <b>@ViewBag.minutestep</b>
 
 <table>
     <thead>
@@ -239,7 +239,7 @@ Schritte zwischen Rennen: @ViewBag.minutestep
                         </td>
                     <td>@cr.Boatclass.Name @cr.Raceclass.Name</td>
                     <td>
-                        <form asp-action="UpdateRaceStarttime" asp-controller="Regatta">
+                        <form asp-action="UpdateRaceStarttimeEndlauf" asp-controller="Regatta">
                             <input type="hidden" name="raceId" value="@cr.RaceId" />
                             <input class="ui-timepicker-selected" type="datetime" name="starttime" value="@cr.Starttime" /> <input type="submit" value="OK" class="btn btn-primary btn-sm" />                            
                         </form>                        

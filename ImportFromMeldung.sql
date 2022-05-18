@@ -181,7 +181,6 @@ USE [RMDB]
 INSERT INTO [RMDB].[dbo].[ReportedStartboatMembers] (ReportedStartboatId,MemberId,Seatnumber)
 SELECT ReportedStartboatId,MemberId,Seatnumber
 FROM [RegattaMeldung].[dbo].[ReportedStartboatMembers]
-GO
 
 USE [RMDB]
 INSERT INTO [RMDB].[dbo].[ReportedStartboatStandbys] (ReportedStartboatId,MemberId,Standbynumber)
