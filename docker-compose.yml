@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+        
+    rmanweb:
+      image: regattamanager:1.0
+      restart: always
+      environment:
+        - PORT=80
+      depends_on:
+        - sksvsqlserver
+      networks:
+        rm-network:
+
+    sksvsqlserver:
+      image: mcr.microsoft.com/mssql/server:2019-latest
+      restart: always
+      environment:
+        - SA_PASSWORD=93bVYzWSQbWU2fbB
+        - ACCEPT_EULA=Y
+        - MSSQL_PID=Express
+      volumes:
+        - sksvsqldata:/var/opt/mssql
+      networks:
+        rm-network:    
+          aliases:
+            - sksvsqlserver
+    
+networks:
+  rm-network:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: br-mailcow
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        - subnet: ${IPV4_NETWORK:-172.22.1}.0/24
+        - subnet: ${IPV6_NETWORK:-fd4d:6169:6c63:6f77::/64}
+
+volumes:
+  sksvsqldata:
