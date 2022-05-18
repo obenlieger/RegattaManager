@@ -13,7 +13,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Renncode</th>
+                <th>Code</th>
                 <th colspan="2">
                     Rennbezeichnung
                 </th>
@@ -148,7 +148,7 @@
             </td>
         </tr>
         <tr class="table-secondary">
-            <td><i>Startbahn</i></td>
+            <td><i>Bahn</i></td>
             <td><i>Starter</i></td>
             <td><i>Verein</i></td>
             <td></td>
@@ -202,8 +202,38 @@
                                 {
                                     if (m.MemberId == sbm.MemberId)
                                     {
-                                        @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                        <br />
+                                        @if (m.MemberId == 1
+                                            || m.MemberId == 2
+                                            || m.MemberId == 3
+                                            || m.MemberId == 4
+                                            || m.MemberId == 5
+                                            || m.MemberId == 6
+                                            || m.MemberId == 7
+                                            || m.MemberId == 8)
+                                        {
+                                            @: <b>
+                                            @string.Format("{0}", m.LastName);
+                                            @: </b>
+                                        }
+                                        else
+                                        {
+                                            @string.Format("{0}, {1}.", m.LastName, m.FirstName.Substring(0,1));
+                                        }                                    
+                                        @if (m.ClubId != sb.ClubId && m.isRented == false && (m.MemberId != 1 && m.MemberId != 2 && m.MemberId != 3 && m.MemberId != 4 && m.MemberId != 5 && m.MemberId != 6 && m.MemberId != 7 && m.MemberId != 8))
+                                        {
+                                            @string.Format(" ({0})", m.Club.ShortName);
+                                        }
+                                        @if (m.isRented == true && m.RentedToClubId != sb.ClubId)
+                                        {
+                                            @foreach (var ac in ViewBag.AllClubs)
+                                            {
+                                                if (ac.ClubId == m.RentedToClubId)
+                                                {
+                                                    @: (@ac.ShortName)
+                                                }
+                                            }
+                                        }
+                                        @:<br />
                                     }
                                 }
                             }

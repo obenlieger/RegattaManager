@@ -178,14 +178,40 @@
                             {
                                 @foreach (var m in ViewBag.members)
                                 {
-                                    @if (m.MemberId == sbm.MemberId)
+                                    if (m.MemberId == sbm.MemberId)
                                     {
-                                        @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                        @if (m.ClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                        @if (m.MemberId == 1
+                                            || m.MemberId == 2
+                                            || m.MemberId == 3
+                                            || m.MemberId == 4
+                                            || m.MemberId == 5
+                                            || m.MemberId == 6
+                                            || m.MemberId == 7
+                                            || m.MemberId == 8)
+                                        {
+                                            @: <b>
+                                            @string.Format("{0}", m.LastName);
+                                            @: </b>
+                                        }
+                                        else
+                                        {
+                                            @string.Format("{0}, {1}.", m.LastName, m.FirstName.Substring(0,1));
+                                        }                                    
+                                        @if (m.ClubId != sb.ClubId && m.isRented == false && (m.MemberId != 1 && m.MemberId != 2 && m.MemberId != 3 && m.MemberId != 4 && m.MemberId != 5 && m.MemberId != 6 && m.MemberId != 7 && m.MemberId != 8))
                                         {
                                             @string.Format(" ({0})", m.Club.ShortName);
                                         }
-                                        <br />
+                                        @if (m.isRented == true && m.RentedToClubId != sb.ClubId)
+                                        {
+                                            @foreach (var ac in ViewBag.AllClubs)
+                                            {
+                                                if (ac.ClubId == m.RentedToClubId)
+                                                {
+                                                    @: (@ac.ShortName)
+                                                }
+                                            }
+                                        }
+                                        @:<br />
                                     }
                                 }
                             }
@@ -210,12 +236,12 @@
                         <form asp-action="FinishStartboat" asp-controller="Finish" asp-route-id="@sb.StartboatId">
                             @if (sb.Placement != 0)
                             {
-                                <button type="submit" class="btn btn-danger">Löschen</button>
+                                <button type="submit" class="btn btn-danger">Zurücksetzen</button>
                                 <input type="hidden" name="placement" id="placement" value="0" />
                             }
                             else
                             {
-                                <a href="#" class="btn btn-danger disabled">Löschen</a>
+                                <a href="#" class="btn btn-danger disabled">Zurücksetzen</a>
                             }
                             <input type="hidden" name="statusid" id="statusid" value="2" />
                         </form>
