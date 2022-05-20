@@ -48,7 +48,7 @@
             <table class="table table-sm" width="100%">
                 <thead>
                     <tr class="table-primary">
-                        <th width="15%">@item.RaceCode</th>
+                        <th width="15%">@Html.DisplayFor(modelItem => item.Starttime)</th>
                         <th width="30%">
                             @if (item.Gender.Equals("M"))
                             {
@@ -82,8 +82,8 @@
                             &nbsp;-&nbsp;
                             @Html.DisplayFor(modelItem => item.Raceclass.Name)
                         </th>
-                        <th width="20%">
-                            @Html.DisplayFor(modelItem => item.Starttime)
+                        <th width="20%">                            
+                            @item.RaceCode
                         </th>
                         <th width="20%">
                             @if (item.RaceTypId == 4)
