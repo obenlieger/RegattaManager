@@ -717,6 +717,28 @@ namespace RegattaManager.Controllers
             return RedirectToAction("CreateStarttimes", "Regatta");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AllRacesDown(int raceId, int minutestep)
+        {
+            var currentrace = _context.Races.SingleOrDefault(e => e.RaceId == raceId);
+
+            if(currentrace != null)
+            {
+                var racestomove = _context.Races.Where(e => e.Starttime >= currentrace.Starttime).ToList();
+
+                foreach(var r in racestomove)
+                {
+                    r.Starttime = r.Starttime.AddMinutes(minutestep);
+                    _context.Entry(r).State = EntityState.Modified;
+                }
+
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("CreateStarttimes", "Regatta");
+        }
+
         public IActionResult SetRaceTimes(int id)
         {
             var regatta = _context.Regattas.Where(x => x.Choosen == true).FirstOrDefault(e => e.RegattaId == id);
