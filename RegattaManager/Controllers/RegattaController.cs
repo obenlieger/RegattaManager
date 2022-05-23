@@ -658,15 +658,40 @@ namespace RegattaManager.Controllers
             return RedirectToAction("CreateStarttimesEndlauf", "Regatta");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AllRacesDownEndlauf(int raceId, int minutestep)
+        {
+            var currentrace = _context.Races.SingleOrDefault(e => e.RaceId == raceId);
+
+            if (currentrace != null)
+            {
+                var racestomove = _context.Races.Where(e => e.Starttime >= currentrace.Starttime).ToList();
+
+                foreach (var r in racestomove)
+                {
+                    r.Starttime = r.Starttime.AddMinutes(minutestep);
+                    _context.Entry(r).State = EntityState.Modified;
+                }
+
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("CreateStarttimesEndlauf", "Regatta");
+        }
+
         [HttpGet]
         public IActionResult CreateStarttimes()
         {
+            var regatta = _context.Regattas.Where(e => e.Choosen == true).FirstOrDefault();
             var d1 = new DateTime(0001, 1, 1, 0, 0, 0);
-            var races = _context.Races.Include(e => e.Oldclass).Include(e => e.Racestatus).Include(e => e.Raceclass).Include(e => e.Boatclass).Where(e => e.Racestatus.Name != "zu wenig Teilnehmer" && e.Starttime == d1 && e.RaceTyp.Name != "Endlauf").OrderBy(e => e.Oldclass.ToAge).ToList();
+            var races = _context.Races.Include(e => e.Oldclass).Include(e => e.Racestatus).Include(e => e.Raceclass).Include(e => e.Boatclass).Where(e => e.Racestatus.Name != "zu wenig Teilnehmer" && e.Starttime == d1).OrderBy(e => e.Oldclass.ToAge).ToList();
 
-            ViewBag.configuredRaces = _context.Races.Include(e => e.Oldclass).Include(e => e.Racestatus).Include(e => e.Raceclass).Include(e => e.Boatclass).Where(e => e.Racestatus.Name != "zu wenig Teilnehmer" && e.Starttime > d1 && e.RaceTyp.Name != "Endlauf").OrderBy(e => e.Starttime).ToList();
+            ViewBag.configuredRaces = _context.Races.Include(e => e.Oldclass).Include(e => e.Racestatus).Include(e => e.Raceclass).Include(e => e.Boatclass).Where(e => e.Racestatus.Name != "zu wenig Teilnehmer" && e.Starttime > d1 && e.Starttime <= regatta.ToDate).OrderBy(e => e.Starttime).ToList();
+            ViewBag.configuredRacesDayTwo = _context.Races.Include(e => e.Oldclass).Include(e => e.Racestatus).Include(e => e.Raceclass).Include(e => e.Boatclass).Where(e => e.Racestatus.Name != "zu wenig Teilnehmer" && e.Starttime > regatta.ToDate).OrderBy(e => e.Starttime).ToList();
 
-            ViewBag.starttime = _context.Races.OrderByDescending(e => e.Starttime).First().Starttime;
+            ViewBag.starttime = _context.Races.Where(e => e.Starttime >= regatta.FromDate && e.Starttime <= regatta.ToDate).OrderByDescending(e => e.Starttime).First().Starttime;
+            ViewBag.starttimeDayTwo = _context.Races.Where(e => e.Starttime >= regatta.ToDate).OrderByDescending(e => e.Starttime).First().Starttime;
             ViewBag.minutestep = 3;
 
             return View(races);

@@ -141,7 +141,8 @@ Schritte zwischen Rennen: <b>@ViewBag.minutestep</b>
                         <th>Race Code</th>
                         <th>Altersklasse</th>
                         <th>Strecke</th>
-                        <th>Startzeit</th>                        
+                        <th>Startzeit</th>  
+                        <th></th>
                     </tr>
                 </thead>
                 @foreach (var cr in ViewBag.configuredRaces)
@@ -243,6 +244,13 @@ Schritte zwischen Rennen: <b>@ViewBag.minutestep</b>
                             <input type="hidden" name="raceId" value="@cr.RaceId" />
                             <input class="ui-timepicker-selected" type="datetime" name="starttime" value="@cr.Starttime" /> <input type="submit" value="OK" class="btn btn-primary btn-sm" />                            
                         </form>                        
+                    </td>
+                    <td>
+                        <form asp-action="AllRacesDownEndlauf" asp-controller="Regatta">
+                            <input type="hidden" name="raceId" value="@cr.RaceId" />
+                            <input type="hidden" name="minutestep" value="@ViewBag.minutestep" />
+                            <input type="submit" value="V" class="btn btn-outline-warning" />
+                        </form>
                     </td>
                 </tr>
                 }
