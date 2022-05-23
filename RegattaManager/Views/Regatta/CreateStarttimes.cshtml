@@ -13,6 +13,7 @@ Startzeit Tag 1: <b>@(ViewBag.starttime.AddMinutes(ViewBag.minutestep))</b><br/>
 Startzeit Tag 2: <b>@(ViewBag.starttimeDayTwo.AddMinutes(ViewBag.minutestep))</b><br/>
 Schritte zwischen Rennen: <b>@ViewBag.minutestep</b>
 
+
 <table>
     <thead>
         <tr>
@@ -126,9 +127,15 @@ Schritte zwischen Rennen: <b>@ViewBag.minutestep</b>
                     <td>
                         <form asp-action="ConfigureRace" asp-controller="Regatta">
                             <input type="hidden" name="raceId" value="@race.RaceId"/>
-                            <input type="hidden" name="starttime" value="@ViewBag.starttime" />
                             <input type="hidden" name="minutestep" value="@ViewBag.minutestep" />
-                            <input type="submit" value="&gt;" class="btn btn-success btn-sm" />
+                            <input type="submit" value="1" class="btn btn-success btn-sm" />
+                        </form>
+                    </td>
+                    <td>
+                        <form asp-action="ConfigureRaceDayTwo" asp-controller="Regatta">
+                            <input type="hidden" name="raceId" value="@race.RaceId"/>
+                            <input type="hidden" name="minutestep" value="@ViewBag.minutestep" />
+                            <input type="submit" value="2" class="btn btn-success btn-sm" />
                         </form>
                     </td>
                 </tr>
@@ -156,7 +163,16 @@ Schritte zwischen Rennen: <b>@ViewBag.minutestep</b>
                             <input type="submit" value="&lt;" class="btn btn-warning btn-sm" />
                         </form>
                     </td>
-                    <td>@cr.RaceCode</td>
+                    <td>
+                        @cr.RaceCode
+@*                        @foreach(var cs in ViewBag.conflictedStarters)
+                        {
+                            if(cs.RaceId == cr.RaceId)
+                            {
+                                <span class="badge bg-danger">Konflikt!</span>
+                            }
+                        }*@
+                    </td>
                     <td>
                         @if (cr.Gender.Equals("M"))
                         {
@@ -279,7 +295,9 @@ Schritte zwischen Rennen: <b>@ViewBag.minutestep</b>
                             <input type="submit" value="&lt;" class="btn btn-warning btn-sm" />
                         </form>
                     </td>
-                    <td>@cr.RaceCode</td>
+                    <td>
+                        @cr.RaceCode
+                    </td>
                     <td>
                         @if (cr.Gender.Equals("M"))
                         {

@@ -35,7 +35,15 @@ namespace RegattaManager.Controllers
             {
                 var regattaclubs = _context.RegattaClubs.Where(e => e.RegattaId == rid).ToList();
                 var clubs = _context.Clubs.Where(e => regattaclubs.Select(i => i.ClubId).Contains(e.ClubId)).OrderBy(e => e.Name).ToList();
-                var reportedStartboats = _context.ReportedStartboats.Include(e => e.ReportedRace).ThenInclude(e => e.Competition).ThenInclude(e => e.Boatclasses).ToList();
+                var reportedStartboats = _context.ReportedStartboats.Include(e => e.ReportedStartboatMembers).Include(e => e.ReportedRace).ThenInclude(e => e.Competition).Where(e => 
+                    !e.ReportedStartboatMembers.Select(x => x.MemberId).Contains(1)
+                    && !e.ReportedStartboatMembers.Select(x => x.MemberId).Contains(2)
+                    && !e.ReportedStartboatMembers.Select(x => x.MemberId).Contains(3)
+                    && !e.ReportedStartboatMembers.Select(x => x.MemberId).Contains(4)
+                    && !e.ReportedStartboatMembers.Select(x => x.MemberId).Contains(5)
+                    && !e.ReportedStartboatMembers.Select(x => x.MemberId).Contains(6)
+                    && !e.ReportedStartboatMembers.Select(x => x.MemberId).Contains(7)
+                    && !e.ReportedStartboatMembers.Select(x => x.MemberId).Contains(8)).ToList();
                 var startingFees = _context.StartingFees.ToList();
                 var campingFees = _context.CampingFees.ToList();
                 var oldclasses = _context.Oldclasses.ToList();
@@ -66,7 +74,15 @@ namespace RegattaManager.Controllers
 
             var model = _context.Clubs.FirstOrDefault(e => e.ClubId == id);
 
-            var reportedStartboats = _context.ReportedStartboats.Include(e => e.ReportedRace).ThenInclude(e => e.Competition).Where(e => e.ClubId == id).ToList();
+            var reportedStartboats = _context.ReportedStartboats.Include(e => e.ReportedStartboatMembers).Include(e => e.ReportedRace).ThenInclude(e => e.Competition).Where(e => e.ClubId == id 
+                && !e.ReportedStartboatMembers.Select(x => x.MemberId).Contains(1)
+                && !e.ReportedStartboatMembers.Select(x => x.MemberId).Contains(2)
+                && !e.ReportedStartboatMembers.Select(x => x.MemberId).Contains(3)
+                && !e.ReportedStartboatMembers.Select(x => x.MemberId).Contains(4)
+                && !e.ReportedStartboatMembers.Select(x => x.MemberId).Contains(5)
+                && !e.ReportedStartboatMembers.Select(x => x.MemberId).Contains(6)
+                && !e.ReportedStartboatMembers.Select(x => x.MemberId).Contains(7)
+                && !e.ReportedStartboatMembers.Select(x => x.MemberId).Contains(8)).ToList();
             var startingFees = _context.StartingFees.Include(e => e.Boatclasses).OrderBy(e => e.Boatclasses.Name).ToList();
             var oldclasses = _context.Oldclasses.ToList();
 

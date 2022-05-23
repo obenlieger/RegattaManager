@@ -29,12 +29,12 @@
         }
 
         th {
-            font-size: 85%;
+            font-size: 100%;
             color: black;
         }
 
         td {
-            font-size: 85%;
+            font-size: 100%;
             color: black;
         }
     </style>
@@ -45,10 +45,10 @@
         <h5>Stand: @DateTime.Now.ToString("dd.MM.yyyy HH:mm")</h5>
         @foreach (var item in Model)
         {
-            <table class="table table-sm" width="100%">
+            <table class="table table-sm table-bordered border-dark" width="100%">
                 <thead>
                     <tr class="table-primary">
-                        <th width="15%">@item.RaceCode</th>
+                        <th width="15%">@Html.DisplayFor(modelItem => item.Starttime)</th>
                         <th width="30%">
                             @if (item.Gender.Equals("M"))
                             {
@@ -134,9 +134,6 @@
                             @Html.DisplayFor(modelItem => item.Raceclass.Name)
                         </th>
                         <th width="20%">
-                            @Html.DisplayFor(modelItem => item.Starttime)
-                        </th>
-                        <th width="20%">
                             @if (item.RaceTypId == 4)
                             {
                                 <span class="badge badge-pill badge-danger">Endlauf</span>
@@ -167,8 +164,10 @@
                                     @:&nbsp;<img src="/images/prosecco.png" height="15" />
                                 }
                             }
-                        </th>
-                        <th width="5%">
+                            <br/>
+                            @item.RaceCode
+                        </th>                      
+                        <th width="25%">
                             @foreach (var rdr in ViewBag.racedrawrules)
                             {
                                 @if (rdr.RaceDrawId == item.RaceDrawId && rdr.RaceSequence == item.Sequence && rdr.RaceTypId == item.RaceTypId && rdr.RaceDraw.isAbteilungslauf == item.isAbteilungslauf)
@@ -201,7 +200,6 @@
                     <td><i>Starter</i></td>
                     <td><i>Ersatz</i></td>
                     <td><i>Verein</i></td>
-                    <td></td>
                 </tr>
                 @foreach (var sb in ViewBag.startboats)
                 {
@@ -219,27 +217,35 @@
                                         {
                                             @if (m.MemberId == sbm.MemberId)
                                             {
-                                                @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                                @if (m.ClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                                @if(m.MemberId == 1 || m.MemberId == 2 || m.MemberId == 3 || m.MemberId == 4 || m.MemberId == 5 || m.MemberId == 6 || m.MemberId == 7 || m.MemberId == 8)
                                                 {
-                                                    @string.Format(" ({0})", m.Club.ShortName);
+                                                    <b>
+                                                    @string.Format("{0}", m.LastName)
+                                                    </b>
                                                 }
-                                                @if (m.isRented == true && m.RentYear == ViewBag.ThisYear && sb.ClubId != m.RentedToClubId)
+                                                else
                                                 {
-                                                    @foreach (var rc in ViewBag.clubs)
+                                                    @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                                    @if (m.ClubId != sb.ClubId && m.isRented == false)
                                                     {
-                                                        @if (rc.ClubId == m.RentedToClubId)
+                                                        @string.Format(" ({0})", m.Club.ShortName);
+                                                    }
+                                                    @if (m.isRented == true && sb.ClubId != m.RentedToClubId)
+                                                    {
+                                                        @foreach (var rc in ViewBag.clubs)
                                                         {
-                                                            @string.Format(" ({0})", rc.ShortName);
+                                                            @if (rc.ClubId == m.RentedToClubId)
+                                                            {
+                                                                @string.Format(" ({0})", rc.ShortName);
+                                                            }
                                                         }
                                                     }
-                                                }
+                                                }                                                
                                                 <br />
                                             }
                                         }
                                     }
-                                }
-
+                                }                                
                             </td>
                             <td>
                                 @foreach (var sbs in ViewBag.startboatstandbys)
@@ -272,10 +278,9 @@
                                 }
                             </td>
                             <td>@sb.Club.ShortName</td>
-                            <td></td>
                         </tr>
                     }
-                }
+                }                    
             </table>
         }
     </div>

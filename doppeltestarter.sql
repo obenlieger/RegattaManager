@@ -1,18 +1,19 @@
 DECLARE @racedate DATETIME2
+DECLARE @racecode VARCHAR(50)
 
 DECLARE cur_race CURSOR FOR
-  SELECT Starttime 
+  SELECT Starttime, RaceCode 
   FROM Races
   WHERE Starttime <> '0001-01-01'
   ORDER BY Starttime
 
 OPEN cur_race  
-FETCH NEXT FROM cur_race INTO @racedate  
+FETCH NEXT FROM cur_race INTO @racedate, @racecode  
 
 WHILE @@FETCH_STATUS = 0  
 BEGIN  
 		USE RMDB
-		SELECT sbm.MemberId, COUNT(sbm.MemberId)
+		SELECT sbm.MemberId, COUNT(sbm.MemberId) AS Anzahl, @racecode AS RennCode
 		FROM Races r
 		INNER JOIN Startboats sb ON sb.RaceId = r.RaceId
 		INNER JOIN StartboatMembers sbm ON sbm.StartboatId = sb.StartboatId
@@ -21,7 +22,7 @@ BEGIN
 		GROUP BY sbm.MemberId
 		HAVING COUNT(sbm.MemberId) > 1
 
-      FETCH NEXT FROM cur_race INTO @racedate 
+      FETCH NEXT FROM cur_race INTO @racedate, @racecode
 END 
 
 CLOSE cur_race  

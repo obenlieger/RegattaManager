@@ -3,7 +3,9 @@
 @{
     ViewBag.Title = "Rennen";
 }
-@{ var x = 0;}
+@{ 
+    var x = 0; 
+}
 <br />
 <h2>Rennübersicht</h2>
 <a asp-action="Create" asp-controller="Race" class="btn btn-success">Neues Rennen erstellen</a>
@@ -640,7 +642,7 @@ else
                 }
             </td>
         @:</tr>
-    }
+        }
     </table>
     <hr />
     <h4>Fertige Rennen</h4>

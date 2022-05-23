@@ -39,7 +39,7 @@ namespace RegattaManager.Controllers
                 var raceable = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId == 1004).OrderBy(e => e.Starttime).ToList();
                 var finished = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId == 3).OrderBy(e => e.Starttime).ToList();
                 var notenough = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Regatta).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RegattaId == rid && e.RacestatusId == 1006).OrderBy(e => e.Starttime).ToList();
-                var startboats = _context.Startboats.ToList();                
+                var startboats = _context.Startboats.ToList();                                          
 
                 if (orderby == "RaceCode")
                 {
@@ -624,8 +624,8 @@ namespace RegattaManager.Controllers
             var clubid = startboat.ClubId;
             var sbMembers = _context.StartboatMembers.Include(e => e.Member).Where(e => e.Startboat.RaceId == startboat.RaceId).Select(e => e.MemberId).ToList();
             var sbStandbys = _context.StartboatStandbys.Include(e => e.Member).Where(e => e.Startboat.RaceId == startboat.RaceId).Select(e => e.MemberId).ToList();
-            var allMembers = _context.Members.Include(e => e.Club);
-            var vStartboats = _context.Startboats.Where(e => e.RaceId == id).ToList();
+            var allMembers = _context.Members.Include(e => e.Club).OrderBy(e => e.LastName);
+            var vStartboats = _context.Startboats.Where(e => e.RaceId == startboat.RaceId).ToList();
             var editSBMember = _context.StartboatMembers.Where(e => e.StartboatId == startboat.StartboatId).OrderBy(e => e.SeatNumber);
             var editSBStandby = _context.StartboatStandbys.Where(e => e.StartboatId == startboat.StartboatId).OrderBy(e => e.Standbynumber);
             IQueryable<Member> tempmemberlist = _context.Members;
@@ -1564,6 +1564,6 @@ namespace RegattaManager.Controllers
             }
 
             return true;
-        }
+        }        
     }
 }
