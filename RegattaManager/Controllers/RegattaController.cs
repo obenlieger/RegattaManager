@@ -606,8 +606,6 @@ namespace RegattaManager.Controllers
             var d1 = new DateTime(0001, 1, 1, 0, 0, 0);
             var races = _context.Races.Include(e => e.Oldclass).Include(e => e.Racestatus).Include(e => e.Raceclass).Include(e => e.Boatclass).Where(e => e.Racestatus.Name != "zu wenig Teilnehmer" && e.Starttime == d1).OrderBy(e => e.Oldclass.ToAge).ToList();
 
-            //ViewBag.conflictedStarters = getConflictedStarters();
-
             ViewBag.configuredRaces = _context.Races.Include(e => e.Oldclass).Include(e => e.Racestatus).Include(e => e.Raceclass).Include(e => e.Boatclass).Where(e => e.Racestatus.Name != "zu wenig Teilnehmer" && e.Starttime > d1 && e.Starttime <= regatta.ToDate).OrderBy(e => e.Starttime).ToList();
             ViewBag.configuredRacesDayTwo = _context.Races.Include(e => e.Oldclass).Include(e => e.Racestatus).Include(e => e.Raceclass).Include(e => e.Boatclass).Where(e => e.Racestatus.Name != "zu wenig Teilnehmer" && e.Starttime > regatta.ToDate).OrderBy(e => e.Starttime).ToList();
 
@@ -1039,73 +1037,6 @@ namespace RegattaManager.Controllers
             rvm.Competitions = _context.Competitions.Include(e => e.Boatclasses).Include(e => e.Raceclasses).ToList();
 
             return rvm;
-        }
-
-        private List<ConflictedStarters> getConflictedStarters()
-        {
-            List<ConflictedStarters> cStarters = new List<ConflictedStarters>();
-            ConflictedStarters tempstarter = new ConflictedStarters();
-            ConflictedStarters tempstarter2 = new ConflictedStarters();
-            var regatta = _context.Regattas.Where(e => e.Choosen == true).FirstOrDefault();
-            var races = _context.Races.Where(e => e.Starttime >= regatta.FromDate).OrderBy(e => e.Starttime).ToList();
-            var tempraces = new List<Race>();
-            List<int> raceids = new List<int>();
-            List<int> cMember = new List<int>();
-            var tempsb = new List<Startboat>();
-            var tempsbm = new List<StartboatMember>();
-            var csbm = new List<StartboatMember>();
-            var sbmchecklist = new List<StartboatMember>();
-
-            List<Race> conflictedRaces = new List<Race>();
-
-            foreach (var r in races)
-            {
-                sbmchecklist.Clear();
-                tempraces = _context.Races.Where(e => e.Starttime >= r.Starttime && e.Starttime <= r.Starttime.AddMinutes(15)).OrderBy(e => e.Starttime).ToList();
-
-                foreach (var tr in tempraces)
-                {
-                    tempsbm = _context.StartboatMembers.Include(e => e.Startboat).Where(e => e.Startboat.RaceId == tr.RaceId).ToList();
-
-                    foreach (var tsbm in tempsbm)
-                    {
-                        sbmchecklist.Add(tsbm);
-
-                        if (sbmchecklist.GroupBy(e => e.MemberId).SelectMany(grp => grp.Skip(1)).Count() >= 1)
-                        {
-                            tempstarter.StartboatId = tsbm.StartboatId;
-                            tempstarter.MemberId = tsbm.MemberId;
-                            tempstarter.RaceId = tr.RaceId;
-
-                            if (!cStarters.Contains(tempstarter))
-                            {
-                                cStarters.Add(tempstarter);
-                            }
-
-                            raceids = tempraces.Select(e => e.RaceId).ToList();
-                            tempsb = _context.Startboats.Where(e => raceids.Contains(e.RaceId)).ToList();
-                            csbm = _context.StartboatMembers.Include(e => e.Startboat).Where(e => tempsb.Select(e => e.StartboatId).Contains(e.StartboatId)).ToList();
-
-                            foreach (var tcsbm in csbm)
-                            {
-                                if (tcsbm.MemberId == tsbm.MemberId)
-                                {
-                                    tempstarter2.StartboatId = tcsbm.StartboatId;
-                                    tempstarter2.MemberId = tsbm.MemberId;
-                                    tempstarter2.RaceId = tcsbm.Startboat.RaceId;
-
-                                    if (!cStarters.Contains(tempstarter2))
-                                    {
-                                        cStarters.Add(tempstarter2);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return cStarters;
-        }
+        }        
     }
 }

@@ -102,7 +102,7 @@ namespace RegattaManager.Controllers
                     ageTo = getAgeTo(model.Oldclass.FromAge, model.Oldclass.ToAge, false);
                 }
 
-                var allMembers = _context.Members.Include(e => e.Club).ToList();
+                var allMembers = _context.Members.Include(e => e.Club).OrderBy(e => e.LastName).ToList();
                 var vStartboats = _context.Startboats.Include(e => e.Startboatstatus).Include(e => e.Club).Where(e => e.RaceId == id).OrderBy(e => e.Startslot).ToList();
 
                 if(model.RacestatusId == 1002 || model.RacestatusId == 3)
@@ -110,10 +110,10 @@ namespace RegattaManager.Controllers
                     vStartboats = vStartboats.OrderBy(e => e.Placement).ToList();
                 }
 
-                var sbMembers = _context.StartboatMembers.Include(e => e.Member).Where(e => e.Startboat.RaceId == id).Select(e => e.MemberId).ToList();
-                var sbStandbys = _context.StartboatStandbys.Include(e => e.Member).Where(e => e.Startboat.RaceId == id).Select(e => e.MemberId).ToList();
-                var availMembers = _context.Members.Include(e => e.Club).Where(e => !sbMembers.Contains(e.MemberId));
-                allMembers = _context.Members.Include(e => e.Club).ToList();
+                var sbMembers = _context.StartboatMembers.Include(e => e.Member).Where(e => e.Startboat.RaceId == id).OrderBy(e => e.Member.LastName).Select(e => e.MemberId).ToList();
+                var sbStandbys = _context.StartboatStandbys.Include(e => e.Member).Where(e => e.Startboat.RaceId == id).OrderBy(e => e.Member.LastName).Select(e => e.MemberId).ToList();
+                var availMembers = _context.Members.Include(e => e.Club).Where(e => !sbMembers.Contains(e.MemberId)).OrderBy(e => e.LastName);
+                allMembers = _context.Members.Include(e => e.Club).OrderBy(e => e.LastName).ToList();
 
                 if (model.Gender == "M" || model.Gender == "W")
                 {
@@ -142,7 +142,7 @@ namespace RegattaManager.Controllers
                 var regattaClubs = _context.RegattaClubs.Where(e => e.RegattaId == rid);
                 var otherRaces = _context.Races.Where(e => e.ReportedRaceId == model.ReportedRaceId && e.RaceId != model.RaceId).OrderBy(e => e.RaceCode).ToList();
 
-                IEnumerable<Club> allClubs = _context.Clubs.Where(e => regattaClubs.Select(i => i.ClubId).Contains(e.ClubId)).OrderBy(e => e.Name);
+                IEnumerable<Club> allClubs = _context.Clubs.Where(e => regattaClubs.Select(i => i.ClubId).Contains(e.ClubId)).OrderBy(e => e.ShortName);
 
                 ViewBag.startboats = vStartboats;
                 ViewBag.startboatmembers = _context.StartboatMembers;
@@ -159,11 +159,11 @@ namespace RegattaManager.Controllers
 
                 if (filterclub != null)
                 {
-                    ViewBag.ClubId = new SelectList(_context.Clubs.Where(e => e.Name.Contains(filterclub)), "ClubId", "Name");
+                    ViewBag.ClubId = new SelectList(_context.Clubs.Where(e => e.ShortName.Contains(filterclub)), "ClubId", "ShortName");
                 }
                 else
                 {
-                    ViewBag.ClubId = new SelectList(allClubs, "ClubId", "Name");
+                    ViewBag.ClubId = new SelectList(allClubs, "ClubId", "ShortName");
                 }                
                 ViewBag.StartboatstatusId = new SelectList(_context.Startboatstati, "StartboatstatusId", "Name",6);
 
@@ -622,8 +622,8 @@ namespace RegattaManager.Controllers
             }
 
             var clubid = startboat.ClubId;
-            var sbMembers = _context.StartboatMembers.Include(e => e.Member).Where(e => e.Startboat.RaceId == startboat.RaceId).Select(e => e.MemberId).ToList();
-            var sbStandbys = _context.StartboatStandbys.Include(e => e.Member).Where(e => e.Startboat.RaceId == startboat.RaceId).Select(e => e.MemberId).ToList();
+            var sbMembers = _context.StartboatMembers.Include(e => e.Member).Where(e => e.Startboat.RaceId == startboat.RaceId).OrderBy(e => e.Member.LastName).Select(e => e.MemberId).ToList();
+            var sbStandbys = _context.StartboatStandbys.Include(e => e.Member).Where(e => e.Startboat.RaceId == startboat.RaceId).OrderBy(e => e.Member.LastName).Select(e => e.MemberId).ToList();
             var allMembers = _context.Members.Include(e => e.Club).OrderBy(e => e.LastName);
             var vStartboats = _context.Startboats.Where(e => e.RaceId == startboat.RaceId).ToList();
             var editSBMember = _context.StartboatMembers.Where(e => e.StartboatId == startboat.StartboatId).OrderBy(e => e.SeatNumber);
