@@ -611,7 +611,7 @@ namespace RegattaManager.Controllers
 
             ViewBag.starttime = _context.Races.Where(e => e.Starttime >= regatta.FromDate && e.Starttime <= regatta.ToDate).OrderByDescending(e => e.Starttime).First().Starttime;
             ViewBag.starttimeDayTwo = _context.Races.Where(e => e.Starttime >= regatta.ToDate).OrderByDescending(e => e.Starttime).First().Starttime;
-            ViewBag.minutestep = 3;
+            ViewBag.minutestep = 2;
 
             return View(races);
         }

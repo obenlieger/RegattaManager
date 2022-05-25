@@ -29,6 +29,11 @@ BEGIN
 	  SET @startdate = DATEADD(MINUTE,2,@startdate)
 	END
 
+    IF @startdate = '2022-06-11 12:05' 
+	BEGIN
+	  SET @startdate = '2022-06-11 13:00'
+	END
+
 	FETCH NEXT FROM cur_race INTO @raceid, @boatclassid
 END
 
