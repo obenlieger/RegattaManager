@@ -703,9 +703,9 @@ namespace RegattaManager.Controllers
             return RedirectToAction("CreateStarttimes", "Regatta");
         }
 
-        public IActionResult SetRaceTimes(int id, int minutestep, DateTime day1start, DateTime day2start)
+        public IActionResult SetRaceTimes(int RegattaId, int minutestep, DateTime day1start, DateTime day2start)
         {
-            Regatta regatta = _context.Regattas.Where(x => x.Choosen == true).FirstOrDefault(e => e.RegattaId == id);
+            Regatta regatta = _context.Regattas.Where(x => x.Choosen == true).FirstOrDefault(e => e.RegattaId == RegattaId);
 
             if(regatta != null)
             {
@@ -731,7 +731,7 @@ namespace RegattaManager.Controllers
 
                 Race firstrace = vorlaeufe.Where(e => e.Oldclass.FromAge >= 13).OrderBy(e => e.Oldclass.FromAge).FirstOrDefault();
 
-                firstrace.Starttime = day1start;
+                firstrace.Starttime = globaltimestamp;
                 _context.Races.Update(firstrace);
                 _context.SaveChanges();
 
@@ -753,52 +753,90 @@ namespace RegattaManager.Controllers
                         globaltimestamp = globaltimestamp.AddMinutes(minutestep);
                         v.Starttime = globaltimestamp;
                         _context.Races.Update(v);
+                        _context.SaveChanges();
                     }
                     else
                     {
                         availableRaces.Add(v);
                     }
                 }
-                foreach(var h in hoffnungslaeufe)
+
+                //foreach(var h in hoffnungslaeufe)
+                //{
+                //    previousRaceIds = vorlaeufe.Where(e => e.Starttime <= globaltimestamp && e.Starttime != d1).OrderByDescending(e => e.Starttime).Select(e => e.RaceId).Take(auszeitRennen).ToList();
+                //    previousStartboatIds = startboats.Where(e => previousRaceIds.Contains(e.RaceId)).Select(e => e.StartboatId).ToList();
+                //    previousMemberIds = startboatMembers.Where(e => previousStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
+
+                //    currentStartboatIds = startboats.Where(e => e.RaceId == h.RaceId).Select(e => e.StartboatId).ToList();
+                //    currentMemberIds = startboatMembers.Where(e => currentStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
+
+                //    if (!previousMemberIds.Except(currentMemberIds).Any())
+                //    {
+                //        globaltimestamp = globaltimestamp.AddMinutes(minutestep);
+                //        h.Starttime = globaltimestamp;
+                //        _context.Races.Update(h);
+                //        _context.SaveChanges();
+                //    }
+                //    else
+                //    {
+                //        availableRaces.Add(h);
+                //    }
+                //}
+
+                //foreach(var z in zwischenlaeufe)
+                //{
+                //    previousRaceIds = vorlaeufe.Where(e => e.Starttime <= globaltimestamp && e.Starttime != d1).OrderByDescending(e => e.Starttime).Select(e => e.RaceId).Take(auszeitRennen).ToList();
+                //    previousStartboatIds = startboats.Where(e => previousRaceIds.Contains(e.RaceId)).Select(e => e.StartboatId).ToList();
+                //    previousMemberIds = startboatMembers.Where(e => previousStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
+
+                //    currentStartboatIds = startboats.Where(e => e.RaceId == z.RaceId).Select(e => e.StartboatId).ToList();
+                //    currentMemberIds = startboatMembers.Where(e => currentStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
+
+                //    if (!previousMemberIds.Except(currentMemberIds).Any())
+                //    {
+                //        globaltimestamp = globaltimestamp.AddMinutes(minutestep);
+                //        z.Starttime = globaltimestamp;
+                //        _context.Races.Update(z);
+                //        _context.SaveChanges();
+                //    }
+                //    else
+                //    {
+                //        availableRaces.Add(z);
+                //    }
+                //}
+
+                while(availableRaces.Count() > 0)
                 {
-                    previousRaceIds = vorlaeufe.Where(e => e.Starttime <= globaltimestamp && e.Starttime != d1).OrderByDescending(e => e.Starttime).Select(e => e.RaceId).Take(auszeitRennen).ToList();
-                    previousStartboatIds = startboats.Where(e => previousRaceIds.Contains(e.RaceId)).Select(e => e.StartboatId).ToList();
-                    previousMemberIds = startboatMembers.Where(e => previousStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
+                    int durchlauf = 0;
 
-                    currentStartboatIds = startboats.Where(e => e.RaceId == h.RaceId).Select(e => e.StartboatId).ToList();
-                    currentMemberIds = startboatMembers.Where(e => currentStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
-
-                    if (!previousMemberIds.Except(currentMemberIds).Any())
+                    foreach(var ar in availableRaces)
                     {
-                        globaltimestamp = globaltimestamp.AddMinutes(minutestep);
-                        h.Starttime = globaltimestamp;
-                        _context.Races.Update(h);
+                        previousRaceIds = vorlaeufe.Where(e => e.Starttime <= globaltimestamp && e.Starttime != d1).OrderByDescending(e => e.Starttime).Select(e => e.RaceId).Take(auszeitRennen).ToList();
+                        previousStartboatIds = startboats.Where(e => previousRaceIds.Contains(e.RaceId)).Select(e => e.StartboatId).ToList();
+                        previousMemberIds = startboatMembers.Where(e => previousStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
+
+                        currentStartboatIds = startboats.Where(e => e.RaceId == ar.RaceId).Select(e => e.StartboatId).ToList();
+                        currentMemberIds = startboatMembers.Where(e => currentStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
+
+                        if (!previousMemberIds.Except(currentMemberIds).Any())
+                        {
+                            globaltimestamp = globaltimestamp.AddMinutes(minutestep);
+                            ar.Starttime = globaltimestamp;
+                            _context.Races.Update(ar);
+                            _context.SaveChanges();
+                            availableRaces.Remove(ar);
+                        }
+                        durchlauf++;
                     }
-                    else
+
+                    if(durchlauf > 100)
                     {
-                        availableRaces.Add(h);
+                        _context.SaveChanges();
+                        break;
                     }
                 }
-                foreach(var z in zwischenlaeufe)
-                {
-                    previousRaceIds = vorlaeufe.Where(e => e.Starttime <= globaltimestamp && e.Starttime != d1).OrderByDescending(e => e.Starttime).Select(e => e.RaceId).Take(auszeitRennen).ToList();
-                    previousStartboatIds = startboats.Where(e => previousRaceIds.Contains(e.RaceId)).Select(e => e.StartboatId).ToList();
-                    previousMemberIds = startboatMembers.Where(e => previousStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
 
-                    currentStartboatIds = startboats.Where(e => e.RaceId == z.RaceId).Select(e => e.StartboatId).ToList();
-                    currentMemberIds = startboatMembers.Where(e => currentStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
-
-                    if (!previousMemberIds.Except(currentMemberIds).Any())
-                    {
-                        globaltimestamp = globaltimestamp.AddMinutes(minutestep);
-                        h.Starttime = globaltimestamp;
-                        _context.Races.Update(z);
-                    }
-                    else
-                    {
-                        availableRaces.Add(z);
-                    }
-                }
+                _context.SaveChanges();
             }
 
             return RedirectToAction("Index","Race");

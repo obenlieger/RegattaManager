@@ -47,7 +47,12 @@
                 <a asp-action="Edit" asp-route-id="@item.RegattaId" class="btn btn-secondary">Bearbeiten</a> <br />
                 <a asp-action="Delete" asp-route-id="@item.RegattaId" class="btn btn-danger">L&ouml;schen</a> <br />
                 <a asp-action="CreateProgram" asp-route-id="@item.RegattaId" class="btn btn-primary">Rennen auslosen</a> <br />
-                <a asp-action="SetRaceTimes" asp-route-id="@item.RegattaId" class="btn btn-success">Zeitplan erstellen</a> <br />
+                <form asp-action="SetRaceTimes">
+                    <input type="hidden" name="RegattaId" value="@item.RegattaId"/>
+                    <input type="number" name="minutestep" value="3">
+                    <input type="datetime" name="day1start" value="@item.FromDate">
+                    <input type="submit" class="btn btn-success" value="Zeitplan erstellen">
+                </form>
                 <a asp-action="UpdateProgram" asp-route-id="@item.RegattaId" class="btn btn-warning">Nachmeldungen einpflegen</a> <br />
                 @if (!item.Choosen)
                 {
