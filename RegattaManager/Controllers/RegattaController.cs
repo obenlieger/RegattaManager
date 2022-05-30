@@ -703,254 +703,103 @@ namespace RegattaManager.Controllers
             return RedirectToAction("CreateStarttimes", "Regatta");
         }
 
-        public IActionResult SetRaceTimes(int id)
+        public IActionResult SetRaceTimes(int id, int minutestep, DateTime day1start, DateTime day2start)
         {
-            var regatta = _context.Regattas.Where(x => x.Choosen == true).FirstOrDefault(e => e.RegattaId == id);
+            Regatta regatta = _context.Regattas.Where(x => x.Choosen == true).FirstOrDefault(e => e.RegattaId == id);
 
-            if(regatta != null && regatta.Name.Contains("Sprintpokal"))
+            if(regatta != null)
             {
-                DateTime globaltimestamp = regatta.FromDate.AddDays(2);
-                globaltimestamp = globaltimestamp.AddHours(2);
+                DateTime globaltimestamp = day1start;
+                var d1 = new DateTime(0001, 1, 1, 0, 0, 0);
 
-                var baseraces = _context.Races.Include(x => x.Oldclass).Include(x => x.RaceTyp).Include(x => x.Racestatus).Where(e => e.RaceTyp.Name == "Endlauf" && e.Racestatus.Name != "zu wenig Teilnehmer").ToList();
+                int auszeitRennen = 40 / minutestep;
 
-                //var nr1 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Schüler B11" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                //var nr2 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Schüler B12" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr3 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Schüler B" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr4 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Jugend" && e.Gender == "X" && e.Raceclass.Length == 200).ToList();
-                var nr5 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Leistungsklasse" && e.Gender == "X" && e.Raceclass.Length == 200).ToList();
-                var nr6 = baseraces.Where(e => e.Boatclass.Name == "S4" && e.Oldclass.Name == "Schüler C" && e.Gender == "M" && e.Raceclass.Length == 100).ToList();
-                var nr7 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Schüler C" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr8 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Schüler B10" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr9 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Schüler B10" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr10 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Schüler A" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr11 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Schüler A13" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr12 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Schüler A14" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr13 = baseraces.Where(e => e.Boatclass.Name == "C2" && e.Oldclass.Name == "Schüler A" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr14 = baseraces.Where(e => e.Boatclass.Name == "C1" && e.Oldclass.Name == "Schüler A" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr15 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Junioren" && e.Gender == "X" && e.Raceclass.Length == 200).ToList();
-                var nr16 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.FromAge >= 32 && e.Oldclass.ToAge <= 99 && e.Gender == "X" && e.Raceclass.Length == 200).ToList();
-                var nr17 = baseraces.Where(e => e.Boatclass.Name == "S4" && e.Oldclass.Name == "Schüler B" && e.Gender == "M" && e.Raceclass.Length == 100).ToList();
-                var nr18 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Schüler B" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr19 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Jugend" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr20 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Jugend" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr21 = baseraces.Where(e => e.Boatclass.Name == "C1" && e.Oldclass.Name == "Jugend" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr22 = baseraces.Where(e => e.Boatclass.Name == "C2" && e.Oldclass.Name == "Jugend" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr23 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Leistungsklasse" && e.Gender == "X" && e.Raceclass.Length == 200).ToList();
-                var nr24 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Schüler C" && e.Gender == "X" && e.Raceclass.Length == 200).ToList();
-                var nr25 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Schüler A" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr26 = baseraces.Where(e => e.Boatclass.Name == "S4" && e.Oldclass.Name == "Schüler A" && e.Gender == "W" && e.Raceclass.Length == 100).ToList();
-                var nr27 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Junioren" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr28 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Junioren" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr29 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Schüler B10" && e.Gender == "X" && e.Raceclass.Length == 200).ToList();
-                var nr30 = baseraces.Where(e => e.Boatclass.Name == "C1" && e.Oldclass.Name == "Junioren" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr31 = baseraces.Where(e => e.Boatclass.Name == "C2" && e.Oldclass.Name == "Junioren" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr32 = baseraces.Where(e => e.Boatclass.Name == "S4" && e.Oldclass.Name == "Senioren A" && e.Gender == "M" && e.Raceclass.Length == 100).ToList();
-                var nr33 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Senioren A" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr34 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Schüler B" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr35 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Schüler B11" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr36 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Schüler B12" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr37 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Schüler C8" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr38 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Schüler C9" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr39 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Jugend" && e.Gender == "X" && e.Raceclass.Length == 200).ToList();
-                var nr40 = baseraces.Where(e => e.Boatclass.Name == "S4" && e.Oldclass.Name == "Leistungsklasse" && e.Gender == "M" && e.Raceclass.Length == 100).ToList();
-                var nr41 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Leistungsklasse" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr42 = baseraces.Where(e => e.Boatclass.Name == "S4" && e.Oldclass.Name == "Schüler B10" && e.Gender == "M" && e.Raceclass.Length == 100).ToList();
-                var nr43 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Schüler B10" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr44 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Schüler A13" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr48 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Schüler A14" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr49 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Schüler A" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr50 = baseraces.Where(e => e.Boatclass.Name == "C1" && e.Oldclass.Name == "Schüler A13" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr51 = baseraces.Where(e => e.Boatclass.Name == "C1" && e.Oldclass.Name == "Schüler A14" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr52 = baseraces.Where(e => e.Boatclass.Name == "C2" && e.Oldclass.Name == "Schüler A" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr53 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Junioren" && e.Gender == "X" && e.Raceclass.Length == 200).ToList();
-                var nr54 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.FromAge >= 32 && e.Oldclass.ToAge <= 99 && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr55 = baseraces.Where(e => e.Boatclass.Name == "S4" && e.Oldclass.FromAge >= 32 && e.Oldclass.ToAge <= 99 && e.Gender == "W" && e.Raceclass.Length == 100).ToList();
-                var nr56 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Schüler C8" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr57 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Schüler C9" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr58 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Jugend" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr59 = baseraces.Where(e => e.Boatclass.Name == "S4" && e.Oldclass.Name == "Jugend" && e.Gender == "M" && e.Raceclass.Length == 100).ToList();
-                var nr60 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Schüler B" && e.Gender == "X" && e.Raceclass.Length == 200).ToList();
-                var nr61 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Leistungsklasse" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr62 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Leistungsklasse" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr63 = baseraces.Where(e => e.Boatclass.Name == "C1" && e.Oldclass.Name == "Leistungsklasse" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr64 = baseraces.Where(e => e.Boatclass.Name == "C2" && e.Oldclass.Name == "Leistungsklasse" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr65 = baseraces.Where(e => e.Boatclass.Name == "C4" && e.Oldclass.FromAge >= 13 && e.Oldclass.ToAge <= 16 && e.Gender == "X" && e.Raceclass.Length == 200).ToList();
-                var nr66 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Schüler C" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr67 = baseraces.Where(e => e.Boatclass.Name == "S4" && e.Oldclass.Name == "Schüler C" && e.Gender == "W" && e.Raceclass.Length == 100).ToList();
-                var nr68 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Schüler A" && e.Gender == "X" && e.Raceclass.Length == 200).ToList();
-                var nr69 = baseraces.Where(e => e.Boatclass.Name == "S4" && e.Oldclass.Name == "Junioren" && e.Gender == "M" && e.Raceclass.Length == 100).ToList();
-                var nr70 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Junioren" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr71 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Senioren A" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr72 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Senioren C" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr73 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.FromAge >= 32 && e.Oldclass.ToAge <= 99 && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr74 = baseraces.Where(e => e.Boatclass.Name == "C1" && e.Oldclass.FromAge >= 32 && e.Oldclass.ToAge <= 99 && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr75 = baseraces.Where(e => e.Boatclass.Name == "C2" && e.Oldclass.FromAge >= 32 && e.Oldclass.ToAge <= 99 && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr76 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Schüler C" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr77 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Schüler B10" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr78 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Senioren D" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr79 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Senioren B" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr80 = baseraces.Where(e => e.Boatclass.Name == "S8" && e.Oldclass.FromAge >= 0 && e.Oldclass.ToAge <= 99 && e.Gender == "X" && e.Raceclass.Length == 100).ToList();
-                var nr81 = baseraces.Where(e => e.Boatclass.Name == "C4" && e.Oldclass.FromAge >= 17 && e.Oldclass.ToAge <= 99 && e.Gender == "X" && e.Raceclass.Length == 200).ToList();
-                var nr82 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Schüler C" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr83 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Schüler B10" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr84 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Schüler A" && e.Gender == "X" && e.Raceclass.Length == 200).ToList();
-                var nr85 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Junioren" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr86 = baseraces.Where(e => e.Boatclass.Name == "S4" && e.Oldclass.Name == "Junioren" && e.Gender == "W" && e.Raceclass.Length == 100).ToList();
-                var nr87 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.FromAge >= 32 && e.Oldclass.ToAge <= 99 && e.Gender == "X" && e.Raceclass.Length == 200).ToList();
-                var nr88 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Schüler B" && e.Gender == "X" && e.Raceclass.Length == 200).ToList();
-                var nr89 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Jugend" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr90 = baseraces.Where(e => e.Boatclass.Name == "S4" && e.Oldclass.Name == "Jugend" && e.Gender == "W" && e.Raceclass.Length == 100).ToList();
-                var nr91 = baseraces.Where(e => e.Boatclass.Name == "K4" && (e.Oldclass.Name == "Schüler C" || e.Oldclass.Name == "Schüler B10") && e.Gender == "X" && e.Raceclass.Length == 200).ToList();
-                var nr92 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Leistungsklasse" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr93 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Leistungsklasse" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr94 = baseraces.Where(e => e.Boatclass.Name == "C2" && e.Oldclass.Name == "Leistungsklasse" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr95 = baseraces.Where(e => e.Boatclass.Name == "C1" && e.Oldclass.Name == "Leistungsklasse" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr96 = baseraces.Where(e => e.Boatclass.Name == "S4" && e.Oldclass.Name == "Schüler B" && e.Gender == "W" && e.Raceclass.Length == 100).ToList();
-                var nr97 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Schüler B" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr98 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Jugend" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr99 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Jugend" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr100 = baseraces.Where(e => e.Boatclass.Name == "C2" && e.Oldclass.Name == "Jugend" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr101 = baseraces.Where(e => e.Boatclass.Name == "C1" && e.Oldclass.Name == "Jugend" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr102 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.FromAge >= 32 && e.Oldclass.ToAge <= 49 && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr103 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.FromAge >= 32 && e.Oldclass.ToAge <= 99 && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr104 = baseraces.Where(e => e.Boatclass.Name == "C2" && e.Oldclass.FromAge >= 32 && e.Oldclass.ToAge <= 99 && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr105 = baseraces.Where(e => e.Boatclass.Name == "C1" && e.Oldclass.FromAge >= 32 && e.Oldclass.ToAge <= 99 && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr109 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.FromAge >= 50 && e.Oldclass.ToAge <= 99 && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr110 = baseraces.Where(e => e.Boatclass.Name == "S4" && e.Oldclass.Name == "Schüler A" && e.Gender == "M" && e.Raceclass.Length == 100).ToList();
-                var nr111 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Schüler A" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr112 = baseraces.Where(e => e.Boatclass.Name == "K2" && e.Oldclass.Name == "Junioren" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr113 = baseraces.Where(e => e.Boatclass.Name == "K1" && e.Oldclass.Name == "Junioren" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr114 = baseraces.Where(e => e.Boatclass.Name == "C2" && e.Oldclass.Name == "Junioren" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr115 = baseraces.Where(e => e.Boatclass.Name == "C1" && e.Oldclass.Name == "Junioren" && e.Gender == "W" && e.Raceclass.Length == 200).ToList();
-                var nr116 = baseraces.Where(e => e.Boatclass.Name == "S4" && e.Oldclass.Name == "Schüler B10" && e.Gender == "W" && e.Raceclass.Length == 100).ToList();
-                var nr117 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Schüler B10" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
-                var nr118 = baseraces.Where(e => e.Boatclass.Name == "S4" && e.Oldclass.Name == "Leistungsklasse" && e.Gender == "W" && e.Raceclass.Length == 100).ToList();
-                var nr119 = baseraces.Where(e => e.Boatclass.Name == "K4" && e.Oldclass.Name == "Leistungsklasse" && e.Gender == "M" && e.Raceclass.Length == 200).ToList();
+                List<Race> vorlaeufe = _context.Races.Include(x => x.Oldclass).Include(x => x.RaceTyp).Include(x => x.Racestatus).Where(e => e.RaceTyp.Name == "Vorlauf" && e.Racestatus.Name != "zu wenig Teilnehmer").OrderBy(e => e.RaceCode).ToList();
+                List<Race> zwischenlaeufe = _context.Races.Include(x => x.Oldclass).Include(x => x.RaceTyp).Include(x => x.Racestatus).Where(e => e.RaceTyp.Name == "Zwischenlauf" && e.Racestatus.Name != "zu wenig Teilnehmer").OrderBy(e => e.RaceCode).ToList();
+                List<Race> hoffnungslaeufe = _context.Races.Include(x => x.Oldclass).Include(x => x.RaceTyp).Include(x => x.Racestatus).Where(e => e.RaceTyp.Name == "Hoffnungslauf" && e.Racestatus.Name != "zu wenig Teilnehmer").OrderBy(e => e.RaceCode).ToList();
 
-                //globaltimestamp = SetTimes(nr1, globaltimestamp);
-                //globaltimestamp = SetTimes(nr2, globaltimestamp);
-                globaltimestamp = SetTimes(nr3, globaltimestamp);
-                globaltimestamp = SetTimes(nr4, globaltimestamp);
-                globaltimestamp = SetTimes(nr5, globaltimestamp);
-                globaltimestamp = SetTimes(nr6, globaltimestamp);
-                globaltimestamp = SetTimes(nr7, globaltimestamp);
-                globaltimestamp = SetTimes(nr8, globaltimestamp);
-                globaltimestamp = SetTimes(nr9, globaltimestamp);
-                globaltimestamp = SetTimes(nr10, globaltimestamp);
-                globaltimestamp = SetTimes(nr11, globaltimestamp);
-                globaltimestamp = SetTimes(nr12, globaltimestamp);
-                globaltimestamp = SetTimes(nr13, globaltimestamp);
-                globaltimestamp = SetTimes(nr14, globaltimestamp);
-                globaltimestamp = SetTimes(nr15, globaltimestamp);
-                globaltimestamp = SetTimes(nr16, globaltimestamp);
-                globaltimestamp = SetTimes(nr17, globaltimestamp);
-                globaltimestamp = SetTimes(nr18, globaltimestamp);
-                globaltimestamp = SetTimes(nr19, globaltimestamp);
-                globaltimestamp = SetTimes(nr20, globaltimestamp);
-                globaltimestamp = SetTimes(nr21, globaltimestamp);
-                globaltimestamp = SetTimes(nr22, globaltimestamp);
-                globaltimestamp = SetTimes(nr23, globaltimestamp);
-                globaltimestamp = SetTimes(nr24, globaltimestamp);
-                globaltimestamp = SetTimes(nr25, globaltimestamp);
-                globaltimestamp = SetTimes(nr26, globaltimestamp);
-                globaltimestamp = SetTimes(nr27, globaltimestamp);
-                globaltimestamp = SetTimes(nr28, globaltimestamp);
-                globaltimestamp = SetTimes(nr29, globaltimestamp);
-                globaltimestamp = SetTimes(nr30, globaltimestamp);
-                globaltimestamp = SetTimes(nr31, globaltimestamp);
-                globaltimestamp = SetTimes(nr32, globaltimestamp);
-                globaltimestamp = SetTimes(nr33, globaltimestamp);
-                globaltimestamp = SetTimes(nr34, globaltimestamp);
-                globaltimestamp = SetTimes(nr35, globaltimestamp);
-                globaltimestamp = SetTimes(nr36, globaltimestamp);
-                globaltimestamp = SetTimes(nr37, globaltimestamp);
-                globaltimestamp = SetTimes(nr38, globaltimestamp);
-                globaltimestamp = SetTimes(nr39, globaltimestamp);
-                globaltimestamp = SetTimes(nr40, globaltimestamp);
-                globaltimestamp = SetTimes(nr41, globaltimestamp);
-                globaltimestamp = SetTimes(nr42, globaltimestamp);
-                globaltimestamp = SetTimes(nr43, globaltimestamp);
-                globaltimestamp = SetTimes(nr44, globaltimestamp);                
-                globaltimestamp = SetTimes(nr48, globaltimestamp);
-                globaltimestamp = SetTimes(nr49, globaltimestamp);
-                globaltimestamp = SetTimes(nr50, globaltimestamp);
-                globaltimestamp = SetTimes(nr51, globaltimestamp);
-                globaltimestamp = SetTimes(nr52, globaltimestamp);
-                globaltimestamp = SetTimes(nr53, globaltimestamp);
-                globaltimestamp = SetTimes(nr54, globaltimestamp);
-                globaltimestamp = SetTimes(nr55, globaltimestamp);
-                globaltimestamp = SetTimes(nr56, globaltimestamp);
-                globaltimestamp = SetTimes(nr57, globaltimestamp);
-                globaltimestamp = SetTimes(nr58, globaltimestamp);
-                globaltimestamp = SetTimes(nr59, globaltimestamp);
-                globaltimestamp = SetTimes(nr60, globaltimestamp);
-                globaltimestamp = SetTimes(nr61, globaltimestamp);
-                globaltimestamp = SetTimes(nr62, globaltimestamp);
-                globaltimestamp = SetTimes(nr63, globaltimestamp);
-                globaltimestamp = SetTimes(nr64, globaltimestamp);
-                globaltimestamp = SetTimes(nr65, globaltimestamp);
-                globaltimestamp = SetTimes(nr66, globaltimestamp);
-                globaltimestamp = SetTimes(nr67, globaltimestamp);
-                globaltimestamp = SetTimes(nr68, globaltimestamp);
-                globaltimestamp = SetTimes(nr69, globaltimestamp);
-                globaltimestamp = SetTimes(nr70, globaltimestamp);
-                globaltimestamp = SetTimes(nr71, globaltimestamp);
-                globaltimestamp = SetTimes(nr72, globaltimestamp);
-                globaltimestamp = SetTimes(nr73, globaltimestamp);
-                globaltimestamp = SetTimes(nr74, globaltimestamp);
-                globaltimestamp = SetTimes(nr75, globaltimestamp);
-                globaltimestamp = SetTimes(nr76, globaltimestamp);
-                globaltimestamp = SetTimes(nr77, globaltimestamp);
-                globaltimestamp = SetTimes(nr78, globaltimestamp);
-                globaltimestamp = SetTimes(nr79, globaltimestamp);
-                globaltimestamp = SetTimes(nr80, globaltimestamp);
-                globaltimestamp = SetTimes(nr81, globaltimestamp);
-                globaltimestamp = SetTimes(nr82, globaltimestamp);
-                globaltimestamp = SetTimes(nr83, globaltimestamp);
-                globaltimestamp = SetTimes(nr84, globaltimestamp);
-                globaltimestamp = SetTimes(nr85, globaltimestamp);
-                globaltimestamp = SetTimes(nr86, globaltimestamp);
-                globaltimestamp = SetTimes(nr87, globaltimestamp);
-                globaltimestamp = SetTimes(nr88, globaltimestamp);
-                globaltimestamp = SetTimes(nr89, globaltimestamp);
-                globaltimestamp = SetTimes(nr90, globaltimestamp);
-                globaltimestamp = SetTimes(nr91, globaltimestamp);
-                globaltimestamp = SetTimes(nr92, globaltimestamp);
-                globaltimestamp = SetTimes(nr93, globaltimestamp);
-                globaltimestamp = SetTimes(nr94, globaltimestamp);
-                globaltimestamp = SetTimes(nr95, globaltimestamp);
-                globaltimestamp = SetTimes(nr96, globaltimestamp);
-                globaltimestamp = SetTimes(nr97, globaltimestamp);
-                globaltimestamp = SetTimes(nr98, globaltimestamp);
-                globaltimestamp = SetTimes(nr99, globaltimestamp);
-                globaltimestamp = SetTimes(nr100, globaltimestamp);
-                globaltimestamp = SetTimes(nr101, globaltimestamp);
-                globaltimestamp = SetTimes(nr102, globaltimestamp);
-                globaltimestamp = SetTimes(nr103, globaltimestamp);
-                globaltimestamp = SetTimes(nr104, globaltimestamp);
-                globaltimestamp = SetTimes(nr105, globaltimestamp);                
-                globaltimestamp = SetTimes(nr109, globaltimestamp);
-                globaltimestamp = SetTimes(nr110, globaltimestamp);
-                globaltimestamp = SetTimes(nr111, globaltimestamp);
-                globaltimestamp = SetTimes(nr112, globaltimestamp);
-                globaltimestamp = SetTimes(nr113, globaltimestamp);
-                globaltimestamp = SetTimes(nr114, globaltimestamp);
-                globaltimestamp = SetTimes(nr115, globaltimestamp);
-                globaltimestamp = SetTimes(nr116, globaltimestamp);
-                globaltimestamp = SetTimes(nr117, globaltimestamp);
-                globaltimestamp = SetTimes(nr118, globaltimestamp);
-                globaltimestamp = SetTimes(nr119, globaltimestamp);                
+                List<Race> availableRaces = new List<Race>();
+
+                List<Startboat> startboats = _context.Startboats.ToList();
+                List<StartboatMember> startboatMembers = _context.StartboatMembers.ToList();
+
+                List<int> previousRaceIds = new List<int>();
+                List<int> previousStartboatIds = new List<int>();
+                List<int> previousMemberIds = new List<int>();
+                List<int> currentStartboatIds = new List<int>();
+                List<int> currentMemberIds = new List<int>();
+
+                Race firstrace = vorlaeufe.Where(e => e.Oldclass.FromAge >= 13).OrderBy(e => e.Oldclass.FromAge).FirstOrDefault();
+
+                firstrace.Starttime = day1start;
+                _context.Races.Update(firstrace);
+                _context.SaveChanges();
+
+                vorlaeufe = _context.Races.Include(x => x.Oldclass).Include(x => x.RaceTyp).Include(x => x.Racestatus).Where(e => e.RaceTyp.Name == "Vorlauf" && e.Racestatus.Name != "zu wenig Teilnehmer" && e.RaceId != firstrace.RaceId).OrderBy(e => e.RaceCode).ToList();
+
+
+
+                foreach(var v in vorlaeufe)
+                {                    
+                    previousRaceIds = vorlaeufe.Where(e => e.Starttime <= globaltimestamp && e.Starttime != d1).OrderByDescending(e => e.Starttime).Select(e => e.RaceId).Take(auszeitRennen).ToList();
+                    previousStartboatIds = startboats.Where(e => previousRaceIds.Contains(e.RaceId)).Select(e => e.StartboatId).ToList();
+                    previousMemberIds = startboatMembers.Where(e => previousStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
+
+                    currentStartboatIds = startboats.Where(e => e.RaceId == v.RaceId).Select(e => e.StartboatId).ToList();
+                    currentMemberIds = startboatMembers.Where(e => currentStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
+
+                    if(!previousMemberIds.Except(currentMemberIds).Any())
+                    {
+                        globaltimestamp = globaltimestamp.AddMinutes(minutestep);
+                        v.Starttime = globaltimestamp;
+                        _context.Races.Update(v);
+                    }
+                    else
+                    {
+                        availableRaces.Add(v);
+                    }
+                }
+                foreach(var h in hoffnungslaeufe)
+                {
+                    previousRaceIds = vorlaeufe.Where(e => e.Starttime <= globaltimestamp && e.Starttime != d1).OrderByDescending(e => e.Starttime).Select(e => e.RaceId).Take(auszeitRennen).ToList();
+                    previousStartboatIds = startboats.Where(e => previousRaceIds.Contains(e.RaceId)).Select(e => e.StartboatId).ToList();
+                    previousMemberIds = startboatMembers.Where(e => previousStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
+
+                    currentStartboatIds = startboats.Where(e => e.RaceId == h.RaceId).Select(e => e.StartboatId).ToList();
+                    currentMemberIds = startboatMembers.Where(e => currentStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
+
+                    if (!previousMemberIds.Except(currentMemberIds).Any())
+                    {
+                        globaltimestamp = globaltimestamp.AddMinutes(minutestep);
+                        h.Starttime = globaltimestamp;
+                        _context.Races.Update(h);
+                    }
+                    else
+                    {
+                        availableRaces.Add(h);
+                    }
+                }
+                foreach(var z in zwischenlaeufe)
+                {
+                    previousRaceIds = vorlaeufe.Where(e => e.Starttime <= globaltimestamp && e.Starttime != d1).OrderByDescending(e => e.Starttime).Select(e => e.RaceId).Take(auszeitRennen).ToList();
+                    previousStartboatIds = startboats.Where(e => previousRaceIds.Contains(e.RaceId)).Select(e => e.StartboatId).ToList();
+                    previousMemberIds = startboatMembers.Where(e => previousStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
+
+                    currentStartboatIds = startboats.Where(e => e.RaceId == z.RaceId).Select(e => e.StartboatId).ToList();
+                    currentMemberIds = startboatMembers.Where(e => currentStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
+
+                    if (!previousMemberIds.Except(currentMemberIds).Any())
+                    {
+                        globaltimestamp = globaltimestamp.AddMinutes(minutestep);
+                        h.Starttime = globaltimestamp;
+                        _context.Races.Update(z);
+                    }
+                    else
+                    {
+                        availableRaces.Add(z);
+                    }
+                }
             }
-            else
-            {
-                DateTime globaltimestamp = regatta.FromDate;
-
-                var races = _context.Races.Where(e => e.RacestatusId == 1).ToList();
-
-                SetTimes(races, globaltimestamp);
-            }
-
 
             return RedirectToAction("Index","Race");
         }
@@ -975,11 +824,6 @@ namespace RegattaManager.Controllers
                     {
                         timestamp = timestamp.AddMinutes(3);
                     }                    
-                }
-
-                if (timestamp.Hour >= 18)
-                {
-                    timestamp = timestamp.AddHours(14);
                 }
             }
             _context.SaveChanges();
