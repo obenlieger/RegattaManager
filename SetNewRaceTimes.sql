@@ -2,6 +2,12 @@ DECLARE @raceid INT
 DECLARE @boatclassid INT
 DECLARE @startdate DATETIME2 = '2022-06-11 09:02:00'
 
+DECLARE @vorlaeufe TABLE(RaceId INT, BoatclassId INT)
+
+INSERT INTO @vorlaeufe (RaceId, BoatclassId)
+	(SELECT RaceId, BoatclassId FROM Races
+	 WHERE RaceclassId = 1 )
+
 DECLARE cur_race CURSOR FOR
 SELECT RaceId, BoatclassId FROM Races
 WHERE Starttime > '2022-06-11 09:00:00'

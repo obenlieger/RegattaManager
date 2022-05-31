@@ -737,8 +737,6 @@ namespace RegattaManager.Controllers
 
                 vorlaeufe = _context.Races.Include(x => x.Oldclass).Include(x => x.RaceTyp).Include(x => x.Racestatus).Where(e => e.RaceTyp.Name == "Vorlauf" && e.Racestatus.Name != "zu wenig Teilnehmer" && e.RaceId != firstrace.RaceId).OrderBy(e => e.RaceCode).ToList();
 
-
-
                 foreach(var v in vorlaeufe)
                 {                    
                     previousRaceIds = vorlaeufe.Where(e => e.Starttime <= globaltimestamp && e.Starttime != d1).OrderByDescending(e => e.Starttime).Select(e => e.RaceId).Take(auszeitRennen).ToList();
@@ -748,7 +746,7 @@ namespace RegattaManager.Controllers
                     currentStartboatIds = startboats.Where(e => e.RaceId == v.RaceId).Select(e => e.StartboatId).ToList();
                     currentMemberIds = startboatMembers.Where(e => currentStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
 
-                    if(!previousMemberIds.Except(currentMemberIds).Any())
+                    if(!currentMemberIds.Except(previousMemberIds).Any())
                     {
                         globaltimestamp = globaltimestamp.AddMinutes(minutestep);
                         v.Starttime = globaltimestamp;
@@ -805,34 +803,37 @@ namespace RegattaManager.Controllers
                 //    }
                 //}
 
-                while(availableRaces.Count() > 0)
+                if(availableRaces.Count() > 0)
                 {
-                    int durchlauf = 0;
-
-                    foreach(var ar in availableRaces)
+                    while (availableRaces.Count() > 0)
                     {
-                        previousRaceIds = vorlaeufe.Where(e => e.Starttime <= globaltimestamp && e.Starttime != d1).OrderByDescending(e => e.Starttime).Select(e => e.RaceId).Take(auszeitRennen).ToList();
-                        previousStartboatIds = startboats.Where(e => previousRaceIds.Contains(e.RaceId)).Select(e => e.StartboatId).ToList();
-                        previousMemberIds = startboatMembers.Where(e => previousStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
+                        int durchlauf = 0;
 
-                        currentStartboatIds = startboats.Where(e => e.RaceId == ar.RaceId).Select(e => e.StartboatId).ToList();
-                        currentMemberIds = startboatMembers.Where(e => currentStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
-
-                        if (!previousMemberIds.Except(currentMemberIds).Any())
+                        foreach (var ar in availableRaces)
                         {
-                            globaltimestamp = globaltimestamp.AddMinutes(minutestep);
-                            ar.Starttime = globaltimestamp;
-                            _context.Races.Update(ar);
-                            _context.SaveChanges();
-                            availableRaces.Remove(ar);
-                        }
-                        durchlauf++;
-                    }
+                            previousRaceIds = vorlaeufe.Where(e => e.Starttime <= globaltimestamp && e.Starttime != d1).OrderByDescending(e => e.Starttime).Select(e => e.RaceId).Take(auszeitRennen).ToList();
+                            previousStartboatIds = startboats.Where(e => previousRaceIds.Contains(e.RaceId)).Select(e => e.StartboatId).ToList();
+                            previousMemberIds = startboatMembers.Where(e => previousStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
 
-                    if(durchlauf > 100)
-                    {
-                        _context.SaveChanges();
-                        break;
+                            currentStartboatIds = startboats.Where(e => e.RaceId == ar.RaceId).Select(e => e.StartboatId).ToList();
+                            currentMemberIds = startboatMembers.Where(e => currentStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
+
+                            if (!previousMemberIds.Except(currentMemberIds).Any())
+                            {
+                                globaltimestamp = globaltimestamp.AddMinutes(minutestep);
+                                ar.Starttime = globaltimestamp;
+                                _context.Races.Update(ar);
+                                _context.SaveChanges();
+                                availableRaces.Remove(ar);
+                            }
+                            durchlauf++;
+                        }
+
+                        if (durchlauf > 100)
+                        {
+                            _context.SaveChanges();
+                            break;
+                        }
                     }
                 }
 

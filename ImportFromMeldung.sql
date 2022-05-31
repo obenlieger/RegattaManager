@@ -133,6 +133,8 @@ GO
 SET IDENTITY_INSERT [RMDB].[dbo].[Members] OFF
 GO
 
+-- hier das häufige
+
 USE [RMDB]
 SET IDENTITY_INSERT [RMDB].[dbo].[ReportedRaces] ON
 GO
@@ -187,6 +189,8 @@ INSERT INTO [RMDB].[dbo].[ReportedStartboatStandbys] (ReportedStartboatId,Member
 SELECT ReportedStartboatId,MemberId,Standbynumber
 FROM [RegattaMeldung].[dbo].[ReportedStartboatStandbys]
 GO
+
+-- bis hier
 
 DELETE FROM StartboatMembers 
 WHERE StartboatId IN
