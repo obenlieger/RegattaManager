@@ -609,8 +609,24 @@ namespace RegattaManager.Controllers
             ViewBag.configuredRaces = _context.Races.Include(e => e.Oldclass).Include(e => e.Racestatus).Include(e => e.Raceclass).Include(e => e.Boatclass).Where(e => e.Racestatus.Name != "zu wenig Teilnehmer" && e.Starttime > d1 && e.Starttime <= regatta.ToDate).OrderBy(e => e.Starttime).ToList();
             ViewBag.configuredRacesDayTwo = _context.Races.Include(e => e.Oldclass).Include(e => e.Racestatus).Include(e => e.Raceclass).Include(e => e.Boatclass).Where(e => e.Racestatus.Name != "zu wenig Teilnehmer" && e.Starttime > regatta.ToDate).OrderBy(e => e.Starttime).ToList();
 
-            ViewBag.starttime = _context.Races.Where(e => e.Starttime >= regatta.FromDate && e.Starttime <= regatta.ToDate).OrderByDescending(e => e.Starttime).First().Starttime;
-            ViewBag.starttimeDayTwo = _context.Races.Where(e => e.Starttime >= regatta.ToDate).OrderByDescending(e => e.Starttime).First().Starttime;
+            if(_context.Races.Where(e => e.Starttime >= regatta.FromDate && e.Starttime <= regatta.ToDate).Count() > 0)
+            {
+                ViewBag.starttime = _context.Races.Where(e => e.Starttime >= regatta.FromDate && e.Starttime <= regatta.ToDate).OrderByDescending(e => e.Starttime).First().Starttime;
+            }
+            else
+            {
+                ViewBag.starttime = regatta.FromDate;
+            }            
+
+            if(_context.Races.Where(e => e.Starttime >= regatta.ToDate).OrderByDescending(e => e.Starttime).Count() > 0)
+            {
+                ViewBag.starttimeDayTwo = _context.Races.Where(e => e.Starttime >= regatta.ToDate).OrderByDescending(e => e.Starttime).First().Starttime;
+            }            
+            else
+            {
+                ViewBag.starttimeDayTwo = regatta.ToDate;
+            }
+
             ViewBag.minutestep = 2;
 
             return View(races);
@@ -701,147 +717,7 @@ namespace RegattaManager.Controllers
             }
 
             return RedirectToAction("CreateStarttimes", "Regatta");
-        }
-
-        public IActionResult SetRaceTimes(int RegattaId, int minutestep, DateTime day1start, DateTime day2start)
-        {
-            Regatta regatta = _context.Regattas.Where(x => x.Choosen == true).FirstOrDefault(e => e.RegattaId == RegattaId);
-
-            if(regatta != null)
-            {
-                DateTime globaltimestamp = day1start;
-                var d1 = new DateTime(0001, 1, 1, 0, 0, 0);
-
-                int auszeitRennen = 40 / minutestep;
-
-                List<Race> vorlaeufe = _context.Races.Include(x => x.Oldclass).Include(x => x.RaceTyp).Include(x => x.Racestatus).Where(e => e.RaceTyp.Name == "Vorlauf" && e.Racestatus.Name != "zu wenig Teilnehmer").OrderBy(e => e.RaceCode).ToList();
-                List<Race> zwischenlaeufe = _context.Races.Include(x => x.Oldclass).Include(x => x.RaceTyp).Include(x => x.Racestatus).Where(e => e.RaceTyp.Name == "Zwischenlauf" && e.Racestatus.Name != "zu wenig Teilnehmer").OrderBy(e => e.RaceCode).ToList();
-                List<Race> hoffnungslaeufe = _context.Races.Include(x => x.Oldclass).Include(x => x.RaceTyp).Include(x => x.Racestatus).Where(e => e.RaceTyp.Name == "Hoffnungslauf" && e.Racestatus.Name != "zu wenig Teilnehmer").OrderBy(e => e.RaceCode).ToList();
-
-                List<Race> availableRaces = new List<Race>();
-
-                List<Startboat> startboats = _context.Startboats.ToList();
-                List<StartboatMember> startboatMembers = _context.StartboatMembers.ToList();
-
-                List<int> previousRaceIds = new List<int>();
-                List<int> previousStartboatIds = new List<int>();
-                List<int> previousMemberIds = new List<int>();
-                List<int> currentStartboatIds = new List<int>();
-                List<int> currentMemberIds = new List<int>();
-
-                Race firstrace = vorlaeufe.Where(e => e.Oldclass.FromAge >= 13).OrderBy(e => e.Oldclass.FromAge).FirstOrDefault();
-
-                firstrace.Starttime = globaltimestamp;
-                _context.Races.Update(firstrace);
-                _context.SaveChanges();
-
-                vorlaeufe = _context.Races.Include(x => x.Oldclass).Include(x => x.RaceTyp).Include(x => x.Racestatus).Where(e => e.RaceTyp.Name == "Vorlauf" && e.Racestatus.Name != "zu wenig Teilnehmer" && e.RaceId != firstrace.RaceId).OrderBy(e => e.RaceCode).ToList();
-
-                foreach(var v in vorlaeufe)
-                {                    
-                    previousRaceIds = vorlaeufe.Where(e => e.Starttime <= globaltimestamp && e.Starttime != d1).OrderByDescending(e => e.Starttime).Select(e => e.RaceId).Take(auszeitRennen).ToList();
-                    previousStartboatIds = startboats.Where(e => previousRaceIds.Contains(e.RaceId)).Select(e => e.StartboatId).ToList();
-                    previousMemberIds = startboatMembers.Where(e => previousStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
-
-                    currentStartboatIds = startboats.Where(e => e.RaceId == v.RaceId).Select(e => e.StartboatId).ToList();
-                    currentMemberIds = startboatMembers.Where(e => currentStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
-
-                    if(!currentMemberIds.Except(previousMemberIds).Any())
-                    {
-                        globaltimestamp = globaltimestamp.AddMinutes(minutestep);
-                        v.Starttime = globaltimestamp;
-                        _context.Races.Update(v);
-                        _context.SaveChanges();
-                    }
-                    else
-                    {
-                        availableRaces.Add(v);
-                    }
-                }
-
-                //foreach(var h in hoffnungslaeufe)
-                //{
-                //    previousRaceIds = vorlaeufe.Where(e => e.Starttime <= globaltimestamp && e.Starttime != d1).OrderByDescending(e => e.Starttime).Select(e => e.RaceId).Take(auszeitRennen).ToList();
-                //    previousStartboatIds = startboats.Where(e => previousRaceIds.Contains(e.RaceId)).Select(e => e.StartboatId).ToList();
-                //    previousMemberIds = startboatMembers.Where(e => previousStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
-
-                //    currentStartboatIds = startboats.Where(e => e.RaceId == h.RaceId).Select(e => e.StartboatId).ToList();
-                //    currentMemberIds = startboatMembers.Where(e => currentStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
-
-                //    if (!previousMemberIds.Except(currentMemberIds).Any())
-                //    {
-                //        globaltimestamp = globaltimestamp.AddMinutes(minutestep);
-                //        h.Starttime = globaltimestamp;
-                //        _context.Races.Update(h);
-                //        _context.SaveChanges();
-                //    }
-                //    else
-                //    {
-                //        availableRaces.Add(h);
-                //    }
-                //}
-
-                //foreach(var z in zwischenlaeufe)
-                //{
-                //    previousRaceIds = vorlaeufe.Where(e => e.Starttime <= globaltimestamp && e.Starttime != d1).OrderByDescending(e => e.Starttime).Select(e => e.RaceId).Take(auszeitRennen).ToList();
-                //    previousStartboatIds = startboats.Where(e => previousRaceIds.Contains(e.RaceId)).Select(e => e.StartboatId).ToList();
-                //    previousMemberIds = startboatMembers.Where(e => previousStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
-
-                //    currentStartboatIds = startboats.Where(e => e.RaceId == z.RaceId).Select(e => e.StartboatId).ToList();
-                //    currentMemberIds = startboatMembers.Where(e => currentStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
-
-                //    if (!previousMemberIds.Except(currentMemberIds).Any())
-                //    {
-                //        globaltimestamp = globaltimestamp.AddMinutes(minutestep);
-                //        z.Starttime = globaltimestamp;
-                //        _context.Races.Update(z);
-                //        _context.SaveChanges();
-                //    }
-                //    else
-                //    {
-                //        availableRaces.Add(z);
-                //    }
-                //}
-
-                if(availableRaces.Count() > 0)
-                {
-                    while (availableRaces.Count() > 0)
-                    {
-                        int durchlauf = 0;
-
-                        foreach (var ar in availableRaces)
-                        {
-                            previousRaceIds = vorlaeufe.Where(e => e.Starttime <= globaltimestamp && e.Starttime != d1).OrderByDescending(e => e.Starttime).Select(e => e.RaceId).Take(auszeitRennen).ToList();
-                            previousStartboatIds = startboats.Where(e => previousRaceIds.Contains(e.RaceId)).Select(e => e.StartboatId).ToList();
-                            previousMemberIds = startboatMembers.Where(e => previousStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
-
-                            currentStartboatIds = startboats.Where(e => e.RaceId == ar.RaceId).Select(e => e.StartboatId).ToList();
-                            currentMemberIds = startboatMembers.Where(e => currentStartboatIds.Contains(e.StartboatId)).Select(e => e.MemberId).ToList();
-
-                            if (!previousMemberIds.Except(currentMemberIds).Any())
-                            {
-                                globaltimestamp = globaltimestamp.AddMinutes(minutestep);
-                                ar.Starttime = globaltimestamp;
-                                _context.Races.Update(ar);
-                                _context.SaveChanges();
-                                availableRaces.Remove(ar);
-                            }
-                            durchlauf++;
-                        }
-
-                        if (durchlauf > 100)
-                        {
-                            _context.SaveChanges();
-                            break;
-                        }
-                    }
-                }
-
-                _context.SaveChanges();
-            }
-
-            return RedirectToAction("Index","Race");
-        }
+        }        
 
         private DateTime SetTimes(List<Race> races, DateTime timestamp)
         {
