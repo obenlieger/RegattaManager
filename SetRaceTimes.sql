@@ -1,6 +1,6 @@
 UPDATE Races SET Starttime = '2022-06-11 09:00:00' WHERE RaceCode = '21083V1'
-UPDATE Races SET Starttime = '2022-06-11 09:03:00' WHERE RaceCode = '21083V2'
-UPDATE Races SET Starttime = '2022-06-11 09:06:00' WHERE RaceCode = '21083V3'
+UPDATE Races SET Starttime = '2022-06-11 09:02:00' WHERE RaceCode = '21083V2'
+UPDATE Races SET Starttime = '2022-06-11 09:04:00' WHERE RaceCode = '21083V3'
 --UPDATE Races SET Starttime = '2022-06-11 12:15:00' WHERE RaceCode = '93003V1'
 --UPDATE Races SET Starttime = '2022-06-11 12:30:00' WHERE RaceCode = '93003V2'
 --UPDATE Races SET Starttime = '2022-06-11 12:45:00' WHERE RaceCode = '93003V3'
@@ -9,10 +9,11 @@ UPDATE Races SET Starttime = '2022-06-11 09:06:00' WHERE RaceCode = '21083V3'
 DECLARE @raceid INT
 DECLARE @boatclassid INT
 DECLARE @startdate DATETIME2
+DECLARE @racecode VARCHAR(50)
 
 IF EXISTS (SELECT * FROM Races WHERE Starttime <> '0001-01-01')
 BEGIN
-	SET @startdate = DATEADD(MINUTE,3,(SELECT TOP (1) Starttime FROM Races ORDER BY Starttime DESC))
+	SET @startdate = DATEADD(MINUTE,2,(SELECT TOP (1) Starttime FROM Races WHERE Starttime < '2022-06-12' ORDER BY Starttime DESC))
 END
 ELSE
 BEGIN
@@ -27,22 +28,23 @@ DECLARE @previousMembers TABLE(pmid INT)
 DECLARE @previousStartboats TABLE(psid INT)
 DECLARE @previousRaces TABLE(prid INT, st DATETIME2)
 DECLARE @currentMembers TABLE(cmid INT)
+DECLARE @tempvorlaufraceid INT
 
 IF EXISTS (SELECT * FROM Races WHERE Starttime <> '0001-01-01')
 BEGIN
 	DECLARE cur_race CURSOR FOR
-	SELECT RaceId, BoatclassId FROM Races
+	SELECT RaceId, BoatclassId, RaceCode FROM Races
 	WHERE RaceTypId = 1 
 	AND RacestatusId <> 1006 
 	AND Starttime = '0001-01-01'
 	AND RaceCode NOT IN ('93003V1','93003V2','93003V3')
-	--ORDER BY newid()
-	ORDER BY RaceCode
+	ORDER BY newid()
+	--ORDER BY RaceCode
 END
 ELSE
 BEGIN
 	DECLARE cur_race CURSOR FOR
-	SELECT RaceId, BoatclassId FROM Races
+	SELECT RaceId, BoatclassId, RaceCode FROM Races
 	WHERE RaceTypId = 1 
 	AND RacestatusId <> 1006 
 	AND Starttime = '0001-01-01'
@@ -51,7 +53,7 @@ BEGIN
 END
 
 OPEN cur_race  
-FETCH NEXT FROM cur_race INTO @raceid, @boatclassid
+FETCH NEXT FROM cur_race INTO @raceid, @boatclassid, @racecode
 
 WHILE @@FETCH_STATUS = 0  
 BEGIN
@@ -138,7 +140,7 @@ BEGIN
 
 		IF @boatclassid = 11
 		BEGIN
-		  SET @startdate = DATEADD(MINUTE,6,@startdate)
+		  SET @startdate = DATEADD(MINUTE,4,@startdate)
 		END
 		ELSE IF @boatclassid = 10
 		BEGIN
@@ -146,13 +148,47 @@ BEGIN
 		END
 		ELSE
 		BEGIN
-		  SET @startdate = DATEADD(MINUTE,3,@startdate)
+		  SET @startdate = DATEADD(MINUTE,2,@startdate)
 		END
-
 		IF @startdate >= '2022-06-11 12:00' AND @startdate <= '2022-06-11 12:10'
 		BEGIN
 		  SET @startdate = '2022-06-11 13:00'
 		END
+
+		WHILE	(
+				(SELECT COUNT(RaceId) FROM Races
+				WHERE SUBSTRING(RaceCode,1,6) = SUBSTRING(@racecode,1,6)
+				AND Starttime = '0001-01-01') > 0
+				)
+		BEGIN	
+		
+			SET @tempvorlaufraceid = (SELECT TOP(1) RaceId FROM Races
+										WHERE SUBSTRING(RaceCode,1,6) = SUBSTRING(@racecode,1,6)
+										AND Starttime = '0001-01-01')
+
+			UPDATE Races SET Starttime = @startdate
+			WHERE RaceId = @tempvorlaufraceid
+
+			IF @boatclassid = 11
+			BEGIN
+			  SET @startdate = DATEADD(MINUTE,4,@startdate)
+			END
+			ELSE IF @boatclassid = 10
+			BEGIN
+			  SET @startdate = DATEADD(MINUTE,15,@startdate)
+			END
+			ELSE
+			BEGIN
+			  SET @startdate = DATEADD(MINUTE,2,@startdate)
+			END
+			IF @startdate >= '2022-06-11 12:00' AND @startdate <= '2022-06-11 12:10'
+			BEGIN
+			  SET @startdate = '2022-06-11 13:00'
+			END
+
+		END
+
+		
 	END
 
 	IF EXISTS 
@@ -215,7 +251,7 @@ BEGIN
 
 		IF @boatclassid = 11
 		BEGIN
-		  SET @startdate = DATEADD(MINUTE,6,@startdate)
+		  SET @startdate = DATEADD(MINUTE,4,@startdate)
 		END
 		ELSE IF @boatclassid = 10
 		BEGIN
@@ -223,7 +259,7 @@ BEGIN
 		END
 		ELSE
 		BEGIN
-		  SET @startdate = DATEADD(MINUTE,3,@startdate)
+		  SET @startdate = DATEADD(MINUTE,2,@startdate)
 		END
 
 		IF @startdate = '2022-06-11 12:00' 
@@ -292,7 +328,7 @@ BEGIN
 
 		IF @boatclassid = 11
 		BEGIN
-		  SET @startdate = DATEADD(MINUTE,6,@startdate)
+		  SET @startdate = DATEADD(MINUTE,4,@startdate)
 		END
 		ELSE IF @boatclassid = 10
 		BEGIN
@@ -300,7 +336,7 @@ BEGIN
 		END
 		ELSE
 		BEGIN
-		  SET @startdate = DATEADD(MINUTE,3,@startdate)
+		  SET @startdate = DATEADD(MINUTE,2,@startdate)
 		END
 
 		IF @startdate = '2022-06-11 12:00' 
@@ -316,7 +352,7 @@ BEGIN
 	DELETE FROM @hoffnungslaeufe
 	DELETE FROM @zwischenlaeufe
 
-	FETCH NEXT FROM cur_race INTO @raceid, @boatclassid
+	FETCH NEXT FROM cur_race INTO @raceid, @boatclassid, @racecode
 END
 
 CLOSE cur_race  
