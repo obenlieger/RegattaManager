@@ -1,3 +1,11 @@
+UPDATE Races SET Starttime = '2022-06-11 09:00:00' WHERE RaceCode = '21083V1'
+UPDATE Races SET Starttime = '2022-06-11 09:03:00' WHERE RaceCode = '21083V2'
+UPDATE Races SET Starttime = '2022-06-11 09:06:00' WHERE RaceCode = '21083V3'
+--UPDATE Races SET Starttime = '2022-06-11 12:15:00' WHERE RaceCode = '93003V1'
+--UPDATE Races SET Starttime = '2022-06-11 12:30:00' WHERE RaceCode = '93003V2'
+--UPDATE Races SET Starttime = '2022-06-11 12:45:00' WHERE RaceCode = '93003V3'
+
+
 DECLARE @raceid INT
 DECLARE @boatclassid INT
 DECLARE @startdate DATETIME2
@@ -11,7 +19,7 @@ BEGIN
 	SET @startdate = '2022-06-11 09:00:00'
 END
 
---SET @startdate = '2022-06-11 09:06:00'
+--SET @startdate = '2022-06-11 18:15:00'
 
 DECLARE @zwischenlaeufe TABLE(RaceId INT, BoatclassId INT, Starttime DATETIME2)
 DECLARE @hoffnungslaeufe TABLE(RaceId INT, BoatclassId INT, Starttime DATETIME2)
