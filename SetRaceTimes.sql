@@ -33,7 +33,7 @@ DECLARE @tempvorlaufraceid INT
 IF EXISTS (SELECT * FROM Races WHERE Starttime <> '0001-01-01')
 BEGIN
 	DECLARE cur_race CURSOR FOR
-	SELECT RaceId, BoatclassId, RaceCode FROM Races
+	SELECT RaceId, RaceCode FROM Races
 	WHERE RaceTypId = 1 
 	AND RacestatusId <> 1006 
 	AND Starttime = '0001-01-01'
@@ -44,7 +44,7 @@ END
 ELSE
 BEGIN
 	DECLARE cur_race CURSOR FOR
-	SELECT RaceId, BoatclassId, RaceCode FROM Races
+	SELECT RaceId, RaceCode FROM Races
 	WHERE RaceTypId = 1 
 	AND RacestatusId <> 1006 
 	AND Starttime = '0001-01-01'
@@ -53,7 +53,7 @@ BEGIN
 END
 
 OPEN cur_race  
-FETCH NEXT FROM cur_race INTO @raceid, @boatclassid, @racecode
+FETCH NEXT FROM cur_race INTO @raceid, @racecode
 
 WHILE @@FETCH_STATUS = 0  
 BEGIN
@@ -138,6 +138,8 @@ BEGIN
 		UPDATE Races SET Starttime = @startdate
 		WHERE RaceId = @raceid
 
+		SET @boatclassid = (SELECT BoatclassId FROM Races WHERE RaceId = @raceid)
+
 		IF @boatclassid = 11
 		BEGIN
 		  SET @startdate = DATEADD(MINUTE,4,@startdate)
@@ -168,6 +170,8 @@ BEGIN
 
 			UPDATE Races SET Starttime = @startdate
 			WHERE RaceId = @tempvorlaufraceid
+
+			SET @boatclassid = (SELECT BoatclassId FROM Races WHERE RaceId = @tempvorlaufraceid)
 
 			IF @boatclassid = 11
 			BEGIN
@@ -249,6 +253,8 @@ BEGIN
 		UPDATE Races SET Starttime = @startdate
 		WHERE RaceId IN (SELECT TOP (1) RaceId FROM @hoffnungslaeufe)
 
+		SET @boatclassid = (SELECT BoatclassId FROM Races WHERE RaceId IN (SELECT TOP (1) RaceId FROM @hoffnungslaeufe))
+
 		IF @boatclassid = 11
 		BEGIN
 		  SET @startdate = DATEADD(MINUTE,4,@startdate)
@@ -326,6 +332,8 @@ BEGIN
 		UPDATE Races SET Starttime = @startdate
 		WHERE RaceId IN (SELECT TOP (1) RaceId FROM @zwischenlaeufe)
 
+		SET @boatclassid = (SELECT BoatclassId FROM Races WHERE RaceId IN (SELECT TOP (1) RaceId FROM @zwischenlaeufe))
+
 		IF @boatclassid = 11
 		BEGIN
 		  SET @startdate = DATEADD(MINUTE,4,@startdate)
@@ -352,7 +360,7 @@ BEGIN
 	DELETE FROM @hoffnungslaeufe
 	DELETE FROM @zwischenlaeufe
 
-	FETCH NEXT FROM cur_race INTO @raceid, @boatclassid, @racecode
+	FETCH NEXT FROM cur_race INTO @raceid, @racecode
 END
 
 CLOSE cur_race  
