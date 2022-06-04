@@ -34,11 +34,11 @@ BEGIN
 				AND sbm.MemberId NOT IN (1,2,3,4,5,6,7,8)
 		)
 		SELECT S.MemberId,
-			   R.RaceCode,
-			   R.ClubName,
-			   R.LastName,
-			   R.FirstName,
-			   R.Startime
+			R.RaceCode,
+			R.ClubName,
+			R.LastName,
+			R.FirstName,
+			R.Startime
 			FROM S
 			JOIN R ON S.MemberId = R.MemberId
 
@@ -83,11 +83,11 @@ BEGIN
 				AND sbm.MemberId NOT IN (1,2,3,4,5,6,7,8)
 		)
 		SELECT S.MemberId,
-			   R.RaceCode,
-			   R.ClubName,
-			   R.LastName,
-			   R.FirstName,
-			   R.Startime
+			R.RaceCode,
+			R.ClubName,
+			R.LastName,
+			R.FirstName,
+			R.Startime
 			FROM S
 			JOIN R ON S.MemberId = R.MemberId
 

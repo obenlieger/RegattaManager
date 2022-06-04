@@ -226,7 +226,7 @@ BEGIN
 				SELECT SUBSTRING(RaceCode,1,5)
 				FROM Races
 				WHERE Starttime <= @startdate 
-				AND Starttime >= DATEADD(Minute,-30,@startdate)
+				AND Starttime >= DATEADD(Minute,-45,@startdate)
 				AND Starttime <> '0001-01-01'
 				AND RaceTypId = 1 
 				AND RacestatusId <> 1006				
@@ -309,7 +309,7 @@ BEGIN
 				SELECT SUBSTRING(RaceCode,1,5)
 				FROM Races
 				WHERE Starttime <= @startdate 
-				AND Starttime >= DATEADD(Minute,-30,@startdate)
+				AND Starttime >= DATEADD(Minute,-60,@startdate)
 				AND Starttime <> '0001-01-01'
 				AND (RaceTypId = 1 OR RaceTypId = 3)
 				AND RacestatusId <> 1006
