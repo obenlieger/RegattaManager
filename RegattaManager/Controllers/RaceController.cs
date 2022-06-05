@@ -610,16 +610,8 @@ namespace RegattaManager.Controllers
             int ageFrom = 0;
             int ageTo = yearnow - model.Oldclass.ToAge;
 
-            if (allAvailable == true)
-            {
-                ageFrom = getAgeFrom(model.Oldclass.FromAge, true);
-                ageTo = getAgeTo(model.Oldclass.FromAge, model.Oldclass.ToAge, true);
-            }
-            else
-            {
-                ageFrom = getAgeFrom(model.Oldclass.FromAge, false);
-                ageTo = getAgeTo(model.Oldclass.FromAge, model.Oldclass.ToAge, false);
-            }
+            ageFrom = getAgeFrom(model.Oldclass.FromAge, true);
+            ageTo = getAgeTo(model.Oldclass.FromAge, model.Oldclass.ToAge, true);
 
             var clubid = startboat.ClubId;
             var sbMembers = _context.StartboatMembers.Include(e => e.Member).Where(e => e.Startboat.RaceId == startboat.RaceId).OrderBy(e => e.Member.LastName).Select(e => e.MemberId).ToList();

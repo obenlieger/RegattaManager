@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - RegattaManager</title>
+    <title>Ausgeloste Rennen</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -29,63 +29,111 @@
         }
 
         th {
-            font-size: 85%;
+            font-size: 100%;
             color: black;
         }
 
         td {
-            font-size: 85%;
+            font-size: 100%;
             color: black;
         }
     </style>
 </head>
 <body>
     <div class="container body-content">
-        <h3>@ViewBag.regatta.Name</h3>
+        <h3>Ausgeloste Rennen</h3>
         <h5>Stand: @DateTime.Now.ToString("dd.MM.yyyy HH:mm")</h5>
         @foreach (var item in Model)
         {
-            <table class="table table-sm" width="100%">
+            <table class="table table-sm table-bordered border-dark" width="100%">
                 <thead>
                     <tr class="table-primary">
                         <th width="15%">@Html.DisplayFor(modelItem => item.Starttime)</th>
                         <th width="30%">
                             @if (item.Gender.Equals("M"))
                             {
-                                @if (item.Oldclass.FromAge >= 17 && item.Oldclass.ToAge <= 99)
+                                @if(item.Oldclass.FromAge >=17 && item.Oldclass.ToAge <= 99)
                                 {
                                     @:Herren
                                 }
-                                else if (item.Oldclass.FromAge >= 15 && item.Oldclass.ToAge <= 16)
+                                else if(item.Oldclass.FromAge >= 15 && item.Oldclass.ToAge <= 16)
                                 {
-                                    @:männliche
-                                }
+                                    @:männliche    
+                                }              
+                                @item.Oldclass.Name                                    
                             }
                             else if (string.Equals(item.Gender, "W"))
-                            {
+                            {                            
                                 @if (item.Oldclass.FromAge >= 17 && item.Oldclass.ToAge <= 99)
                                 {
-                                    @:Damen
+                                    @:Damen 
+                                    @item.Oldclass.Name
+                                }
+                                else if(item.Oldclass.FromAge >= 15 && item.Oldclass.ToAge <= 16)
+                                {                                
+                                    @:weibliche
+                                    @item.Oldclass.Name
                                 }
                                 else
                                 {
-                                    @:weibliche
+                                    switch(item.Oldclass.Name)
+                                    {                                    
+                                        case "Schüler C7":
+                                            @:Schülerinnen C7
+                                            break;
+                                        case "Schüler C8":
+                                            @:Schülerinnen C8
+                                            break;
+                                        case "Schüler C9":
+                                            @:Schülerinnen C9
+                                            break;
+                                        case "Schüler C":
+                                            @:Schülerinnen C
+                                            break;
+                                        case "Schüler B10":
+                                            @:Schülerinnen B10
+                                            break;
+                                        case "Schüler B11":
+                                            @:Schülerinnen B11
+                                            break;
+                                        case "Schüler B12":
+                                            @:Schülerinnen B12
+                                            break;
+                                        case "Schüler B":
+                                            @:Schülerinnen B
+                                            break;
+                                        case "Schüler C/B10":
+                                            @:Schülerinnen C/B10
+                                            break;
+                                        case "Schüler B11/B12":
+                                            @:Schülerinnen B11/B12
+                                            break;
+                                        case "Schüler A13":
+                                            @:Schülerinnen A13
+                                            break;
+                                        case "Schüler A14":
+                                            @:Schülerinnen A14
+                                            break;
+                                        case "Schüler A":
+                                            @:Schülerinnen A
+                                            break;
+                                        default:
+                                            @item.Oldclass.Name
+                                            break;
+                                    }
                                 }
                             }
                             else if (string.Equals(item.Gender, "X"))
                             {
                                 @:mixed
-                            }
-                            @Html.DisplayFor(modelItem => item.Oldclass.Name)
+                                @item.Oldclass.Name
+                            } 
                             &nbsp;-&nbsp;
                             @Html.DisplayFor(modelItem => item.Boatclass.Name)
                             &nbsp;-&nbsp;
                             @Html.DisplayFor(modelItem => item.Raceclass.Name)
                         </th>
                         <th width="20%">                            
-                            @item.RaceCode
-                        </th>
-                        <th width="20%">
                             @if (item.RaceTypId == 4)
                             {
                                 <span class="badge badge-pill badge-danger">Endlauf</span>
@@ -106,7 +154,7 @@
                             @if (item.Comment != "")
                             {
                                 @:&nbsp;
-                                @:<span class="label label-warning">@item.Comment</span>
+                                @:<span class="badge badge-primary">@item.Comment</span>
                                 @if (@item.Comment == "Bier Cup")
                                 {
                                     @:&nbsp;<img src="/images/beer-512.png" height="15" />
@@ -116,8 +164,10 @@
                                     @:&nbsp;<img src="/images/prosecco.png" height="15" />
                                 }
                             }
-                        </th>
-                        <th width="5%">
+                            <br/>
+                            @item.RaceCode
+                        </th>                        
+                        <th width="25%">
                             @foreach (var rdr in ViewBag.racedrawrules)
                             {
                                 @if (rdr.RaceDrawId == item.RaceDrawId && rdr.RaceSequence == item.Sequence && rdr.RaceTypId == item.RaceTypId && rdr.RaceDraw.isAbteilungslauf == item.isAbteilungslauf)
@@ -150,7 +200,6 @@
                     <td><i>Starter</i></td>
                     <td><i>Ersatz</i></td>
                     <td><i>Verein</i></td>
-                    <td></td>
                 </tr>
                 @foreach (var sb in ViewBag.startboats)
                 {
@@ -221,7 +270,6 @@
                                 }
                             </td>
                             <td>@sb.Club.ShortName</td>
-                            <td></td>
                         </tr>
                     }
                 }
