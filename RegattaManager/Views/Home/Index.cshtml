@@ -160,7 +160,7 @@
             <th>
                 @foreach (var rdr in ViewBag.racedrawrules)
                 {
-                    @if (rdr.RaceDrawId == item.RaceDrawId && rdr.RaceSequence == item.Sequence && rdr.RaceTypId == item.RaceTypId && rdr.RaceDraw.isAbteilungslauf == item.isAbteilungslauf)
+                    @if (rdr.RaceDrawId == item.RaceDrawId && rdr.RaceSequence == item.Sequence && rdr.RaceTypId == item.RaceTypId)
                     {
                         if (rdr.ToRaceTypId == 1)
                         {
@@ -178,7 +178,21 @@
                         {
                             ToRace = "Endlauf";
                         }
-                        @string.Format("{0}.-{1}. in {2}", rdr.PlacementFrom, rdr.PlacementTo, ToRace)
+                        if(rdr.PlacementFrom == rdr.PlacementTo)
+                        {
+                            if(rdr.ToRaceTypId == 2)
+                            {
+                                @string.Format("{0}. in {1} {2}", rdr.PlacementTo, ToRace, rdr.ToRaceSequence)
+                            }
+                            else
+                            {
+                                @string.Format("{0}. in {1}", rdr.PlacementTo, ToRace)
+                            }                                        
+                        }
+                        else
+                        {
+                            @string.Format("{0}.-{1}. in {2}", rdr.PlacementFrom, rdr.PlacementTo, ToRace)    
+                        }
                         <br />
                     }
                 }
