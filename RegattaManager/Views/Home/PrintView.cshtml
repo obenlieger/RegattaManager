@@ -170,7 +170,7 @@
                         <th width="25%">
                             @foreach (var rdr in ViewBag.racedrawrules)
                             {
-                                @if (rdr.RaceDrawId == item.RaceDrawId && rdr.RaceSequence == item.Sequence && rdr.RaceTypId == item.RaceTypId && rdr.RaceDraw.isAbteilungslauf == item.isAbteilungslauf)
+                                @if (rdr.RaceDrawId == item.RaceDrawId && rdr.RaceSequence == item.Sequence && rdr.RaceTypId == item.RaceTypId)
                                 {
                                     if (rdr.ToRaceTypId == 1)
                                     {
@@ -202,7 +202,7 @@
                                     else
                                     {
                                         @string.Format("{0}.-{1}. in {2}", rdr.PlacementFrom, rdr.PlacementTo, ToRace)    
-                                    }                                 
+                                    }                               
                                     <br />
                                 }
                             }

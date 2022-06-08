@@ -43,7 +43,7 @@ namespace RegattaManager.Controllers
             ViewBag.members = _context.Members.Include(e => e.Club).ToList();
             ViewBag.racedrawrules = _context.RaceDrawRules.Include(e => e.RaceDraw).Include(e => e.RaceTyp).ToList();
             ViewBag.regatta = _context.Regattas.FirstOrDefault(e => e.RegattaId == rid);            
-            ViewBag.clubs = _context.Clubs.Where(e => regattaClubs.Select(i => i.ClubId).Contains(e.ClubId)).ToList();
+            ViewBag.clubs = _context.Clubs.ToList();
             ViewBag.ClubId = new SelectList(_context.Clubs.OrderBy(e => e.Name), "ClubId", "Name");
             ViewBag.ThisYear = DateTime.Now.Year;
 
@@ -138,7 +138,7 @@ namespace RegattaManager.Controllers
                 ViewBag.members = _context.Members.Include(e => e.Club).ToList();                
                 ViewBag.racedrawrules = _context.RaceDrawRules.Include(e => e.RaceDraw).Include(e => e.RaceTyp).ToList();
                 ViewBag.regatta = _context.Regattas.FirstOrDefault(e => e.RegattaId == rid);                
-                ViewBag.clubs = _context.Clubs.Where(e => regattaClubs.Select(i => i.ClubId).Contains(e.ClubId)).ToList();
+                ViewBag.clubs = _context.Clubs.ToList();
                 ViewBag.ThisYear = DateTime.Now.Year;
 
                 return View(model);

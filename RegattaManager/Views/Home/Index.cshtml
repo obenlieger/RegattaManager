@@ -221,18 +221,27 @@
                                     {
                                         @if (m.MemberId == sbm.MemberId)
                                         {
-                                            @string.Format("{0}, {1}", m.LastName, m.FirstName);
-                                            @if (m.ClubId != sb.ClubId && m.RentedToClubId != sb.ClubId && m.isRented == false && m.RentYear != ViewBag.ThisYear)
+                                            @if(m.MemberId == 1 || m.MemberId == 2 || m.MemberId == 3 || m.MemberId == 4 || m.MemberId == 5 || m.MemberId == 6 || m.MemberId == 7 || m.MemberId == 8)
                                             {
-                                                @string.Format(" ({0})", m.Club.ShortName);
+                                                <b>
+                                                @string.Format("{0}", m.LastName)
+                                                </b>
                                             }
-                                            @if (m.isRented == true && m.RentYear == ViewBag.ThisYear && sb.ClubId != m.RentedToClubId)
+                                            else
                                             {
-                                                @foreach (var rc in ViewBag.clubs)
+                                                @string.Format("{0}, {1}", m.LastName, m.FirstName);
+                                                @if (m.ClubId != sb.ClubId && m.isRented == false)
                                                 {
-                                                    @if (rc.ClubId == m.RentedToClubId)
+                                                    @string.Format(" ({0})", m.Club.ShortName);
+                                                }
+                                                @if (m.isRented == true && sb.ClubId != m.RentedToClubId)
+                                                {
+                                                    @foreach (var rc in ViewBag.clubs)
                                                     {
-                                                        @string.Format(" ({0})", rc.ShortName);
+                                                        @if (rc.ClubId == m.RentedToClubId)
+                                                        {
+                                                            @string.Format(" ({0})", rc.ShortName);
+                                                        }
                                                     }
                                                 }
                                             }
