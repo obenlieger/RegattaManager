@@ -26,7 +26,7 @@ else
                 Startzeit
             </th>
             <th></th>
-            <th></th>            
+            <th></th>
         </tr>
     </thead>
 
@@ -208,6 +208,7 @@ else
             <td><i>Startbahn</i></td>
             <td><i>Starter</i></td>
             <td><i>Verein</i></td>
+            <td></td>
         @:</tr>
         @foreach (var sb in ViewBag.startboats)
         {
@@ -246,6 +247,7 @@ else
                         }
                 </td>
                 <td>@sb.Club.ShortName</td>
+                <td></td>
             @:</tr>
             }
             }
