@@ -627,7 +627,7 @@ namespace RegattaManager.Controllers
                 ViewBag.starttimeDayTwo = regatta.ToDate;
             }
 
-            ViewBag.minutestep = 3;
+            ViewBag.minutestep = 2;
 
             return View(races);
         }

@@ -41,6 +41,7 @@ BEGIN
 			R.Startime
 			FROM S
 			JOIN R ON S.MemberId = R.MemberId
+			ORDER BY R.LastName, R.FirstName
 
       FETCH NEXT FROM cur_race INTO @racedate, @racecode
 END 
@@ -90,6 +91,7 @@ BEGIN
 			R.Startime
 			FROM S
 			JOIN R ON S.MemberId = R.MemberId
+			ORDER BY R.LastName, R.FirstName
 
       FETCH NEXT FROM cur_race INTO @racedate, @racecode
 END 
