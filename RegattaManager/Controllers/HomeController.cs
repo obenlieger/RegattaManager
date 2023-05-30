@@ -147,6 +147,35 @@ namespace RegattaManager.Controllers
             return NotFound();
         }
 
+        public IActionResult PrintOverview()
+        {
+            var rid = 0;
+
+            if (_context.Regattas.Where(e => e.Choosen == true).Any())
+            {
+                rid = _context.Regattas.Where(e => e.Choosen == true).FirstOrDefault().RegattaId;
+            }
+
+            if (rid != 0)
+            {
+                var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId != 1006).OrderBy(e => e.Starttime).ToList();
+                var regattaClubs = _context.RegattaClubs.Where(e => e.RegattaId == rid);
+
+                ViewBag.startboats = _context.Startboats.Include(e => e.Club).OrderBy(e => e.Startslot).ToList();
+                ViewBag.startboatmembers = _context.StartboatMembers.ToList();
+                ViewBag.startboatstandbys = _context.StartboatStandbys.ToList();
+                ViewBag.members = _context.Members.Include(e => e.Club).ToList();
+                ViewBag.racedrawrules = _context.RaceDrawRules.Include(e => e.RaceDraw).Include(e => e.RaceTyp).ToList();
+                ViewBag.regatta = _context.Regattas.FirstOrDefault(e => e.RegattaId == rid);
+                ViewBag.clubs = _context.Clubs.ToList();
+                ViewBag.ThisYear = DateTime.Now.Year;
+
+                return View(model);
+            }
+
+            return NotFound();
+        }
+
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
