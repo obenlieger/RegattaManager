@@ -1,7 +1,7 @@
 UPDATE Races SET Starttime = '2023-06-03 09:00:00' WHERE RaceCode = '11033V1'
---UPDATE Races SET Starttime = '2023-06-03 09:03:00' WHERE RaceCode = '21083V2'
---UPDATE Races SET Starttime = '2023-06-03 09:06:00' WHERE RaceCode = '21083V3'
---UPDATE Races SET Starttime = '2023-06-03 12:15:00' WHERE RaceCode = '93003V1'
+UPDATE Races SET Starttime = '2023-06-03 09:02:00' WHERE RaceCode = '11033V2'
+UPDATE Races SET Starttime = '2023-06-03 09:04:00' WHERE RaceCode = '11033V3'
+UPDATE Races SET Starttime = '2023-06-03 09:06:00' WHERE RaceCode = '11033V4'
 --UPDATE Races SET Starttime = '2023-06-03 12:30:00' WHERE RaceCode = '93003V2'
 --UPDATE Races SET Starttime = '2023-06-03 12:45:00' WHERE RaceCode = '93003V3'
 
@@ -140,11 +140,11 @@ BEGIN
 
 		IF @boatclassid = 11
 		BEGIN
-		  SET @startdate = DATEADD(MINUTE,10,@lastdate)
+		  SET @startdate = DATEADD(MINUTE,6,@lastdate)
 		END
 		ELSE IF @boatclassid = 10
 		BEGIN
-		  SET @startdate = DATEADD(MINUTE,15,@lastdate)
+		  SET @startdate = DATEADD(MINUTE,12,@lastdate)
 		END
 		ELSE
 		BEGIN
@@ -182,11 +182,11 @@ BEGIN
 
 			IF @boatclassid = 11
 			BEGIN
-			  SET @startdate = DATEADD(MINUTE,10,@lastdate)
+			  SET @startdate = DATEADD(MINUTE,6,@lastdate)
 			END
 			ELSE IF @boatclassid = 10
 			BEGIN
-			  SET @startdate = DATEADD(MINUTE,15,@lastdate)
+			  SET @startdate = DATEADD(MINUTE,12,@lastdate)
 			END
 			ELSE
 			BEGIN
@@ -267,11 +267,11 @@ BEGIN
 
 		IF @boatclassid = 11
 		BEGIN
-		  SET @startdate = DATEADD(MINUTE,10,@lastdate)
+		  SET @startdate = DATEADD(MINUTE,6,@lastdate)
 		END
 		ELSE IF @boatclassid = 10
 		BEGIN
-		  SET @startdate = DATEADD(MINUTE,15,@lastdate)
+		  SET @startdate = DATEADD(MINUTE,12,@lastdate)
 		END
 		ELSE
 		BEGIN
@@ -350,11 +350,11 @@ BEGIN
 
 		IF @boatclassid = 11
 		BEGIN
-		  SET @startdate = DATEADD(MINUTE,10,@lastdate)
+		  SET @startdate = DATEADD(MINUTE,6,@lastdate)
 		END
 		ELSE IF @boatclassid = 10
 		BEGIN
-		  SET @startdate = DATEADD(MINUTE,15,@lastdate)
+		  SET @startdate = DATEADD(MINUTE,12,@lastdate)
 		END
 		ELSE
 		BEGIN

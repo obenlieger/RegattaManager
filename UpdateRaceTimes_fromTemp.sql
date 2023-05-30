@@ -4,7 +4,7 @@ GO
 UPDATE Races
 SET Races.Starttime = rtt.Starttime
 FROM Races r
-INNER JOIN RaceTimesTemp rtt ON r.RaceCode = rtt.RaceCode
+INNER JOIN Zeitplantabellarisch rtt ON r.RaceCode = rtt.RaceCode
 
 UPDATE Races SET Comment = 'Abteilungslauf'
   WHERE RaceCode like '11033V%' 

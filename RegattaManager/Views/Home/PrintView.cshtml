@@ -42,7 +42,7 @@
 <body>
     <div class="container body-content">
         <h3>@ViewBag.regatta.Name</h3>
-        <h5>Stand: @DateTime.Now.ToString("dd.MM.yyyy HH:mm")</h5>
+        <h5>Stand: @DateTime.Now.AddHours(2).ToString("dd.MM.yyyy HH:mm")</h5>
         @foreach (var item in Model)
         {
             <table class="table table-sm table-bordered border-dark" width="100%">
