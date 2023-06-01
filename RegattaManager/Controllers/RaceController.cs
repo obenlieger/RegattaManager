@@ -843,6 +843,11 @@ namespace RegattaManager.Controllers
             }
             else if (seatnumber == 2)
             {
+                if (seat2 == 1)
+                {
+                    seat2 = 2;
+                }
+
                 if (seat1 == 0 || seat2 == 0)
                 {
                     return RedirectToAction("Details", "Race", new { id = startboat.RaceId });
@@ -881,6 +886,21 @@ namespace RegattaManager.Controllers
             }
             else if (seatnumber == 4)
             {
+                if (seat2 == 1)
+                {
+                    seat2 = 2;
+                }
+
+                if (seat3 == 1)
+                {
+                    seat3 = 3;
+                }
+
+                if (seat4 == 1)
+                {
+                    seat4 = 4;
+                }
+
                 if (seat1 == 0 || seat2 == 0 || seat3 == 0 || seat4 == 0)
                 {
                     return RedirectToAction("Details", "Race", new { id = startboat.RaceId });
@@ -939,6 +959,41 @@ namespace RegattaManager.Controllers
             }
             else if (seatnumber == 8)
             {
+                if (seat2 == 1)
+                {
+                    seat2 = 2;
+                }
+
+                if (seat3 == 1)
+                {
+                    seat3 = 3;
+                }
+
+                if (seat4 == 1)
+                {
+                    seat4 = 4;
+                }
+
+                if (seat5 == 1)
+                {
+                    seat5 = 5;
+                }
+
+                if (seat6 == 1)
+                {
+                    seat6 = 6;
+                }
+
+                if (seat7 == 1)
+                {
+                    seat7 = 7;
+                }
+
+                if (seat8 == 1)
+                {
+                    seat8 = 8;
+                }
+
                 if (seat1 == 0 || seat2 == 0 || seat3 == 0 || seat4 == 0 || seat5 == 0 || seat6 == 0 || seat7 == 0 || seat8 == 0)
                 {
                     return RedirectToAction("Details", "Race", new { id = startboat.RaceId });
