@@ -368,12 +368,27 @@ namespace RegattaManager.Controllers
                 }
                 else if (seatnumber == 2)
                 {
+                    if (seat2 == 1)
+                    {
+                        seat2 = 2;
+                    }
+
                     _context.StartboatMembers.Add(new StartboatMember { MemberId = seat1, SeatNumber = 1, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
                     _context.StartboatMembers.Add(new StartboatMember { MemberId = seat2, SeatNumber = 2, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
                     _context.SaveChanges();
                 }
                 else if (seatnumber == 3)
                 {
+                    if (seat2 == 1)
+                    {
+                        seat2 = 2;
+                    }
+
+                    if (seat3 == 1)
+                    {
+                        seat3 = 3;
+                    }
+
                     _context.StartboatMembers.Add(new StartboatMember { MemberId = seat1, SeatNumber = 1, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
                     _context.StartboatMembers.Add(new StartboatMember { MemberId = seat2, SeatNumber = 2, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
                     _context.StartboatMembers.Add(new StartboatMember { MemberId = seat3, SeatNumber = 3, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
@@ -381,6 +396,21 @@ namespace RegattaManager.Controllers
                 }
                 else if (seatnumber == 4)
                 {
+                    if (seat2 == 1)
+                    {
+                        seat2 = 2;
+                    }
+
+                    if (seat3 == 1)
+                    {
+                        seat3 = 3;
+                    }
+
+                    if (seat4 == 1)
+                    {
+                        seat4 = 4;
+                    }
+
                     _context.StartboatMembers.Add(new StartboatMember { MemberId = seat1, SeatNumber = 1, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
                     _context.StartboatMembers.Add(new StartboatMember { MemberId = seat2, SeatNumber = 2, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
                     _context.StartboatMembers.Add(new StartboatMember { MemberId = seat3, SeatNumber = 3, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
@@ -389,6 +419,41 @@ namespace RegattaManager.Controllers
                 }
                 else if (seatnumber == 8)
                 {
+                    if (seat2 == 1)
+                    {
+                        seat2 = 2;
+                    }
+
+                    if (seat3 == 1)
+                    {
+                        seat3 = 3;
+                    }
+
+                    if (seat4 == 1)
+                    {
+                        seat4 = 4;
+                    }
+
+                    if (seat5 == 1)
+                    {
+                        seat5 = 5;
+                    }
+
+                    if (seat6 == 1)
+                    {
+                        seat6 = 6;
+                    }
+
+                    if (seat7 == 1)
+                    {
+                        seat7 = 7;
+                    }
+
+                    if (seat8 == 1)
+                    {
+                        seat8 = 8;
+                    }
+
                     _context.StartboatMembers.Add(new StartboatMember { MemberId = seat1, SeatNumber = 1, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
                     _context.StartboatMembers.Add(new StartboatMember { MemberId = seat2, SeatNumber = 2, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
                     _context.StartboatMembers.Add(new StartboatMember { MemberId = seat3, SeatNumber = 3, StartboatId = _context.Startboats.Max(i => i.StartboatId) });
@@ -1161,7 +1226,7 @@ namespace RegattaManager.Controllers
                 if (MemberFromAge == 19)
                 {
                     ageFrom = yearnow - 17;
-                    ageTo = yearnow - 49;
+                    ageTo = yearnow - 99;
                 }
                 else if (MemberFromAge == 32)
                 {
@@ -1237,6 +1302,11 @@ namespace RegattaManager.Controllers
                     return 1;
                 }
 
+                if (seat2 == 1)
+                {
+                    seat2 = 2;
+                }
+
                 seats.Add(seat1);
                 seats.Add(seat2);
 
@@ -1286,6 +1356,21 @@ namespace RegattaManager.Controllers
                 if (seat1 == 0 || seat2 == 0 || seat3 == 0 || seat4 == 0)
                 {
                     return 1;
+                }
+
+                if (seat2 == 1)
+                {
+                    seat2 = 2;
+                }
+
+                if (seat3 == 1)
+                {
+                    seat3 = 3;
+                }
+
+                if (seat4 == 1)
+                {
+                    seat4 = 4;
                 }
 
                 seats.Add(seat1);
@@ -1366,6 +1451,41 @@ namespace RegattaManager.Controllers
                 if (seat1 == 0 || seat2 == 0 || seat3 == 0 || seat4 == 0 || seat5 == 0 || seat6 == 0 || seat7 == 0 || seat8 == 0)
                 {
                     return 1;
+                }
+
+                if (seat2 == 1)
+                {
+                    seat2 = 2;
+                }
+
+                if (seat3 == 1)
+                {
+                    seat3 = 3;
+                }
+
+                if (seat4 == 1)
+                {
+                    seat4 = 4;
+                }
+
+                if (seat5 == 1)
+                {
+                    seat5 = 5;
+                }
+
+                if (seat6 == 1)
+                {
+                    seat6 = 6;
+                }
+
+                if (seat7 == 1)
+                {
+                    seat7 = 7;
+                }
+
+                if (seat8 == 1)
+                {
+                    seat8 = 8;
                 }
 
                 seats.Add(seat1);
