@@ -1215,7 +1215,7 @@ namespace RegattaManager.Controllers
                 }
                 else if (MemberFromAge == 8)
                 {
-                    ageFrom = yearnow - 7;
+                    ageFrom = yearnow - 0;
                 }
                 else if (MemberFromAge == 9)
                 {
@@ -1223,35 +1223,35 @@ namespace RegattaManager.Controllers
                 }
                 else if (MemberFromAge == 10)
                 {
-                    ageFrom = yearnow - 7;
+                    ageFrom = yearnow - 0;
                 }
                 else if (MemberFromAge == 11)
                 {
-                    ageFrom = yearnow - 9;
+                    ageFrom = yearnow - 8;
                 }
                 else if (MemberFromAge == 12)
                 {
-                    ageFrom = yearnow - 12;
+                    ageFrom = yearnow - 8;
                 }
                 else if (MemberFromAge == 13)
                 {
-                    ageFrom = yearnow - 9;
+                    ageFrom = yearnow - 8;
                 }
                 else if (MemberFromAge == 14)
                 {
-                    ageFrom = yearnow - 13;
+                    ageFrom = yearnow - 8;
                 }
                 else if (MemberFromAge == 15)
                 {
-                    ageFrom = yearnow - 13;
+                    ageFrom = yearnow - 8;
                 }
                 else if (MemberFromAge == 17)
                 {
-                    ageFrom = yearnow - 12;
+                    ageFrom = yearnow - 8;
                 }
                 else if (MemberFromAge == 19)
                 {
-                    ageFrom = yearnow - 17;
+                    ageFrom = yearnow - 16;
                 }
                 else if (MemberFromAge == 32)
                 {
@@ -1280,7 +1280,7 @@ namespace RegattaManager.Controllers
             {
                 if (MemberFromAge == 19)
                 {
-                    ageFrom = yearnow - 17;
+                    ageFrom = yearnow - 16;
                     ageTo = yearnow - 99;
                 }
                 else if (MemberFromAge == 32)
