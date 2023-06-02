@@ -197,7 +197,7 @@
                                     }
                                     if(rdr.PlacementFrom == rdr.PlacementTo)
                                     {
-                                        if(rdr.ToRaceTypId == 2)
+                                        if(rdr.ToRaceTypId == 2 || rdr.ToRaceTypId == 3)
                                         {
                                             @string.Format("{0}. in {1} {2}", rdr.PlacementTo, ToRace, rdr.ToRaceSequence)
                                         }
@@ -208,7 +208,14 @@
                                     }
                                     else
                                     {
-                                        @string.Format("{0}.-{1}. in {2}", rdr.PlacementFrom, rdr.PlacementTo, ToRace)    
+                                        if (rdr.ToRaceTypId == 2 || rdr.ToRaceTypId == 3)
+                                        {
+                                            @string.Format("{0}.-{1}. in {2} {3}", rdr.PlacementFrom, rdr.PlacementTo, ToRace, rdr.ToRaceSequence)
+                                        }
+                                        else
+                                        {
+                                            @string.Format("{0}.-{1}. in {2}", rdr.PlacementFrom, rdr.PlacementTo, ToRace)
+                                        }  
                                     }                               
                                     <br />
                                 }

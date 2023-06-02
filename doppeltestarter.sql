@@ -94,7 +94,7 @@ BEGIN
 			ORDER BY R.LastName, R.FirstName
 
       FETCH NEXT FROM cur_race INTO @racedate, @racecode
-END 
+END
 
 CLOSE cur_race  
 DEALLOCATE cur_race 
