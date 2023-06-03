@@ -9,7 +9,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY [".", "RegattaManager/"]
-RUN dotnet restore "RegattaManager/RegattaManager.csproj"
+RUN dotnet restore --disable-parallel "RegattaManager/RegattaManager.csproj"
 #COPY . .
 WORKDIR "/src/RegattaManager"
 RUN dotnet build "RegattaManager.csproj" -c Release -o /app/build

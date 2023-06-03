@@ -90,7 +90,7 @@ namespace RegattaManager.Controllers
                     ViewData["filterClub"] = new SelectList(_context.Clubs.Where(e => regattaClubs.Select(i => i.ClubId).Contains(e.ClubId)).OrderBy(e => e.ShortName),"ClubId","ShortName",filterClubId);
                 }
 
-                return View(races);
+                return View(races.OrderBy(e => e.Starttime));
             }
 
             if (!String.IsNullOrEmpty(All))
