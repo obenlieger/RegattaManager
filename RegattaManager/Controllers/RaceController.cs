@@ -299,7 +299,7 @@ namespace RegattaManager.Controllers
             {
                 var model = _context.Races.Include(e => e.Boatclass).Include(e => e.Oldclass).Include(e => e.Raceclass).Include(e => e.Racestatus).Include(e => e.Startboats).Where(e => e.RacestatusId == 3).OrderBy(e => e.Starttime).ToList();
 
-                ViewBag.startboats = _context.Startboats.Include(e => e.Club).Include(e => e.Startboatstatus).Where(e => e.StartboatstatusId == 3).OrderBy(e => e.Placement).ToList();
+                ViewBag.startboats = _context.Startboats.Include(e => e.Club).Include(e => e.Startboatstatus).OrderBy(e => e.RaceId).ThenBy(e => e.Placement).ToList();
                 ViewBag.disqstartboats = _context.Startboats.Include(e => e.Club).Include(e => e.Startboatstatus).Where(e => e.StartboatstatusId == 4 || e.StartboatstatusId == 5 || e.StartboatstatusId == 7 || e.StartboatstatusId == 8).OrderBy(e => e.Placement).ToList();
                 ViewBag.startboatmembers = _context.StartboatMembers.ToList();
                 ViewBag.startboatstandbys = _context.StartboatStandbys.ToList();
