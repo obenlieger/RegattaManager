@@ -290,7 +290,7 @@
                         @:&nbsp;
                         <tr class="table-light">
                             <td>
-                                @sb.Placement
+                                
                             </td>
                             <td>@sb.Startslot</td>
                             <td>
@@ -356,9 +356,13 @@
                             </td>
                             <td>@sb.Club.ShortName</td>
                             <td>
-                                @if(sb.StartboatstatusId != 3)
+                                @if(sb.StartboatstatusId != 3 && sb.StartboatstatusId != 1)
                                 {
                                     @sb.Startboatstatus.Name
+                                }
+                                else if(sb.StartboatstatusId == 1)
+                                {
+                                    @:disqualifiziert
                                 }
                             </td>
                         </tr>
